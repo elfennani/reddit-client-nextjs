@@ -1,0 +1,95 @@
+.card {
+    h1,
+    p,
+    h5 {
+        margin: 0;
+    }
+
+    &.error {
+        color: lighten($color: red, $amount: 20%);
+        min-height: 150px !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: lighter;
+        gap: 16px;
+    }
+
+    &:not(.error) {
+        .centerFlex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .cover {
+            height: 110px;
+            position: relative;
+            margin-bottom: 36px;
+            background-size: cover;
+
+            .profileContainer {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translate(-50%, 50%);
+                border-radius: 4px;
+                border: 1px solid rgba($color: #000000, $alpha: 0.15);
+                overflow: hidden;
+                height: 56px;
+                width: 56px;
+                background-color: #5b5b5b;
+
+                .profile {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #5b5b5b;
+                }
+            }
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 0 24px;
+        }
+        > p {
+            opacity: 0.5;
+            text-align: center;
+            padding: 0 24px;
+            margin-bottom: 12px;
+        }
+
+        .split {
+            padding: 8px 24px;
+            display: flex;
+            margin-bottom: 24px;
+
+            h5 {
+                font-size: 0.7rem;
+                opacity: 50%;
+                margin-bottom: 2px;
+            }
+
+            p {
+                text-align: left;
+                padding: 0;
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            > * {
+                flex: 1;
+                padding: 0 12px;
+
+                &:first-child {
+                    border-right: 1px solid rgba($color: #000000, $alpha: 0.12);
+                }
+            }
+        }
+    }
+}
