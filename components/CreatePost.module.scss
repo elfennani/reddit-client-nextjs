@@ -1,0 +1,69 @@
+@import "../styles/variables.scss";
+.form {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    padding: 16px;
+
+    &:hover {
+        background-color: darken($color: white, $amount: 1%) !important;
+    }
+
+    img {
+        background-color: #5b5b5b;
+        border-radius: 4px;
+        width: 32px;
+        height: 32px;
+        border: 1px solid rgba($color: #000000, $alpha: 0.15);
+    }
+
+    p {
+        margin: 0;
+        line-height: 32px;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        opacity: 0.33;
+        user-select: none;
+        cursor: text;
+        font-weight: 300;
+        flex: 1;
+    }
+
+    .textEditor {
+        display: flex;
+        align-items: center;
+
+        span {
+            margin-right: 4px;
+            opacity: 0.33;
+        }
+    }
+
+    .buttonsContainer {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+
+        button {
+            font-size: 0.7rem;
+            font-family: $fontFamily;
+            background-color: #f6f6f6;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 100px;
+            color: #3d3d3d;
+            cursor: pointer;
+            transition: background-color 0.2s;
+
+            &:hover {
+                background-color: darken($color: #f6f6f6, $amount: 5%);
+            }
+
+            span {
+                color: $primary;
+                margin-right: 8px;
+                font-size: 0.8rem;
+            }
+        }
+    }
+}
