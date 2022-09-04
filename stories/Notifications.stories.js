@@ -1,5 +1,5 @@
 import NotificationCard from "../components/NotificationCard";
-import NotificationItem from "../components/NotificationItem";
+import NotificationItem from "../components/NotificationCard/NotificationItem";
 
 const config = {
     name: "Notification Card",

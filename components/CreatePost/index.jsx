@@ -6,7 +6,7 @@ import {
     FileImageOutlined,
     VideoCameraOutlined,
 } from "@ant-design/icons";
-import Card from "./Card";
+import Card from "../Card";
 
 const CreatePost = (props) => {
     return (

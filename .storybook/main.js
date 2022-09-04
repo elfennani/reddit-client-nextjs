@@ -17,11 +17,12 @@ module.exports = {
                 sassLoaderOptions: {
                     additionalData: (content) => {
                         // paths are relative to root dir in this case
-                        return (
-                            `
-                    @import "../styles/globals.scss";
-                  ` + content
-                        ); // content is the individual module.scss file
+                        return content;
+                        //         return (
+                        //             `
+                        //     @import "../styles/globals.scss";
+                        //   ` + content
+                        //         ); // content is the individual module.scss file
                     },
                 },
             },

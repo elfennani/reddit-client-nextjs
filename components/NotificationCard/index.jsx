@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Notification.module.scss";
-import Card from "./Card";
+import Card from "../Card";
 import {
     ExclamationCircleOutlined,
     NotificationFilled,
     ReloadOutlined,
 } from "@ant-design/icons";
-import Button from "./Button";
+import Button from "../Button";
 
 const NotificationCard = (props) => {
     let content;

@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Card from "./Card";
+import Card from "../Card";
 import styles from "./AccountTemplate.module.scss";
 import Image from "next/image";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Button from "./Button";
+import Button from "../Button";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { minimizeNumber } from "../utils/functions";
+import { minimizeNumber } from "../../utils/functions";
 import Link from "next/link";
 
 const AccountTemplate = ({
