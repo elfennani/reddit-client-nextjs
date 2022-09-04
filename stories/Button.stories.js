@@ -10,14 +10,20 @@ const config = {
 
 export default config;
 
-export const Idle = (args) => <Button {...args} />;
+export const Primary = (args) => <Button {...args} />;
 
-Idle.args = {
+Primary.args = {
     title: "Click Me!",
 };
 
-export const Disabled = Idle.bind({});
+export const Disabled = Primary.bind({});
 Disabled.args = {
     title: "I'm Disabled :(",
     disabled: true,
+};
+
+export const Secondary = Primary.bind({});
+Secondary.args = {
+    title: "Secondary Button",
+    secondary: true,
 };

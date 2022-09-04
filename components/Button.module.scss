@@ -21,4 +21,17 @@
     &:disabled {
         background-color: lightgrey;
     }
+    &.secondary {
+        background-color: transparent;
+        color: $primary;
+
+        &:hover,
+        &:focus {
+            background-color: rgba($color: $primary, $alpha: 0.15);
+        }
+    }
+}
+
+:export {
+    primaryColor: $primary;
 }
