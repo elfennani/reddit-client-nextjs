@@ -1,0 +1,42 @@
+@import "../../styles/variables.scss";
+.container {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: white;
+    border-top: 1px solid rgba($color: #000000, $alpha: 0.12);
+    padding: 16px;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        text-align: center;
+        font-size: 0.8rem;
+        gap: 8px;
+        text-transform: capitalize;
+
+        a {
+            display: block;
+        }
+
+        li {
+            transition: color 0.2s;
+            &.active {
+                color: $primary;
+            }
+        }
+
+        > * {
+            flex: 1;
+        }
+
+        span {
+            display: block;
+            margin-bottom: 4px;
+        }
+    }
+}
