@@ -1,4 +1,23 @@
+@import "../../styles/variables.scss";
 .container {
+    @mixin buttonState($color, $amount: 30%) {
+        color: $color !important;
+        font-weight: bold;
+
+        &:is(button) {
+            background-color: lighten(
+                $color: $color,
+                $amount: $amount
+            ) !important;
+        }
+    }
+    .upvoted {
+        @include buttonState($primary);
+    }
+    .downvoted {
+        @include buttonState(#059ff6, 40%);
+    }
+
     header {
         padding: 16px;
         display: flex;
@@ -46,8 +65,96 @@
     }
 
     .content {
+        padding-bottom: 12px;
+        position: relative;
+
+        &::after {
+            content: "";
+            display: block;
+            height: 1px;
+            left: 16px;
+            right: 16px;
+            bottom: 0;
+            position: absolute;
+            background-color: rgba($color: #000000, $alpha: 0.07);
+        }
         > img {
             border-radius: 8px;
+            width: 100%;
+        }
+        h2 {
+            font-size: 1rem;
+            margin: 0 16px;
+            letter-spacing: -0.2px;
+            margin-top: 12px;
+        }
+
+        .text {
+            margin: 0;
+            margin-top: 4px;
+            padding: 0 16px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            font-weight: 100;
+        }
+    }
+
+    .toolbar {
+        padding: 16px;
+        padding-top: 12px;
+
+        p {
+            font-size: 0.8rem;
+            // opacity: 0.66;
+            margin: 0;
+            margin-bottom: 8px;
+            color: rgba($color: #000000, $alpha: 0.75);
+        }
+
+        .buttonsRow {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            > div {
+                display: flex;
+                gap: 8px;
+            }
+
+            button {
+                $color: #000;
+                $backgroundColor: #ececec;
+                $size: 28px;
+                height: $size;
+                font-family: $fontFamily;
+                font-size: 0.9rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 4px 8px;
+                border: none;
+                border-radius: 4px;
+                background-color: $backgroundColor;
+                color: $color;
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: darken(
+                        $color: $backgroundColor,
+                        $amount: 5%
+                    );
+                }
+
+                &.squared {
+                    width: $size;
+                }
+
+                p {
+                    display: inline;
+                    margin: 0;
+                }
+            }
         }
     }
 }

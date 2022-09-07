@@ -23,7 +23,12 @@ import Link from "next/link";
  * @property {string} image
  * @property {string} title
  * @property {string} text
+ * @property {("upvoted"|"downvoted"|null)} voteState
  * @property {string} extPostLink
+ * @property {VoidFunction} onUpvote,
+ * @property {VoidFunction} onDownvote,
+ * @property {VoidFunction} onSave,
+ * @property {VoidFunction} onShare,
  */
 
 /**
@@ -65,7 +70,15 @@ const PostView = (props) => {
             </div>
             <div className={styles.toolbar}>
                 <p>
-                    <span>
+                    <span
+                        className={
+                            props.voteState != "none"
+                                ? props.voteState == "upvoted"
+                                    ? styles.upvoted
+                                    : styles.downvoted
+                                : null
+                        }
+                    >
                         {props.votes} vote
                         {props.votes.toString()[
                             props.votes.toString().length - 1
@@ -80,20 +93,36 @@ const PostView = (props) => {
                         ? ""
                         : "s"}
                 </p>
-                <div className={styles.buttonRow}>
+                <div className={styles.buttonsRow}>
                     <div>
-                        <button>
+                        <button
+                            className={[
+                                styles.squared,
+                                props.voteState == "upvoted"
+                                    ? styles.upvoted
+                                    : null,
+                            ].join(" ")}
+                            onClick={props.onUpvote}
+                        >
                             <CaretUpOutlined />
                         </button>
-                        <button>
+                        <button
+                            className={[
+                                styles.squared,
+                                props.voteState == "downvoted"
+                                    ? styles.downvoted
+                                    : null,
+                            ].join(" ")}
+                            onClick={props.onDownvote}
+                        >
                             <CaretDownOutlined />
                         </button>
                     </div>
                     <div>
-                        <button>
+                        <button onClick={props.onShare}>
                             <ShareAltOutlined /> <p>Share</p>
                         </button>
-                        <button>
+                        <button onClick={props.onSave}>
                             <SaveFilled /> <p>Save</p>
                         </button>
                     </div>
@@ -102,7 +131,9 @@ const PostView = (props) => {
         </Card>
     );
 };
-
+PostView.defaultProps = {
+    voteState: "none",
+};
 PostView.propTypes = {
     subreddit: PropTypes.shape({
         name: PropTypes.string,
@@ -124,6 +155,7 @@ PostView.propTypes = {
     onShare: PropTypes.func,
     postLink: PropTypes.string,
     extPostLink: PropTypes.string,
+    voteState: PropTypes.oneOf(["upvoted", "downvoted", "none"]),
     type: PropTypes.oneOf(["text", "image", "title", "video", "link"]),
 };
 
