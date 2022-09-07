@@ -1,0 +1,53 @@
+.container {
+    header {
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 3px;
+        }
+
+        > a {
+            font-size: 0.8rem;
+            opacity: 0.33;
+            padding: 5px;
+            display: block;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+
+            &:hover {
+                background-color: rgba($color: #000000, $alpha: 0.12);
+            }
+        }
+
+        > div {
+            flex: 1;
+
+            h2 {
+                font-size: 0.9rem;
+                margin: 0;
+                font-weight: 500;
+            }
+            p {
+                font-size: 0.8rem;
+                margin: 0;
+                opacity: 0.33;
+            }
+        }
+    }
+
+    .content {
+        > img {
+            border-radius: 8px;
+        }
+    }
+}
