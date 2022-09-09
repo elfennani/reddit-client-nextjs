@@ -15,19 +15,17 @@ const LoginCard = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "stretch",
+                textAlign: "center",
             }}
         >
-            <Button title="Login with reddit" onClick={props.onLogin} />
+            <h1 style={{ margin: 0, marginBottom: 16 }}>Welcome!</h1>
+            <Button title="Login with reddit" link={props.link} />
         </Card>
     );
 };
 
-LoginCard.defaultProps = {
-    onLogin: () => console.log("Login"),
-};
-
 LoginCard.propTypes = {
-    onLogin: PropTypes.func,
+    link: PropTypes.string,
 };
 
 export default LoginCard;

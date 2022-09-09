@@ -2,13 +2,26 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Button.module.scss";
 import Head from "next/head";
+import Link from "next/link";
 
 const Button = (props) => {
-    /**
-     * @type {React.CSSProperties}
-     */
-    let colorStyle;
-    styles;
+    if (props.link) {
+        return (
+            <Link href={props.link} passHref>
+                <a
+                    className={[
+                        styles.button,
+                        props.secondary ? styles.secondary : null,
+                        props.className ? props.className : null,
+                    ].join(" ")}
+                    disabled={props.disabled}
+                >
+                    {props.title}
+                </a>
+            </Link>
+        );
+    }
+
     return (
         <>
             <button
@@ -19,11 +32,6 @@ const Button = (props) => {
                 ].join(" ")}
                 onClick={props.onClick}
                 disabled={props.disabled || props.onClick == null}
-                style={{
-                    hover: {
-                        height: 300,
-                    },
-                }}
             >
                 {props.title}
             </button>
@@ -42,6 +50,7 @@ Button.propTypes = {
     secondary: PropTypes.bool,
     className: PropTypes.string,
     primaryColor: PropTypes.string,
+    link: PropTypes.string,
 };
 
 export default Button;

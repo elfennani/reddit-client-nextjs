@@ -25,6 +25,6 @@ const Card = (props) => {
     );
 };
 
-Card.propType = HTMLDivElement;
+// Card.propType = HTMLDivElement;
 
 export default Card;

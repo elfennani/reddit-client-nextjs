@@ -10,6 +10,8 @@
     font-size: 0.9rem;
     font-weight: bold;
     transition: all 0.2s;
+    display: inline-block;
+    text-align: center;
 
     &:hover {
         background-color: darken($color: $primary, $amount: 10%);
