@@ -1,4 +1,5 @@
 import AccountTemplate from "../components/AccountTemplate";
+import LoginCard from "../components/LoginCard";
 
 const config = {
     name: "Account Card",
@@ -36,3 +37,7 @@ export const Error = Idle.bind({});
 Error.args = {
     errorMessage: "Failed to get user data",
 };
+
+const LoginTemplate = (args) => <LoginCard {...args} />;
+
+export const Login = LoginTemplate.bind({});
