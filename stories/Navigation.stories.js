@@ -2,6 +2,7 @@ import React from "react";
 
 import PagesList from "../components/PagesList";
 import BottomNavigationComponent from "../components/BottomNavigation";
+import TopNavigation from "../components/TopNavigation";
 
 export default {
     title: "Navigations",
@@ -19,3 +20,5 @@ SideNavigation.args = {
 export const BottomNavigation = (args) => (
     <BottomNavigationComponent {...args} />
 );
+
+export const TopNavigationTemplate = (args) => <TopNavigation />;

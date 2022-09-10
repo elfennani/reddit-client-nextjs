@@ -1,21 +1,16 @@
-const Login = ({}) => {
-    return <div></div>;
-};
+import cookies from "next-cookies";
+import Head from "next/head";
+import TopNavigation from "../components/TopNavigation";
 
-/**
- * @type {import("next").GetServerSideProps}
- */
-export const getServerSideProps = async (ctx) => {
-    if (!ctx.req.cookies.token || !ctx.req.cookies.refresh)
-        return {
-            redirect: {
-                permanent: false,
-                destination: "/login",
-            },
-        };
-    return {
-        props: {},
-    };
+const Login = ({}) => {
+    return (
+        <div>
+            <Head>
+                <title>Home Page</title>
+            </Head>
+            <TopNavigation />
+        </div>
+    );
 };
 
 export default Login;
