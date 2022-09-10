@@ -13,7 +13,11 @@ const Authenticate = (props) => {
             Date.now() + props.expires_in * 1000
         ).toUTCString()}`;
 
-        document.cookie = `refresh=${props.refresh_token}; path=/;`;
+        document.cookie = `refresh=${
+            props.refresh_token
+        }; path=/;expires=${new Date(
+            Date.now() + 1000 * 3600 * 24 * 365
+        ).toUTCString()}`;
 
         setTimeout(() => {
             router.replace("/", undefined, {

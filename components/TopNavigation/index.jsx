@@ -13,7 +13,7 @@ const TopNavigation = (props) => {
     return (
         <nav className={styles.navigation}>
             <div className={styles.layout}>
-                <button className={styles.toggle}>
+                <button className={styles.toggle} onClick={props.onToggleMenu}>
                     <MenuOutlined />
                 </button>
                 <h1 className={styles.logo}>Logo</h1>
@@ -24,6 +24,7 @@ const TopNavigation = (props) => {
                         searchOpen ? styles.active : null,
                     ].join(" ")}
                     placeholder="Search here..."
+                    disabled={window.outerWidth <= 786 ? !searchOpen : false}
                 />
                 <button className={styles.toggle} onClick={searchToggleHandler}>
                     <SearchOutlined />

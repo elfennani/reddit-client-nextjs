@@ -1,14 +1,15 @@
 import Head from "next/head";
 import React from "react";
 import LoginCard from "../components/LoginCard";
+import config from "../constants/config";
 import endpoints from "../constants/endpoints";
 
 const Login = () => {
     const params = {
-        client_id: "DWY9af0IjWnRpN6wT0t0dg",
+        client_id: config.clientId,
         response_type: "code",
         state: "auth",
-        redirect_uri: "http://localhost:3000/authenticate",
+        redirect_uri: config.redirectUri,
         duration: "permanent",
         scope: [
             "identity",

@@ -23,18 +23,18 @@ const AccountTemplate = ({
 }) => {
     if (errorMessage) {
         return (
-            <Card className={[styles.card, styles.error].join(" ")}>
+            <div className={[styles.card, styles.error].join(" ")}>
                 <p>
                     <ExclamationCircleOutlined style={{ marginRight: 8 }} />
                     {errorMessage}
                 </p>
                 <Button onClick={onRefresh} title="Try Again" />
-            </Card>
+            </div>
         );
     }
 
     return (
-        <Card className={styles.card}>
+        <div className={styles.card}>
             <div
                 style={
                     isLoading || !cover
@@ -84,7 +84,7 @@ const AccountTemplate = ({
                     )}
                 </div>
             </div>
-        </Card>
+        </div>
     );
 };
 

@@ -1,16 +1,25 @@
 import App from "next/app";
 import "../styles/globals.scss";
 import Router, { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import cookies from "next-cookies";
 import config from "../constants/config";
 import endpoints from "../constants/endpoints";
 import Head from "next/head";
+import TopNavigation from "../components/TopNavigation";
+import AccountTemplate from "../components/AccountTemplate";
+import PagesList from "../components/PagesList";
 
 function MyApp(props) {
     const router = useRouter();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navBlacklist = ["/authenticate", "/login"];
+    const [refreshing, setRefreshing] = useState(true);
+
     useEffect(() => {
+        // alert(router.pathname);
+        setRefreshing(true);
         if (props.logout) {
             Cookies.remove("token");
             Cookies.remove("refresh");
@@ -18,7 +27,9 @@ function MyApp(props) {
 
         if (props.isNewToken) {
             Cookies.set("token", props.access_token, {
-                expires: new Date(Date.now() + props.expires_in * 1000),
+                expires: new Date(
+                    Date.now() + props.expires_in * 1000
+                ).toUTCString(),
             });
         }
 
@@ -27,13 +38,51 @@ function MyApp(props) {
 
         if (!token && !refresh && router.pathname != "/login") {
             router.push("/login");
+            return;
         }
+
+        setRefreshing(false);
     }, []);
+
+    const onMenuToggleHandler = () => setIsMenuOpen((state) => !state);
+
+    if (navBlacklist.includes(router.pathname)) {
+        return <props.Component {...props.pageProps} />;
+    }
+
+    if (refreshing) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                }}
+            >
+                <p>Loading</p>
+            </div>
+        );
+    }
 
     return (
         <>
             <Head>Revirt</Head>
-            <props.Component {...props.pageProps} />
+            <TopNavigation onToggleMenu={onMenuToggleHandler} />
+            <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
+                <AccountTemplate isLoading onRefresh={() => {}} />
+                <span className="divider"></span>
+                <PagesList activePage={router.pathname} />
+            </div>
+            {isMenuOpen && (
+                <span
+                    className="backdrop"
+                    onClick={setIsMenuOpen.bind(this, false)}
+                ></span>
+            )}
+            <main className="content">
+                <props.Component {...props.pageProps} />
+            </main>
         </>
     );
 }

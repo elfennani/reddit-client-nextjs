@@ -1,5 +1,8 @@
 @import "../styles/variables.scss";
 
 .container {
-    color: $primary;
+    width: 700px;
+    padding: 32px;
+    max-width: 100%;
+    margin: 0 auto;
 }

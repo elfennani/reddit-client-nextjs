@@ -66,7 +66,7 @@ const PagesList = ({ children, activePage = "/" }) => {
         },
     ];
     return (
-        <Card className={styles.container}>
+        <div className={styles.container}>
             <ul>
                 {pagesList.map((page, index) => {
                     let isActive;
@@ -89,7 +89,7 @@ const PagesList = ({ children, activePage = "/" }) => {
                     );
                 })}
             </ul>
-        </Card>
+        </div>
     );
 };
 
