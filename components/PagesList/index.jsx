@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const PagesList = ({ children, activePage = "/" }) => {
+const PagesList = ({ children, onChange, activePage = "/" }) => {
     const router = useRouter();
     /**
      * @type {[{label:string, link:string, activeCheck:string[], activeIcon:React.Component, inactiveIcon:React.Component}]}
@@ -78,7 +78,10 @@ const PagesList = ({ children, activePage = "/" }) => {
                     return (
                         <li key={index}>
                             <Link href={page.link}>
-                                <a className={isActive ? styles.active : null}>
+                                <a
+                                    className={isActive ? styles.active : null}
+                                    onClick={onChange}
+                                >
                                     {isActive
                                         ? page.activeIcon
                                         : page.inactiveIcon}
@@ -95,6 +98,7 @@ const PagesList = ({ children, activePage = "/" }) => {
 
 PagesList.propTypes = {
     activePage: PropTypes.string,
+    onChange: PropTypes.func,
 };
 
 export default PagesList;

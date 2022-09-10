@@ -80,3 +80,11 @@ main.content {
         padding-top: 48px;
     }
 }
+
+.onMobile {
+    display: none;
+
+    @include onMobile {
+        display: block;
+    }
+}

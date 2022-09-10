@@ -21,32 +21,6 @@ const Login = ({}) => {
                 <div className={styles.content}>
                     <CreatePost image="https://styles.redditmedia.com/t5_vjcux/styles/profileIcon_snoo4eb7f2fb-0e85-4c4d-8ec2-0ee989b23566-headshot-f.png?width=256&height=256&frame=1&crop=256:256,smart&s=ba057519c3932470fc6a56ba1ced07186fa40942" />
                 </div>
-                <button
-                    onClick={() => {
-                        Cookies.remove("token");
-                        Cookies.remove("refresh");
-                        router.reload();
-                    }}
-                >
-                    Logout
-                </button>
-                {/* <div className={styles.sidebar}>
-                    <NotificationCard
-                        onRefresh={() => {}}
-                        onShowAll={function noRefCheck() {}}
-                    >
-                        <NotificationItem
-                            image="https://www.redditstatic.com/avatars/defaults/v2/avatar_default_3.png"
-                            text="30min ago"
-                            title="u/aperson_1234 replied to your comments on r/funny"
-                        />
-                        <NotificationItem
-                            image="https://www.redditstatic.com/avatars/defaults/v2/avatar_default_3.png"
-                            text="1h ago"
-                            title="u/another0ne gave your comment an award."
-                        />
-                    </NotificationCard>
-                </div> */}
             </div>
         </div>
     );

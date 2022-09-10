@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styles from "./CreatePost.module.scss";
 import {
@@ -7,11 +7,21 @@ import {
     VideoCameraOutlined,
 } from "@ant-design/icons";
 import Card from "../Card";
+import TokenContext from "../../contexts/TokenContext";
+import { getUserProfile } from "../../repository/reddit_api";
+import { useQuery } from "@tanstack/react-query";
 
 const CreatePost = (props) => {
+    const token = useContext(TokenContext);
+
+    const { isLoading, isError, data, isSuccess } = useQuery(
+        ["user", token],
+        async () => await getUserProfile(token)
+    );
+
     return (
         <Card className={styles.form}>
-            <img src={props.image} alt={props.username} />
+            {isSuccess ? <img src={data.pfp} alt={props.username} /> : <img />}
             <div>
                 <div className={styles.textEditor}>
                     <p>Start writing your post</p>

@@ -1,6 +1,5 @@
-import App from "next/app";
 import "../styles/globals.scss";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import cookies from "next-cookies";
@@ -10,6 +9,17 @@ import Head from "next/head";
 import TopNavigation from "../components/TopNavigation";
 import AccountTemplate from "../components/AccountTemplate";
 import PagesList from "../components/PagesList";
+import {
+    useQuery,
+    QueryClient,
+    QueryClientProvider,
+} from "@tanstack/react-query";
+import { getUserProfile } from "../repository/reddit_api";
+import Account from "../components/Account";
+import TokenContext from "../contexts/TokenContext";
+import BottomNavigation from "../components/BottomNavigation";
+
+const queryClient = new QueryClient();
 
 function MyApp(props) {
     const router = useRouter();
@@ -18,7 +28,6 @@ function MyApp(props) {
     const [refreshing, setRefreshing] = useState(true);
 
     useEffect(() => {
-        // alert(router.pathname);
         setRefreshing(true);
         if (props.logout) {
             Cookies.remove("token");
@@ -66,24 +75,32 @@ function MyApp(props) {
     }
 
     return (
-        <>
-            <Head>Revirt</Head>
-            <TopNavigation onToggleMenu={onMenuToggleHandler} />
-            <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
-                <AccountTemplate isLoading onRefresh={() => {}} />
-                <span className="divider"></span>
-                <PagesList activePage={router.pathname} />
-            </div>
-            {isMenuOpen && (
-                <span
-                    className="backdrop"
-                    onClick={setIsMenuOpen.bind(this, false)}
-                ></span>
-            )}
-            <main className="content">
-                <props.Component {...props.pageProps} />
-            </main>
-        </>
+        <TokenContext.Provider value={props.token}>
+            <QueryClientProvider client={queryClient}>
+                <Head>Revirt</Head>
+                <TopNavigation onToggleMenu={onMenuToggleHandler} />
+                <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
+                    <Account />
+                    <span className="divider"></span>
+                    <PagesList
+                        activePage={router.pathname}
+                        onChange={() => setIsMenuOpen(false)}
+                    />
+                </div>
+                {isMenuOpen && (
+                    <span
+                        className="backdrop"
+                        onClick={setIsMenuOpen.bind(this, false)}
+                    ></span>
+                )}
+                <main className="content">
+                    <props.Component {...props.pageProps} />
+                </main>
+                <div className="onMobile">
+                    <BottomNavigation activePage={router.pathname} />
+                </div>
+            </QueryClientProvider>
+        </TokenContext.Provider>
     );
 }
 

@@ -24,7 +24,6 @@ const TopNavigation = (props) => {
                         searchOpen ? styles.active : null,
                     ].join(" ")}
                     placeholder="Search here..."
-                    disabled={window.outerWidth <= 786 ? !searchOpen : false}
                 />
                 <button className={styles.toggle} onClick={searchToggleHandler}>
                     <SearchOutlined />
