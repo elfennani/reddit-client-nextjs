@@ -1,4 +1,4 @@
-## Revirt
+# Revirt
 
 Just another reddit client. This project is being made with the power of ReactJS and NextJS.
 
@@ -22,4 +22,17 @@ npm run storybook
 This project uses OAuth 2.0 Flow. with the help of [official reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2) and
 [Reddit API docs](https://www.reddit.com/dev/api).
 
-**\*Revirt** is a hobby project, its purpose is only to showcase my abilities and to be a part of my future portfolio.\*
+## Current State
+
+What works:
+
+-   authenticating
+
+Future Features:
+
+-   scrolling infinite feeds in home page
+-   display account information in the sidebar
+-   showing notification
+-   make all routes in the sidebar accessible
+
+***Revirt** is a hobby project, its purpose is only to showcase my abilities and to be a part of my future portfolio.*
