@@ -27,11 +27,11 @@ This project uses OAuth 2.0 Flow. with the help of [official reddit OAuth guide]
 What works:
 
 -   authenticating
+-   display account information in the sidebar
 
 Future Features:
 
 -   scrolling infinite feeds in home page
--   display account information in the sidebar
 -   showing notification
 -   make all routes in the sidebar accessible
 
