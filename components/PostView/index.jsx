@@ -57,7 +57,12 @@ const PostView = (props) => {
             onClick={() => router.reload(props.postLink)}
         >
             <header>
-                <img src={props.subreddit.picture} alt={props.subreddit.name} />
+                {props.subreddit.picture && (
+                    <img
+                        src={props.subreddit.picture}
+                        alt={props.subreddit.name}
+                    />
+                )}
                 <div>
                     <Link href={props.subreddit.link}>
                         <a>

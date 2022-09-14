@@ -20,7 +20,7 @@ npm run storybook
 ## Made using what?
 
 This project uses OAuth 2.0 Flow. with the help of [official reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2) and
-[Reddit API docs](https://www.reddit.com/dev/api).
+[Reddit API docs](https://www.reddit.com/dev/api/oauth).
 
 ## Current State
 
