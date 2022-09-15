@@ -42,7 +42,6 @@ const Account = () => {
                       {}
                   )
                 : duration;
-        console.log(duration);
         return (
             <AccountTemplate
                 username={data.username}

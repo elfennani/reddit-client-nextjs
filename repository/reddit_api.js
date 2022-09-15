@@ -9,6 +9,7 @@
  */
 
 import endpoints from "../constants/endpoints";
+import { removeAmp } from "../utils/functions";
 
 /**
  * @property {string} token
@@ -33,6 +34,12 @@ export const getUserProfile = async (token) => {
 };
 
 /**
+ * @typedef ImagesMetadata
+ * @property {string} url
+ * @property {string|null} title
+ * @property {string} id
+ */
+/**
  * @typedef PostData
  * @property {string} title
  * @property {string} votes
@@ -42,7 +49,9 @@ export const getUserProfile = async (token) => {
  * @property {string} author
  * @property {string} permalink
  * @property {string} image
+ * @property {ImagesMetadata[]} images
  * @property {Number} created
+ * @property {Object} devJson
  */
 /**
  *
@@ -63,13 +72,10 @@ export const getPosts = async (token, endpoint, after) => {
     return data.data.children.map((data) => {
         const post = data.data;
 
-        let image;
-
-        try {
-            image = post.preview.images[0].source.url.replaceAll("&amp;", "&");
-        } catch (error) {}
-
-        return {
+        /**
+         * @type {PostData}
+         */
+        let post_maped = {
             title: post.title,
             votes: post.score,
             name: post.name,
@@ -77,8 +83,28 @@ export const getPosts = async (token, endpoint, after) => {
             subreddit: post.subreddit_name_prefixed,
             author: post.author,
             permalink: "https://www.reddit.com" + post.permalink,
-            image,
             created: post.created,
+            devJson: post,
         };
+
+        if (post.post_hint == "image")
+            post_maped.image = post.preview.images[0].source.url.replaceAll(
+                "&amp;",
+                "&"
+            );
+        else if (post.media_metadata) {
+            post_maped.images = Object.keys(post.media_metadata).map((key) => {
+                return {
+                    id: key,
+                    url: removeAmp(post.media_metadata[key].s.u),
+                    title:
+                        post.gallery_data.items.filter(
+                            (item) => item.media_id == key
+                        )[0].caption || null,
+                };
+            });
+        }
+
+        return post_maped;
     });
 };

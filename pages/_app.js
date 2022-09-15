@@ -18,11 +18,13 @@ import { getUserProfile } from "../repository/reddit_api";
 import Account from "../components/Account";
 import TokenContext from "../contexts/TokenContext";
 import BottomNavigation from "../components/BottomNavigation";
+import { usePreserveScroll } from "../hooks/usePreserveScroll";
 
 const queryClient = new QueryClient();
 
 function MyApp(props) {
     const router = useRouter();
+    const preserveScroll = usePreserveScroll();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navBlacklist = ["/authenticate", "/login"];
     const [refreshing, setRefreshing] = useState(true);
@@ -35,13 +37,11 @@ function MyApp(props) {
         }
 
         if (props.isNewToken) {
-            console.log(props);
             Cookies.set("token", props.access_token, {
                 expires: new Date(Date.now() + props.expires_in * 1000),
             });
         }
 
-        console.log(props);
         const { token, refresh } = Cookies.get();
 
         if (!token && !refresh && router.pathname != "/login") {
@@ -105,7 +105,7 @@ function MyApp(props) {
 
 MyApp.getInitialProps = async (props) => {
     const { token, refresh } = cookies(props.ctx);
-    console.log(refresh);
+
     if (props.ctx.pathname == "/authenticate") return {};
     if (!token && refresh) {
         const body = {
@@ -113,9 +113,6 @@ MyApp.getInitialProps = async (props) => {
             refresh_token: refresh,
         };
         const formData = new URLSearchParams(body);
-
-        console.log(`Basic ${config.basicCredentials}`);
-        console.log(formData);
 
         const response = await fetch(endpoints.access_token, {
             method: "POST",

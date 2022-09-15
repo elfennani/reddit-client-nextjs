@@ -42,7 +42,7 @@ function PostsList({ endpoint = endpoints.best }) {
     });
 
     if (isLoading) return <p>Loading...</p>;
-    if (isError || !data) return <p>Error</p>;
+    if (isError || !data) return <p>Error{error && `: ${error}`}</p>;
 
     if (data)
         return (
@@ -69,8 +69,13 @@ function PostsList({ endpoint = endpoints.best }) {
                             postLink={p.permalink}
                             creatorLink={`/u/${p.author}`}
                             extPostLink={p.permalink}
-                            // image={p.image}
+                            image={p.image}
+                            images={p.images}
                             createdOn={p.created}
+                            onUpvote={() => console.log("upvote")}
+                            onDownvote={() => console.log("downvote")}
+                            onShare={() => console.log("share")}
+                            onSave={() => console.log("save")}
                         />
                     ))
                 )}

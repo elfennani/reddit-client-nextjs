@@ -45,3 +45,12 @@ export const parseDate = (secondsSinceEpoch) => {
 
     return result;
 };
+
+/**
+ *
+ * @param {string} text
+ * @returns {string}
+ */
+export const removeAmp = (text) => {
+    return text.replaceAll("&amp;", "&");
+};

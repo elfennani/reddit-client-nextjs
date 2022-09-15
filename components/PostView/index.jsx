@@ -34,6 +34,7 @@ import { useRouter } from "next/router";
  * @property {VoidFunction} onDownvote,
  * @property {VoidFunction} onSave,
  * @property {VoidFunction} onShare,
+ * @property {import("../../repository/reddit_api").ImagesMetadata[]} images
  */
 
 /**
@@ -50,8 +51,6 @@ const PostView = (props) => {
         textCapped = true;
         text = props.text.substring(0, 100);
     }
-
-    // console.log(props);
 
     return (
         <Card className={styles.container} onClick={() => router.push("/post")}>
@@ -92,6 +91,14 @@ const PostView = (props) => {
             </header>
             <div className={styles.content}>
                 {props.image && <img src={props.image} alt={props.title} />}
+                {props.images &&
+                    props.images.map((imageMetadata) => (
+                        <img
+                            key={imageMetadata.id}
+                            src={imageMetadata.url}
+                            alt={imageMetadata.title}
+                        />
+                    ))}
                 {props.link && (
                     <a
                         title={props.link}
@@ -140,54 +147,64 @@ const PostView = (props) => {
                 </p>
                 <div className={styles.buttonsRow}>
                     <div>
-                        <button
-                            className={[
-                                styles.squared,
-                                props.voteState == "upvoted"
-                                    ? styles.upvoted
-                                    : null,
-                            ].join(" ")}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                props.onUpvote();
-                            }}
-                        >
-                            <CaretUpOutlined />
-                        </button>
-                        <button
-                            className={[
-                                styles.squared,
-                                props.voteState == "downvoted"
-                                    ? styles.downvoted
-                                    : null,
-                            ].join(" ")}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                props.onDownvote();
-                            }}
-                        >
-                            <CaretDownOutlined />
-                        </button>
+                        {props.onUpvote && (
+                            <button
+                                className={[
+                                    styles.squared,
+                                    props.voteState == "upvoted"
+                                        ? styles.upvoted
+                                        : null,
+                                ].join(" ")}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    props.onUpvote();
+                                }}
+                            >
+                                <CaretUpOutlined />
+                            </button>
+                        )}
+                        {props.onDownvote && (
+                            <button
+                                className={[
+                                    styles.squared,
+                                    props.voteState == "downvoted"
+                                        ? styles.downvoted
+                                        : null,
+                                ].join(" ")}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    props.onDownvote();
+                                }}
+                            >
+                                <CaretDownOutlined />
+                            </button>
+                        )}
                     </div>
                     <div>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.nativeEvent.stopImmediatePropagation();
-                                props.onShare();
-                            }}
-                        >
-                            <ShareAltOutlined /> <p>Share</p>
-                        </button>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.nativeEvent.stopImmediatePropagation();
-                                props.onSave();
-                            }}
-                        >
-                            <SaveFilled /> <p>Save</p>
-                        </button>
+                        {props.onShare && (
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    props.onShare();
+                                }}
+                            >
+                                <ShareAltOutlined /> <p>Share</p>
+                            </button>
+                        )}
+                        {props.onSave && (
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    props.onSave();
+                                }}
+                            >
+                                <SaveFilled /> <p>Save</p>
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
