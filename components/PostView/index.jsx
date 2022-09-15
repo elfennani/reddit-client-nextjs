@@ -51,11 +51,10 @@ const PostView = (props) => {
         text = props.text.substring(0, 100);
     }
 
+    // console.log(props);
+
     return (
-        <Card
-            className={styles.container}
-            onClick={() => router.reload(props.postLink)}
-        >
+        <Card className={styles.container} onClick={() => router.push("/post")}>
             <header>
                 {props.subreddit.picture && (
                     <img
@@ -65,7 +64,7 @@ const PostView = (props) => {
                 )}
                 <div>
                     <Link href={props.subreddit.link}>
-                        <a>
+                        <a onClick={(e) => e.stopPropagation()}>
                             <h2>{props.subreddit.name}</h2>
                         </a>
                     </Link>
@@ -78,11 +77,17 @@ const PostView = (props) => {
                     </p>
                 </div>
                 {props.extPostLink && (
-                    <Link href={props.extPostLink}>
-                        <a target="_blank">
-                            <LogoutOutlined rotate={-45} />
-                        </a>
-                    </Link>
+                    <a
+                        href={props.extPostLink}
+                        target="_blank"
+                        title="Open in Reddit"
+                        onClick={(e) => {
+                            // e.preventDefault();
+                            e.stopPropagation();
+                        }}
+                    >
+                        <LogoutOutlined rotate={-45} />
+                    </a>
                 )}
             </header>
             <div className={styles.content}>

@@ -47,11 +47,12 @@ export const getUserProfile = async (token) => {
 /**
  *
  * @param {string} token
- * @param {strin} endpoint
+ * @param {string} endpoint
+ * @param {string} after
  * @returns {Promise<PostData[]>}
  */
-export const getPosts = async (token, endpoint) => {
-    const res = await fetch(endpoint, {
+export const getPosts = async (token, endpoint, after) => {
+    const res = await fetch(endpoint + (after ? `?after=${after}` : ""), {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -75,7 +76,7 @@ export const getPosts = async (token, endpoint) => {
             commentsCount: post.num_comments,
             subreddit: post.subreddit_name_prefixed,
             author: post.author,
-            permalink: "https://www.reddit.com/" + post.permalink,
+            permalink: "https://www.reddit.com" + post.permalink,
             image,
             created: post.created,
         };

@@ -35,10 +35,9 @@ function MyApp(props) {
         }
 
         if (props.isNewToken) {
+            console.log(props);
             Cookies.set("token", props.access_token, {
-                expires: new Date(
-                    Date.now() + props.expires_in * 1000
-                ).toUTCString(),
+                expires: new Date(Date.now() + props.expires_in * 1000),
             });
         }
 
