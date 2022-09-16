@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import ImageContainer from "../ImageContainer";
 
 /**
  * @typedef PostProps
@@ -30,10 +31,11 @@ import { useRouter } from "next/router";
  * @property {("upvoted"|"downvoted"|null)} voteState
  * @property {string} extPostLink
  * @property {string} postLink
- * @property {VoidFunction} onUpvote,
- * @property {VoidFunction} onDownvote,
- * @property {VoidFunction} onSave,
- * @property {VoidFunction} onShare,
+ * @property {VoidFunction} onUpvote
+ * @property {VoidFunction} onDownvote
+ * @property {VoidFunction} onSav
+ * @property {VoidFunction} onShare
+ * @property {boolean} nsfw
  * @property {import("../../repository/reddit_api").ImagesMetadata[]} images
  */
 
@@ -81,7 +83,7 @@ const PostView = (props) => {
                         target="_blank"
                         title="Open in Reddit"
                         onClick={(e) => {
-                            // e.preventDefault();
+                            console.log(props.json);
                             e.stopPropagation();
                         }}
                     >
@@ -90,15 +92,19 @@ const PostView = (props) => {
                 )}
             </header>
             <div className={styles.content}>
-                {props.image && <img src={props.image} alt={props.title} />}
-                {props.images &&
-                    props.images.map((imageMetadata) => (
-                        <img
-                            key={imageMetadata.id}
-                            src={imageMetadata.url}
-                            alt={imageMetadata.title}
-                        />
-                    ))}
+                {props.image && (
+                    <ImageContainer
+                        image={props.image}
+                        alt={props.title}
+                        blur={props.nsfw}
+                    />
+                )}
+                {props.images && (
+                    <ImageContainer
+                        imagesMetadata={props.images}
+                        blur={props.nsfw}
+                    />
+                )}
                 {props.link && (
                     <a
                         title={props.link}

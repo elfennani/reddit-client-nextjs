@@ -71,11 +71,13 @@ function PostsList({ endpoint = endpoints.best }) {
                             extPostLink={p.permalink}
                             image={p.image}
                             images={p.images}
+                            json={p.devJson}
                             createdOn={p.created}
                             onUpvote={() => console.log("upvote")}
                             onDownvote={() => console.log("downvote")}
                             onShare={() => console.log("share")}
                             onSave={() => console.log("save")}
+                            nsfw={p.nsfw}
                         />
                     ))
                 )}

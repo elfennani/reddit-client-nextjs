@@ -1,0 +1,50 @@
+.imageContainer,
+.slideshow {
+    overflow: hidden;
+    max-height: 600px;
+    position: relative;
+    margin-bottom: 8px;
+
+    .showMore {
+        position: absolute;
+        left: 50%;
+        bottom: 25px;
+        transform: translateX(-50%);
+        z-index: 2;
+        text-transform: uppercase;
+        padding: 12px 24px;
+    }
+
+    .slideshowButton {
+        position: absolute;
+        top: 50%;
+        left: 32px;
+        transform: translateY(-50%);
+
+        &.nextButton {
+            left: unset;
+            right: 32px;
+        }
+    }
+}
+
+.blur {
+    img {
+        filter: blur(20px);
+    }
+}
+
+.overflown::after {
+    content: "";
+    display: block;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100px;
+    position: absolute;
+    background: linear-gradient(
+        to top,
+        rgba($color: #000000, $alpha: 0.5),
+        rgba($color: #000000, $alpha: 0)
+    );
+}

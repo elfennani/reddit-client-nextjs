@@ -88,3 +88,11 @@ main.content {
         display: block;
     }
 }
+
+.blurContainer {
+    overflow: hidden;
+    .blur {
+        filter: blur(40px);
+        overflow: hidden;
+    }
+}

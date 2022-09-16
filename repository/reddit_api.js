@@ -52,6 +52,7 @@ export const getUserProfile = async (token) => {
  * @property {ImagesMetadata[]} images
  * @property {Number} created
  * @property {Object} devJson
+ * @property {boolean} nsfw
  */
 /**
  *
@@ -85,6 +86,7 @@ export const getPosts = async (token, endpoint, after) => {
             permalink: "https://www.reddit.com" + post.permalink,
             created: post.created,
             devJson: post,
+            nsfw: post.over_18,
         };
 
         if (post.post_hint == "image")
@@ -93,7 +95,13 @@ export const getPosts = async (token, endpoint, after) => {
                 "&"
             );
         else if (post.media_metadata) {
+            let notAnImage = false;
             post_maped.images = Object.keys(post.media_metadata).map((key) => {
+                if (notAnImage) return;
+                if (post.media_metadata[key].e != "Image") {
+                    notAnImage = true;
+                    return;
+                }
                 return {
                     id: key,
                     url: removeAmp(post.media_metadata[key].s.u),
@@ -103,6 +111,10 @@ export const getPosts = async (token, endpoint, after) => {
                         )[0].caption || null,
                 };
             });
+
+            if (notAnImage) {
+                post_maped.images = undefined;
+            }
         }
 
         return post_maped;
