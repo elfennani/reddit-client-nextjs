@@ -8,6 +8,7 @@
  * @property {string} pfp
  */
 
+import { decode } from "html-entities";
 import endpoints from "../constants/endpoints";
 import { removeAmp } from "../utils/functions";
 
@@ -119,4 +120,39 @@ export const getPosts = async (token, endpoint, after) => {
 
         return post_maped;
     });
+};
+
+/**
+ * @typedef SubredditInfoData
+ * @property {string} icon
+ * @property {string} primary_color
+ */
+/**
+ * @param {string} subreddit
+ * @param {string} token
+ * @returns {Promise<SubredditInfoData>}
+ */
+export const getSubredditInfo = async (subreddit, token) => {
+    const res = await fetch(endpoints.subreddit(subreddit) + "/about", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const json = await res.json();
+    const data = json.data;
+
+    /**
+     * @type {SubredditInfoData}
+     */
+    const result = {
+        primary_color: data.key_color,
+    };
+
+    if (data.icon_img) {
+        result.icon = decode(data.icon_img);
+    } else if (data.community_icon) {
+        result.icon = decode(data.community_icon);
+    }
+
+    return result;
 };

@@ -40,6 +40,7 @@ function MyApp(props) {
             Cookies.set("token", props.access_token, {
                 expires: new Date(Date.now() + props.expires_in * 1000),
             });
+            router.reload();
         }
 
         const { token, refresh } = Cookies.get();

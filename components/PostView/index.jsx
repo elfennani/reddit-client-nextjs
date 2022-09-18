@@ -14,10 +14,11 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ImageContainer from "../ImageContainer";
+import SubredditIcon from "../SubredditIcon";
 
 /**
  * @typedef PostProps
- * @property {{name: string, picture: string, link: string}} subreddit
+ * @property {string} subreddit
  * @property {string} creator
  * @property {number} createdOn
  * @property {string} creatorLink
@@ -57,16 +58,13 @@ const PostView = (props) => {
     return (
         <Card className={styles.container} onClick={() => router.push("/post")}>
             <header>
-                {props.subreddit.picture && (
-                    <img
-                        src={props.subreddit.picture}
-                        alt={props.subreddit.name}
-                    />
+                {props.subreddit && (
+                    <SubredditIcon subreddit={props.subreddit} />
                 )}
                 <div>
-                    <Link href={props.subreddit.link}>
+                    <Link href={"/" + props.subreddit}>
                         <a onClick={(e) => e.stopPropagation()}>
-                            <h2>{props.subreddit.name}</h2>
+                            <h2>{props.subreddit}</h2>
                         </a>
                     </Link>
                     <p>
@@ -221,11 +219,7 @@ PostView.defaultProps = {
     voteState: "none",
 };
 PostView.propTypes = {
-    subreddit: PropTypes.shape({
-        name: PropTypes.string,
-        picture: PropTypes.string,
-        link: PropTypes.string,
-    }).isRequired,
+    subreddit: PropTypes.string,
     creator: PropTypes.string,
     createdOn: PropTypes.number,
     creatorLink: PropTypes.string,

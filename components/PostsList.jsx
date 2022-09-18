@@ -1,9 +1,5 @@
-import {
-    useInfiniteQuery,
-    useQuery,
-    useQueryClient,
-} from "@tanstack/react-query";
-import { da } from "date-fns/locale";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { decode } from "html-entities";
 import React from "react";
 import { useContext } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -58,19 +54,16 @@ function PostsList({ endpoint = endpoints.best }) {
                     page.map((p) => (
                         <PostView
                             key={p.name}
-                            title={p.title}
+                            title={decode(p.title)}
                             creator={"u/" + p.author}
                             commentCount={p.commentsCount}
-                            subreddit={{
-                                name: p.subreddit,
-                                link: `/${p.subreddit}`,
-                            }}
+                            subreddit={p.subreddit}
                             votes={p.votes}
                             postLink={p.permalink}
                             creatorLink={`/u/${p.author}`}
                             extPostLink={p.permalink}
-                            image={p.image}
-                            images={p.images}
+                            // image={p.image}
+                            // images={p.images}
                             json={p.devJson}
                             createdOn={p.created}
                             onUpvote={() => console.log("upvote")}

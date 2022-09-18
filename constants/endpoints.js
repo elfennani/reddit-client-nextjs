@@ -4,4 +4,5 @@ export default {
     access_token: "https://www.reddit.com/api/v1/access_token",
     profile: `${prefix}/api/v1/me`,
     best: `${prefix}/best/`,
+    subreddit: (subreddit) => `${prefix}/${subreddit}`,
 };
