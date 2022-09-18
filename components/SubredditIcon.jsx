@@ -3,6 +3,7 @@ import { contrastColor } from "contrast-color";
 import React from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
+import Skeleton from "react-loading-skeleton";
 import styled from "styled-components";
 import TokenContext from "../contexts/TokenContext";
 import { getSubredditInfo } from "../repository/reddit_api";
@@ -44,7 +45,7 @@ const SubredditIcon = ({ subreddit, size = 32 }) => {
         return () => {};
     }, [error]);
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Skeleton width={size} height={size} />;
 
     if (isError || !data.icon)
         return (

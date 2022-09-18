@@ -71,6 +71,8 @@ export const getPosts = async (token, endpoint, after) => {
 
     const data = await res.json();
 
+    // console.log(data);
+
     return data.data.children.map((data) => {
         const post = data.data;
 
@@ -97,21 +99,29 @@ export const getPosts = async (token, endpoint, after) => {
             );
         else if (post.media_metadata) {
             let notAnImage = false;
-            post_maped.images = Object.keys(post.media_metadata).map((key) => {
-                if (notAnImage) return;
-                if (post.media_metadata[key].e != "Image") {
-                    notAnImage = true;
-                    return;
-                }
-                return {
-                    id: key,
-                    url: removeAmp(post.media_metadata[key].s.u),
-                    title:
-                        post.gallery_data.items.filter(
-                            (item) => item.media_id == key
-                        )[0].caption || null,
-                };
-            });
+            try {
+                post_maped.images = Object.keys(post.media_metadata).map(
+                    (key) => {
+                        if (notAnImage) return;
+                        if (post.media_metadata[key].e != "Image") {
+                            notAnImage = true;
+                            return;
+                        }
+                        return {
+                            id: key,
+                            url: removeAmp(post.media_metadata[key].s.u),
+                            title:
+                                post.gallery_data && post.gallery_data.items
+                                    ? post.gallery_data.items.filter(
+                                          (item) => item.media_id == key
+                                      )[0].caption || null
+                                    : null,
+                        };
+                    }
+                );
+            } catch (error) {
+                console.log(post);
+            }
 
             if (notAnImage) {
                 post_maped.images = undefined;

@@ -62,8 +62,8 @@ function PostsList({ endpoint = endpoints.best }) {
                             postLink={p.permalink}
                             creatorLink={`/u/${p.author}`}
                             extPostLink={p.permalink}
-                            // image={p.image}
-                            // images={p.images}
+                            image={p.image}
+                            images={p.images}
                             json={p.devJson}
                             createdOn={p.created}
                             onUpvote={() => console.log("upvote")}

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./PostView.module.scss";
 import Card from "../Card";
-import { parseDate } from "../../utils/functions";
+import { minimizeNumber, parseDate } from "../../utils/functions";
 import {
     CaretDownOutlined,
     CaretUpOutlined,
@@ -135,14 +135,14 @@ const PostView = (props) => {
                                 : null
                         }
                     >
-                        {props.votes} vote
+                        {minimizeNumber(props.votes, 1)} vote
                         {props.votes.toString()[
                             props.votes.toString().length - 1
                         ] === "1"
                             ? ""
                             : "s"}
                     </span>{" "}
-                    • {props.commentCount} comment
+                    • {minimizeNumber(props.commentCount, 1)} comment
                     {props.commentCount.toString()[
                         props.commentCount.toString().length - 1
                     ] === "1"

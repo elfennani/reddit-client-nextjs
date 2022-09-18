@@ -12,6 +12,10 @@
 
     @include onMobile {
         margin-left: 0;
+
+        .layout {
+            padding: 0 16px !important;
+        }
     }
 
     .layout {

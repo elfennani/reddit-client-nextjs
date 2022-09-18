@@ -3,7 +3,13 @@
     overflow: hidden;
     max-height: 600px;
     position: relative;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    border-radius: 5px;
+
+    img {
+        width: 100%;
+        display: block;
+    }
 
     .showMore {
         position: absolute;
