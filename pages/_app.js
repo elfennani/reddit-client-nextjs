@@ -20,7 +20,13 @@ import TokenContext from "../contexts/TokenContext";
 import BottomNavigation from "../components/BottomNavigation";
 import { usePreserveScroll } from "../hooks/usePreserveScroll";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 function MyApp(props) {
     const router = useRouter();

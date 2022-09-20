@@ -1,9 +1,20 @@
 import Cookies from "js-cookie";
 import cookies from "next-cookies";
+import { useEffect } from "react";
+import PostHandler from "../../components/PostHandler";
 import { getPostData } from "../../repository/reddit_api";
 
-const Post = ({}) => {
-    return <div></div>;
+/**
+ *
+ * @param {{data:import("../../repository/reddit_api").PostData}} props
+ * @returns
+ */
+const Post = ({ data }) => {
+    return (
+        <div className="layout">
+            <PostHandler key={data.name} postData={data} />
+        </div>
+    );
 };
 
 /**
@@ -11,9 +22,11 @@ const Post = ({}) => {
  */
 export const getServerSideProps = async (ctx) => {
     const { token } = cookies(ctx);
-    console.log(await getPostData(ctx.params.id, token));
+
     return {
-        props: {},
+        props: {
+            data: await getPostData(ctx.params.id, token),
+        },
     };
 };
 

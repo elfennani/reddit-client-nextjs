@@ -54,7 +54,7 @@ export const getUserProfile = async (token) => {
  * @property {Number} created
  * @property {Object} devJson
  * @property {boolean} nsfw
- * @property {("upvoted"|"dowvoted"|null)} voteState
+ * @property {(boolean|null)} voteState
  */
 
 /**
@@ -77,6 +77,8 @@ export const parsePost = (data) => {
         created: post.created,
         devJson: post,
         nsfw: post.over_18,
+        voteState:
+            post.likes == null ? null : post.likes ? "upvoted" : "downvoted",
     };
 
     if (post.post_hint == "image")
@@ -199,12 +201,16 @@ export const votePost = async (id, voteState, token) => {
  * @returns {Promise<PostData>}
  */
 export const getPostData = async (id, token) => {
-    const res = await fetch(endpoints.post_info + `?id=${id}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-
+    let res;
+    if (token) {
+        res = await fetch(endpoints.post_info + `?id=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    } else {
+        res = await fetch(endpoints.post_info_anon + `?id=${id}`);
+    }
     const data = await res.json();
     return data.data.children.map(parsePost)[0];
 };
