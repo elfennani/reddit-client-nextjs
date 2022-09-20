@@ -54,7 +54,68 @@ export const getUserProfile = async (token) => {
  * @property {Number} created
  * @property {Object} devJson
  * @property {boolean} nsfw
+ * @property {("upvoted"|"dowvoted"|null)} voteState
  */
+
+/**
+ * @returns {PostData}
+ */
+export const parsePost = (data) => {
+    const post = data.data;
+
+    /**
+     * @type {PostData}
+     */
+    let post_maped = {
+        title: post.title,
+        votes: post.score,
+        name: post.name,
+        commentsCount: post.num_comments,
+        subreddit: post.subreddit_name_prefixed,
+        author: post.author,
+        permalink: "https://www.reddit.com" + post.permalink,
+        created: post.created,
+        devJson: post,
+        nsfw: post.over_18,
+    };
+
+    if (post.post_hint == "image")
+        post_maped.image = post.preview.images[0].source.url.replaceAll(
+            "&amp;",
+            "&"
+        );
+    else if (post.media_metadata) {
+        let notAnImage = false;
+        try {
+            post_maped.images = Object.keys(post.media_metadata).map((key) => {
+                if (notAnImage) return;
+                if (post.media_metadata[key].e != "Image") {
+                    notAnImage = true;
+                    return;
+                }
+                return {
+                    id: key,
+                    url: removeAmp(post.media_metadata[key].s.u),
+                    title:
+                        post.gallery_data && post.gallery_data.items
+                            ? post.gallery_data.items.filter(
+                                  (item) => item.media_id == key
+                              )[0].caption || null
+                            : null,
+                };
+            });
+        } catch (error) {
+            console.log(post);
+        }
+
+        if (notAnImage) {
+            post_maped.images = undefined;
+        }
+    }
+
+    return post_maped;
+};
+
 /**
  *
  * @param {string} token
@@ -70,66 +131,7 @@ export const getPosts = async (token, endpoint, after) => {
     });
 
     const data = await res.json();
-
-    // console.log(data);
-
-    return data.data.children.map((data) => {
-        const post = data.data;
-
-        /**
-         * @type {PostData}
-         */
-        let post_maped = {
-            title: post.title,
-            votes: post.score,
-            name: post.name,
-            commentsCount: post.num_comments,
-            subreddit: post.subreddit_name_prefixed,
-            author: post.author,
-            permalink: "https://www.reddit.com" + post.permalink,
-            created: post.created,
-            devJson: post,
-            nsfw: post.over_18,
-        };
-
-        if (post.post_hint == "image")
-            post_maped.image = post.preview.images[0].source.url.replaceAll(
-                "&amp;",
-                "&"
-            );
-        else if (post.media_metadata) {
-            let notAnImage = false;
-            try {
-                post_maped.images = Object.keys(post.media_metadata).map(
-                    (key) => {
-                        if (notAnImage) return;
-                        if (post.media_metadata[key].e != "Image") {
-                            notAnImage = true;
-                            return;
-                        }
-                        return {
-                            id: key,
-                            url: removeAmp(post.media_metadata[key].s.u),
-                            title:
-                                post.gallery_data && post.gallery_data.items
-                                    ? post.gallery_data.items.filter(
-                                          (item) => item.media_id == key
-                                      )[0].caption || null
-                                    : null,
-                        };
-                    }
-                );
-            } catch (error) {
-                console.log(post);
-            }
-
-            if (notAnImage) {
-                post_maped.images = undefined;
-            }
-        }
-
-        return post_maped;
-    });
+    return data.data.children.map(parsePost);
 };
 
 /**
@@ -165,4 +167,44 @@ export const getSubredditInfo = async (subreddit, token) => {
     }
 
     return result;
+};
+
+/**
+ *
+ * @param {string} id
+ * @param {(-1|1|0)} voteState
+ * @param {token} token
+ */
+export const votePost = async (id, voteState, token) => {
+    console.log({ id, voteState, token });
+    try {
+        const res = await fetch(endpoints.vote, {
+            method: "post",
+            body: `id=${id}&dir=${voteState}&rank=1`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        });
+
+        console.log(await res.json());
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+/**
+ * @param {string} id
+ * @param {string} token
+ * @returns {Promise<PostData>}
+ */
+export const getPostData = async (id, token) => {
+    const res = await fetch(endpoints.post_info + `?id=${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const data = await res.json();
+    return data.data.children.map(parsePost)[0];
 };

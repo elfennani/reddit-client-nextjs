@@ -5,4 +5,6 @@ export default {
     profile: `${prefix}/api/v1/me`,
     best: `${prefix}/best/`,
     subreddit: (subreddit) => `${prefix}/${subreddit}`,
+    vote: `${prefix}/api/vote`,
+    post_info: `${prefix}/api/info/`,
 };

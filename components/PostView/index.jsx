@@ -56,7 +56,10 @@ const PostView = (props) => {
     }
 
     return (
-        <Card className={styles.container} onClick={() => router.push("/post")}>
+        <Card
+            className={styles.container}
+            onClick={() => router.push(`/post/${props.name}`)}
+        >
             <header>
                 {props.subreddit && (
                     <SubredditIcon subreddit={props.subreddit} />
@@ -128,7 +131,7 @@ const PostView = (props) => {
                 <p>
                     <span
                         className={
-                            props.voteState != "none"
+                            props.voteState != "none" && props.voteState != null
                                 ? props.voteState == "upvoted"
                                     ? styles.upvoted
                                     : styles.downvoted

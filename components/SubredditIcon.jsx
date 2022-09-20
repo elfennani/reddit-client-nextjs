@@ -49,7 +49,10 @@ const SubredditIcon = ({ subreddit, size = 32 }) => {
 
     if (isError || !data.icon)
         return (
-            <ImageTemplate size={size} bgColor={data.primary_color}>
+            <ImageTemplate
+                size={size}
+                bgColor={isError ? null : data.primary_color}
+            >
                 {subreddit.substring(2, 4)}
             </ImageTemplate>
         );

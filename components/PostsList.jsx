@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { decode } from "html-entities";
-import React from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import endpoints from "../constants/endpoints";
 import TokenContext from "../contexts/TokenContext";
-import { getPosts } from "../repository/reddit_api";
+import { getPosts, votePost } from "../repository/reddit_api";
 import Button from "./Button";
 import PostView from "./PostView";
 
@@ -16,6 +16,7 @@ import PostView from "./PostView";
  */
 function PostsList({ endpoint = endpoints.best }) {
     const token = useContext(TokenContext);
+    const [upvotedPosts, setUpvotedPosts] = useState({});
 
     const {
         isLoading,
@@ -30,6 +31,7 @@ function PostsList({ endpoint = endpoints.best }) {
         {
             getNextPageParam: (lastPage, allPages) =>
                 lastPage[lastPage.length - 1].name || undefined,
+            refetchOnMount: false,
         }
     );
 
@@ -39,6 +41,43 @@ function PostsList({ endpoint = endpoints.best }) {
 
     if (isLoading) return <p>Loading...</p>;
     if (isError || !data) return <p>Error{error && `: ${error}`}</p>;
+
+    /**
+     *
+     * @param {("upvote"|"downvote")} type
+     * @param {string} name
+     */
+    const onVote = (type, name) => {
+        if (type != "upvote" && type != "downvote") {
+            throw 'Type should be either "upvote" or "downvote"';
+        }
+
+        setUpvotedPosts((upvotedPosts) => {
+            if (
+                Object.keys(upvotedPosts).includes(name) &&
+                upvotedPosts[name] != undefined
+            ) {
+                const state = upvotedPosts[name] ? "upvote" : "downvote";
+                if (state == type) {
+                    votePost(name, 0, token);
+                    return { ...upvotedPosts, [name]: undefined };
+                }
+            }
+
+            votePost(name, type == "upvote" ? 1 : -1, token);
+            return { ...upvotedPosts, [name]: type == "upvote" ? true : false };
+        });
+    };
+
+    /**
+     * @param {string} name
+     * @returns {"upvoted"|"downvoted"|null}
+     */
+    const getVoteState = (name) => {
+        if (upvotedPosts[name] != undefined)
+            return upvotedPosts[name] ? "upvoted" : "downvoted";
+        return null;
+    };
 
     if (data)
         return (
@@ -54,6 +93,7 @@ function PostsList({ endpoint = endpoints.best }) {
                     page.map((p) => (
                         <PostView
                             key={p.name}
+                            name={p.name}
                             title={decode(p.title)}
                             creator={"u/" + p.author}
                             commentCount={p.commentsCount}
@@ -66,11 +106,12 @@ function PostsList({ endpoint = endpoints.best }) {
                             images={p.images}
                             json={p.devJson}
                             createdOn={p.created}
-                            onUpvote={() => console.log("upvote")}
-                            onDownvote={() => console.log("downvote")}
+                            onUpvote={() => onVote("upvote", p.name)}
+                            onDownvote={() => onVote("downvote", p.name)}
                             onShare={() => console.log("share")}
                             onSave={() => console.log("save")}
                             nsfw={p.nsfw}
+                            voteState={getVoteState(p.name)}
                         />
                     ))
                 )}
