@@ -12,7 +12,12 @@ import { getPostData } from "../../repository/reddit_api";
 const Post = ({ data }) => {
     return (
         <div className="layout">
-            <PostHandler key={data.name} postData={data} />
+            <PostHandler
+                key={data.name}
+                postData={data}
+                ignoreNSFW={true}
+                ignoreImageSize={true}
+            />
         </div>
     );
 };

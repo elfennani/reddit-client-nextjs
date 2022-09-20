@@ -38,6 +38,7 @@ import SubredditIcon from "../SubredditIcon";
  * @property {VoidFunction} onShare
  * @property {boolean} nsfw
  * @property {import("../../repository/reddit_api").ImagesMetadata[]} images
+ * @property {boolean|false} ignoreImageSize
  */
 
 /**
@@ -97,6 +98,7 @@ const PostView = (props) => {
                     <ImageContainer
                         image={props.image}
                         alt={props.title}
+                        ignoreSize={props.ignoreImageSize}
                         blur={props.nsfw}
                     />
                 )}
@@ -104,6 +106,7 @@ const PostView = (props) => {
                     <ImageContainer
                         imagesMetadata={props.images}
                         blur={props.nsfw}
+                        ignoreSize={props.ignoreImageSize}
                     />
                 )}
                 {props.link && (
@@ -220,6 +223,7 @@ const PostView = (props) => {
 };
 PostView.defaultProps = {
     voteState: "none",
+    ignoreImageSize: false,
 };
 PostView.propTypes = {
     subreddit: PropTypes.string,

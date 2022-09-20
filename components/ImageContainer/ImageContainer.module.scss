@@ -6,6 +6,10 @@
     margin-bottom: 12px;
     border-radius: 5px;
 
+    &.ignoreSize {
+        max-height: unset;
+    }
+
     img {
         width: 100%;
         display: block;

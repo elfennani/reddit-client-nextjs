@@ -9,6 +9,7 @@ import styles from "./ImageContainer.module.scss";
  * @property {string} image
  * @property {string} alt
  * @property {boolean} blur
+ * @property {boolean} ignoreSize
  * @property {import("../../repository/reddit_api").ImagesMetadata[]} imagesMetadata
  */
 /**
@@ -16,7 +17,7 @@ import styles from "./ImageContainer.module.scss";
  * @param {ImagesContainerProps} props
  * @returns
  */
-const ImageContainer = ({ image, imagesMetadata, blur, alt }) => {
+const ImageContainer = ({ image, imagesMetadata, blur, alt, ignoreSize }) => {
     const [currentImage, setCurrentImage] = useState(0);
     const [showLink, setShowLink] = useState(false);
     const container = useRef();
@@ -35,6 +36,7 @@ const ImageContainer = ({ image, imagesMetadata, blur, alt }) => {
                     ref={container}
                     className={[
                         styles.imageContainer,
+                        ignoreSize ? styles.ignoreSize : null,
                         blur ? styles.blur : null,
                         showLink ? styles.overflown : null,
                     ].join(" ")}
@@ -58,6 +60,7 @@ const ImageContainer = ({ image, imagesMetadata, blur, alt }) => {
             ref={container}
             className={[
                 styles.slideshow,
+                ignoreSize ? styles.ignoreSize : null,
                 blur ? styles.blur : null,
                 showLink ? styles.overflown : null,
             ].join(" ")}

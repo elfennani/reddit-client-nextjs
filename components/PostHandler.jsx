@@ -7,10 +7,14 @@ import { votePost } from "../repository/reddit_api";
 import PostView from "./PostView";
 
 /**
- * @param {{postData:import('../repository/reddit_api').PostData}} props
+ * @param {{postData:import('../repository/reddit_api').PostData,ignoreNSFW:boolean,ignoreImageSize:boolean}} props
  * @returns {React.Component}
  */
-const PostHandler = ({ postData }) => {
+const PostHandler = ({
+    postData,
+    ignoreNSFW = false,
+    ignoreImageSize = false,
+}) => {
     const token = useContext(TokenContext);
     const [voteState, setVoteState] = useState(postData.voteState);
 
@@ -61,8 +65,9 @@ const PostHandler = ({ postData }) => {
             onDownvote={() => onVote("downvoted", postData.name)}
             onShare={() => console.log("share")}
             onSave={() => console.log("save")}
-            nsfw={postData.nsfw}
+            nsfw={ignoreNSFW ? false : postData.nsfw}
             voteState={getVoteState(postData.name, postData.voteState)}
+            ignoreImageSize={ignoreImageSize}
         />
     );
 };
