@@ -57,168 +57,168 @@ const PostView = (props) => {
     }
 
     return (
-        <Card
-            className={styles.container}
-            onClick={() => router.push(`/post/${props.name}`)}
-        >
-            <header>
-                {props.subreddit && (
-                    <SubredditIcon subreddit={props.subreddit} />
-                )}
-                <div>
-                    <Link href={"/" + props.subreddit}>
-                        <a onClick={(e) => e.stopPropagation()}>
-                            <h2>{props.subreddit}</h2>
+        <Link href={`/post/${props.name}`}>
+            <Card className={styles.container}>
+                <header>
+                    {props.subreddit && (
+                        <SubredditIcon subreddit={props.subreddit} />
+                    )}
+                    <div>
+                        <Link href={"/" + props.subreddit}>
+                            <a onClick={(e) => e.stopPropagation()}>
+                                <h2>{props.subreddit}</h2>
+                            </a>
+                        </Link>
+                        <p>
+                            Posted by{" "}
+                            <Link href={props.creatorLink}>
+                                <a>{props.creator}</a>
+                            </Link>{" "}
+                            {"\u2022"} {parseDate(props.createdOn)}
+                        </p>
+                    </div>
+                    {props.extPostLink && (
+                        <a
+                            href={props.extPostLink}
+                            target="_blank"
+                            title="Open in Reddit"
+                            onClick={(e) => {
+                                console.log(props.json);
+                                e.stopPropagation();
+                            }}
+                        >
+                            <LogoutOutlined rotate={-45} />
                         </a>
-                    </Link>
-                    <p>
-                        Posted by{" "}
-                        <Link href={props.creatorLink}>
-                            <a>{props.creator}</a>
-                        </Link>{" "}
-                        {"\u2022"} {parseDate(props.createdOn)}
-                    </p>
+                    )}
+                </header>
+                <div className={styles.content}>
+                    {props.image && (
+                        <ImageContainer
+                            image={props.image}
+                            alt={props.title}
+                            ignoreSize={props.ignoreImageSize}
+                            blur={props.nsfw}
+                        />
+                    )}
+                    {props.images && (
+                        <ImageContainer
+                            imagesMetadata={props.images}
+                            blur={props.nsfw}
+                            ignoreSize={props.ignoreImageSize}
+                        />
+                    )}
+                    {props.link && (
+                        <a
+                            title={props.link}
+                            className={styles.linkCard}
+                            href={props.link}
+                        >
+                            <span>{props.link}</span> <LinkOutlined />
+                        </a>
+                    )}
+                    <h2>{props.title}</h2>
+                    {text && (
+                        <p
+                            className={[
+                                styles.text,
+                                textCapped ? styles.capped : null,
+                            ].join(" ")}
+                        >
+                            {text}
+                        </p>
+                    )}
                 </div>
-                {props.extPostLink && (
-                    <a
-                        href={props.extPostLink}
-                        target="_blank"
-                        title="Open in Reddit"
-                        onClick={(e) => {
-                            console.log(props.json);
-                            e.stopPropagation();
-                        }}
-                    >
-                        <LogoutOutlined rotate={-45} />
-                    </a>
-                )}
-            </header>
-            <div className={styles.content}>
-                {props.image && (
-                    <ImageContainer
-                        image={props.image}
-                        alt={props.title}
-                        ignoreSize={props.ignoreImageSize}
-                        blur={props.nsfw}
-                    />
-                )}
-                {props.images && (
-                    <ImageContainer
-                        imagesMetadata={props.images}
-                        blur={props.nsfw}
-                        ignoreSize={props.ignoreImageSize}
-                    />
-                )}
-                {props.link && (
-                    <a
-                        title={props.link}
-                        className={styles.linkCard}
-                        href={props.link}
-                    >
-                        <span>{props.link}</span> <LinkOutlined />
-                    </a>
-                )}
-                <h2>{props.title}</h2>
-                {text && (
-                    <p
-                        className={[
-                            styles.text,
-                            textCapped ? styles.capped : null,
-                        ].join(" ")}
-                    >
-                        {text}
-                    </p>
-                )}
-            </div>
-            <div className={styles.toolbar}>
-                <p>
-                    <span
-                        className={
-                            props.voteState != "none" && props.voteState != null
-                                ? props.voteState == "upvoted"
-                                    ? styles.upvoted
-                                    : styles.downvoted
-                                : null
-                        }
-                    >
-                        {minimizeNumber(props.votes, 1)} vote
-                        {props.votes.toString()[
-                            props.votes.toString().length - 1
+                <div className={styles.toolbar}>
+                    <p>
+                        <span
+                            className={
+                                props.voteState != "none" &&
+                                props.voteState != null
+                                    ? props.voteState == "upvoted"
+                                        ? styles.upvoted
+                                        : styles.downvoted
+                                    : null
+                            }
+                        >
+                            {minimizeNumber(props.votes, 1)} vote
+                            {props.votes.toString()[
+                                props.votes.toString().length - 1
+                            ] === "1"
+                                ? ""
+                                : "s"}
+                        </span>{" "}
+                        • {minimizeNumber(props.commentCount, 1)} comment
+                        {props.commentCount.toString()[
+                            props.commentCount.toString().length - 1
                         ] === "1"
                             ? ""
                             : "s"}
-                    </span>{" "}
-                    • {minimizeNumber(props.commentCount, 1)} comment
-                    {props.commentCount.toString()[
-                        props.commentCount.toString().length - 1
-                    ] === "1"
-                        ? ""
-                        : "s"}
-                </p>
-                <div className={styles.buttonsRow}>
-                    <div>
-                        {props.onUpvote && (
-                            <button
-                                className={[
-                                    styles.squared,
-                                    props.voteState == "upvoted"
-                                        ? styles.upvoted
-                                        : null,
-                                ].join(" ")}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    props.onUpvote();
-                                }}
-                            >
-                                <CaretUpOutlined />
-                            </button>
-                        )}
-                        {props.onDownvote && (
-                            <button
-                                className={[
-                                    styles.squared,
-                                    props.voteState == "downvoted"
-                                        ? styles.downvoted
-                                        : null,
-                                ].join(" ")}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    props.onDownvote();
-                                }}
-                            >
-                                <CaretDownOutlined />
-                            </button>
-                        )}
-                    </div>
-                    <div>
-                        {props.onShare && (
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    props.onShare();
-                                }}
-                            >
-                                <ShareAltOutlined /> <p>Share</p>
-                            </button>
-                        )}
-                        {props.onSave && (
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    props.onSave();
-                                }}
-                            >
-                                <SaveFilled /> <p>Save</p>
-                            </button>
-                        )}
+                    </p>
+                    <div className={styles.buttonsRow}>
+                        <div>
+                            {props.onUpvote && (
+                                <button
+                                    className={[
+                                        styles.squared,
+                                        props.voteState == "upvoted"
+                                            ? styles.upvoted
+                                            : null,
+                                    ].join(" ")}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        props.onUpvote();
+                                    }}
+                                >
+                                    <CaretUpOutlined />
+                                </button>
+                            )}
+                            {props.onDownvote && (
+                                <button
+                                    className={[
+                                        styles.squared,
+                                        props.voteState == "downvoted"
+                                            ? styles.downvoted
+                                            : null,
+                                    ].join(" ")}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        props.onDownvote();
+                                    }}
+                                >
+                                    <CaretDownOutlined />
+                                </button>
+                            )}
+                        </div>
+                        <div>
+                            {props.onShare && (
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        props.onShare();
+                                    }}
+                                >
+                                    <ShareAltOutlined /> <p>Share</p>
+                                </button>
+                            )}
+                            {props.onSave && (
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        props.onSave();
+                                    }}
+                                >
+                                    <SaveFilled /> <p>Save</p>
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Card>
+            </Card>
+        </Link>
     );
 };
 PostView.defaultProps = {

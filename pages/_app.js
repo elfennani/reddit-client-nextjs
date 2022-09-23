@@ -1,5 +1,5 @@
 import "../styles/globals.scss";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import cookies from "next-cookies";
@@ -7,18 +7,19 @@ import config from "../constants/config";
 import endpoints from "../constants/endpoints";
 import Head from "next/head";
 import TopNavigation from "../components/TopNavigation";
-import AccountTemplate from "../components/AccountTemplate";
 import PagesList from "../components/PagesList";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 import {
     useQuery,
     QueryClient,
     QueryClientProvider,
 } from "@tanstack/react-query";
-import { getUserProfile } from "../repository/reddit_api";
 import Account from "../components/Account";
 import TokenContext from "../contexts/TokenContext";
 import BottomNavigation from "../components/BottomNavigation";
 import { usePreserveScroll } from "../hooks/usePreserveScroll";
+import VotedPosts from "../contexts/VotedPosts";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -28,15 +29,37 @@ const queryClient = new QueryClient({
     },
 });
 
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
+
 function MyApp(props) {
     const router = useRouter();
     const preserveScroll = usePreserveScroll();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navBlacklist = ["/authenticate", "/login"];
     const [refreshing, setRefreshing] = useState(true);
+    const [votedPosts, setVotedPosts] = useState({});
+
+    /**
+     * @type {import("../contexts/VotedPosts").SetPostValue}
+     */
+    const addVotedPost = (name, value) => {
+        setVotedPosts((votedPosts) => ({ ...votedPosts, [name]: value }));
+    };
+
+    /**
+     * @type {import("../contexts/VotedPosts").VotedPostsContext}
+     */
+    const config = {
+        posts: votedPosts,
+        setPostValue: addVotedPost,
+    };
 
     useEffect(() => {
         setRefreshing(true);
+        config.setPostValue();
+
         if (props.logout) {
             Cookies.remove("token");
             Cookies.remove("refresh");
@@ -82,30 +105,32 @@ function MyApp(props) {
 
     return (
         <TokenContext.Provider value={props.token}>
-            <QueryClientProvider client={queryClient}>
-                <Head>Revirt</Head>
-                <TopNavigation onToggleMenu={onMenuToggleHandler} />
-                <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
-                    <Account />
-                    <span className="divider"></span>
-                    <PagesList
-                        activePage={router.pathname}
-                        onChange={() => setIsMenuOpen(false)}
-                    />
-                </div>
-                {isMenuOpen && (
-                    <span
-                        className="backdrop"
-                        onClick={setIsMenuOpen.bind(this, false)}
-                    ></span>
-                )}
-                <main className="content">
-                    <props.Component {...props.pageProps} />
-                </main>
-                <div className="onMobile">
-                    <BottomNavigation activePage={router.pathname} />
-                </div>
-            </QueryClientProvider>
+            <VotedPosts.Provider value={config}>
+                <QueryClientProvider client={queryClient}>
+                    <Head>Revirt</Head>
+                    <TopNavigation onToggleMenu={onMenuToggleHandler} />
+                    <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
+                        <Account />
+                        <span className="divider"></span>
+                        <PagesList
+                            activePage={router.pathname}
+                            onChange={() => setIsMenuOpen(false)}
+                        />
+                    </div>
+                    {isMenuOpen && (
+                        <span
+                            className="backdrop"
+                            onClick={setIsMenuOpen.bind(this, false)}
+                        ></span>
+                    )}
+                    <main className="content">
+                        <props.Component {...props.pageProps} />
+                    </main>
+                    <div className="onMobile">
+                        <BottomNavigation activePage={router.pathname} />
+                    </div>
+                </QueryClientProvider>
+            </VotedPosts.Provider>
         </TokenContext.Provider>
     );
 }

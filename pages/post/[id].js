@@ -1,8 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
+import { da } from "date-fns/locale";
+import { decode } from "html-entities";
 import Cookies from "js-cookie";
 import cookies from "next-cookies";
+import { useContext } from "react";
 import { useEffect } from "react";
+import Card from "../../components/Card";
 import PostHandler from "../../components/PostHandler";
-import { getPostData } from "../../repository/reddit_api";
+import TokenContext from "../../contexts/TokenContext";
+import {
+    getCommentInfo as getComments,
+    getPostData,
+} from "../../repository/reddit_api";
 
 /**
  *
@@ -18,6 +27,7 @@ const Post = ({ data }) => {
                 ignoreNSFW={true}
                 ignoreImageSize={true}
             />
+            <hr />
         </div>
     );
 };

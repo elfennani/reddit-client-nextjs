@@ -115,6 +115,9 @@ export const parsePost = (data) => {
         }
     }
 
+    if (!post_maped.image) delete post_maped.image;
+    if (!post_maped.images) delete post_maped.images;
+
     return post_maped;
 };
 
@@ -162,10 +165,10 @@ export const getSubredditInfo = async (subreddit, token) => {
         primary_color: data.key_color,
     };
 
-    if (data.icon_img) {
-        result.icon = decode(data.icon_img);
-    } else if (data.community_icon) {
+    if (data.community_icon) {
         result.icon = decode(data.community_icon);
+    } else if (data.icon_img) {
+        result.icon = decode(data.icon_img);
     }
 
     return result;
@@ -213,4 +216,33 @@ export const getPostData = async (id, token) => {
     }
     const data = await res.json();
     return data.data.children.map(parsePost)[0];
+};
+/**
+ * @typedef CommentData
+ * @property {string} content
+ */
+/**
+ * @param {string} name
+ * @param {string} token
+ * @returns {Promise<CommentData[]>}
+ */
+export const getComments = async (name, token) => {
+    console.log();
+    const res = await fetch(
+        `https://${token ? "oauth" : "api"}.reddit.com/comments/${name.replace(
+            "t3_",
+            ""
+        )}`,
+        token
+            ? {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+              }
+            : null
+    );
+
+    const data = await res.json();
+
+    return data[1].data.children.map((comment) => ({}));
 };

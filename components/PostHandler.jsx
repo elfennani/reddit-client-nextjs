@@ -1,8 +1,10 @@
 import { decode } from "html-entities";
 import React from "react";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
+import VotedPosts from "../contexts/VotedPosts";
 import { votePost } from "../repository/reddit_api";
 import PostView from "./PostView";
 
@@ -16,7 +18,14 @@ const PostHandler = ({
     ignoreImageSize = false,
 }) => {
     const token = useContext(TokenContext);
+    const votedPosts = useContext(VotedPosts);
     const [voteState, setVoteState] = useState(postData.voteState);
+
+    useEffect(() => {
+        if (Object.keys(votedPosts.posts).includes(postData.name)) {
+            setVoteState(votedPosts.posts[postData.name]);
+        }
+    }, [votedPosts]);
 
     /**
      * @param {("upvoted"|"downvoted")} type
@@ -29,9 +38,11 @@ const PostHandler = ({
         ) {
             votePost(name, 0, token);
             setVoteState(null);
+            votedPosts.setPostValue(name, null);
             return;
         }
 
+        votedPosts.setPostValue(name, type == "upvoted");
         votePost(name, type == "upvoted" ? 1 : -1, token);
         setVoteState(type == "upvoted");
     };
@@ -53,7 +64,9 @@ const PostHandler = ({
             creator={"u/" + postData.author}
             commentCount={postData.commentsCount}
             subreddit={postData.subreddit}
-            votes={postData.votes}
+            votes={
+                postData.votes + (voteState == null ? 0 : voteState ? 1 : -1)
+            }
             postLink={postData.permalink}
             creatorLink={`/u/${postData.author}`}
             extPostLink={postData.permalink}

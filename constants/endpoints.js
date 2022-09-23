@@ -1,5 +1,5 @@
-const prefix = "https://oauth.reddit.com";
-const anon_prefix = "https://api.reddit.com";
+export const prefix = "https://oauth.reddit.com";
+export const anon_prefix = "https://api.reddit.com";
 export default {
     authorization: "https://www.reddit.com/api/v1/authorize",
     access_token: "https://www.reddit.com/api/v1/access_token",
