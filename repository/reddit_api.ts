@@ -1,22 +1,17 @@
-/**
- * @typedef UserData
- * @property {string} username
- * @property {string} fullname
- * @property {Number} karma
- * @property {Number} created
- * @property {string} cover
- * @property {string} pfp
- */
-
 import { decode } from "html-entities";
 import endpoints from "../constants/endpoints";
 import { removeAmp } from "../utils/functions";
 
-/**
- * @property {string} token
- * @return {Promise<UserData>}
- */
-export const getUserProfile = async (token) => {
+interface UserData {
+    username: string;
+    fullname: string;
+    karma: Number;
+    created: Number;
+    cover: string;
+    pfp: string;
+}
+
+export const getUserProfile = async (token: string): Promise<UserData> => {
     const res = await fetch(endpoints.profile, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -31,42 +26,36 @@ export const getUserProfile = async (token) => {
         karma: data.total_karma,
         created: data.created_utc,
         pfp: data.icon_img.replaceAll("&amp;", "&"),
+        cover: "",
     };
 };
 
-/**
- * @typedef ImagesMetadata
- * @property {string} url
- * @property {string|null} title
- * @property {string} id
- */
-/**
- * @typedef PostData
- * @property {string} title
- * @property {string} votes
- * @property {string} name
- * @property {string} commentsCount
- * @property {string} subreddit
- * @property {string} author
- * @property {string} permalink
- * @property {string} image
- * @property {ImagesMetadata[]} images
- * @property {Number} created
- * @property {Object} devJson
- * @property {boolean} nsfw
- * @property {(boolean|null)} voteState
- */
+export interface ImagesMetadata {
+    url: string;
+    title: string | null;
+    id: string;
+}
 
-/**
- * @returns {PostData}
- */
-export const parsePost = (data) => {
+export interface PostData {
+    title: string;
+    votes: number;
+    name: string;
+    commentsCount: number;
+    subreddit: string;
+    author: string;
+    permalink: string;
+    image?: string;
+    images?: ImagesMetadata[];
+    created: number;
+    devJson: Object;
+    nsfw: boolean;
+    voteState: boolean | null;
+}
+
+export const parsePost = (data: any): PostData => {
     const post = data.data;
 
-    /**
-     * @type {PostData}
-     */
-    let post_maped = {
+    let post_maped: PostData = {
         title: post.title,
         votes: post.score,
         name: post.name,
@@ -77,8 +66,7 @@ export const parsePost = (data) => {
         created: post.created,
         devJson: post,
         nsfw: post.over_18,
-        voteState:
-            post.likes == null ? null : post.likes ? "upvoted" : "downvoted",
+        voteState: post.likes,
     };
 
     if (post.post_hint == "image")
@@ -89,23 +77,29 @@ export const parsePost = (data) => {
     else if (post.media_metadata) {
         let notAnImage = false;
         try {
-            post_maped.images = Object.keys(post.media_metadata).map((key) => {
+            const images: (ImagesMetadata | undefined)[] = Object.keys(
+                post.media_metadata
+            ).map((key) => {
                 if (notAnImage) return;
                 if (post.media_metadata[key].e != "Image") {
                     notAnImage = true;
                     return;
                 }
-                return {
+                return <ImagesMetadata>{
                     id: key,
                     url: removeAmp(post.media_metadata[key].s.u),
                     title:
                         post.gallery_data && post.gallery_data.items
                             ? post.gallery_data.items.filter(
-                                  (item) => item.media_id == key
+                                  (item: any) => item.media_id == key
                               )[0].caption || null
                             : null,
                 };
             });
+
+            post_maped.images = images.filter(
+                (image) => image != undefined
+            ) as ImagesMetadata[];
         } catch (error) {
             console.log(post);
         }
@@ -121,14 +115,11 @@ export const parsePost = (data) => {
     return post_maped;
 };
 
-/**
- *
- * @param {string} token
- * @param {string} endpoint
- * @param {string} after
- * @returns {Promise<PostData[]>}
- */
-export const getPosts = async (token, endpoint, after) => {
+export const getPosts = async (
+    token: string,
+    endpoint: string,
+    after: string | null
+): Promise<PostData[]> => {
     const res = await fetch(endpoint + (after ? `?after=${after}` : ""), {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -139,17 +130,14 @@ export const getPosts = async (token, endpoint, after) => {
     return data.data.children.map(parsePost);
 };
 
-/**
- * @typedef SubredditInfoData
- * @property {string} icon
- * @property {string} primary_color
- */
-/**
- * @param {string} subreddit
- * @param {string} token
- * @returns {Promise<SubredditInfoData>}
- */
-export const getSubredditInfo = async (subreddit, token) => {
+interface SubredditInfoData {
+    icon?: string;
+    primary_color?: string;
+}
+export const getSubredditInfo = async (
+    subreddit: string,
+    token: string
+): Promise<SubredditInfoData> => {
     const res = await fetch(endpoints.subreddit(subreddit) + "/about", {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -158,10 +146,7 @@ export const getSubredditInfo = async (subreddit, token) => {
     const json = await res.json();
     const data = json.data;
 
-    /**
-     * @type {SubredditInfoData}
-     */
-    const result = {
+    const result: SubredditInfoData = {
         primary_color: data.key_color,
     };
 
@@ -174,14 +159,11 @@ export const getSubredditInfo = async (subreddit, token) => {
     return result;
 };
 
-/**
- *
- * @param {string} id
- * @param {(-1|1|0)} voteState
- * @param {token} token
- */
-export const votePost = async (id, voteState, token) => {
-    console.log({ id, voteState, token });
+export const votePost = async (
+    id: string,
+    voteState: -1 | 1 | 0,
+    token: string
+) => {
     try {
         const res = await fetch(endpoints.vote, {
             method: "post",
@@ -198,12 +180,10 @@ export const votePost = async (id, voteState, token) => {
     }
 };
 
-/**
- * @param {string} id
- * @param {string} token
- * @returns {Promise<PostData>}
- */
-export const getPostData = async (id, token) => {
+export const getPostData = async (
+    id: string,
+    token?: string
+): Promise<PostData> => {
     let res;
     if (token) {
         res = await fetch(endpoints.post_info + `?id=${id}`, {
@@ -217,32 +197,64 @@ export const getPostData = async (id, token) => {
     const data = await res.json();
     return data.data.children.map(parsePost)[0];
 };
-/**
- * @typedef CommentData
- * @property {string} content
- */
-/**
- * @param {string} name
- * @param {string} token
- * @returns {Promise<CommentData[]>}
- */
-export const getComments = async (name, token) => {
+
+export interface CommentData {
+    name: string;
+    content: string;
+    replies?: CommentData[];
+    depth: number;
+}
+
+const parseComment = (data: any): CommentData[] => {
+    return data.map((comment: any): CommentData => {
+        const data = comment.data;
+        return {
+            name: data.name as string,
+            content: data.body_html,
+            depth: data.depth,
+            replies: data.replies
+                ? parseComment(data.replies.data.children)
+                : undefined,
+        };
+    });
+};
+
+export const getComments = async (
+    name: string,
+    token?: string
+): Promise<CommentData[]> => {
     console.log();
+    const requestInit: RequestInit = token
+        ? {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+        : {};
     const res = await fetch(
         `https://${token ? "oauth" : "api"}.reddit.com/comments/${name.replace(
             "t3_",
             ""
         )}`,
-        token
-            ? {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                  },
-              }
-            : null
+        requestInit
+    );
+
+    console.log(
+        `https://${token ? "oauth" : "api"}.reddit.com/comments/${name.replace(
+            "t3_",
+            ""
+        )}`
     );
 
     const data = await res.json();
 
-    return data[1].data.children.map((comment) => ({}));
+    return parseComment(data[1].data.children);
+    return data[1].data.children.map((comment: any): CommentData => {
+        const data = comment.data;
+        return {
+            name: data.name as string,
+            content: data.body_html,
+            depth: data.depth,
+        };
+    });
 };

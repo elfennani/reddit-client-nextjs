@@ -5,14 +5,15 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
 import VotedPosts from "../contexts/VotedPosts";
-import { votePost } from "../repository/reddit_api";
+import { PostData, votePost } from "../repository/reddit_api";
 import PostView from "./PostView";
 
-/**
- * @param {{postData:import('../repository/reddit_api').PostData,ignoreNSFW:boolean,ignoreImageSize:boolean}} props
- * @returns {React.Component}
- */
-const PostHandler = ({
+interface PostHandlerProps {
+    postData: PostData;
+    ignoreNSFW?: boolean;
+    ignoreImageSize?: boolean;
+}
+const PostHandler: React.FC<PostHandlerProps> = ({
     postData,
     ignoreNSFW = false,
     ignoreImageSize = false,
@@ -27,11 +28,7 @@ const PostHandler = ({
         }
     }, [votedPosts]);
 
-    /**
-     * @param {("upvoted"|"downvoted")} type
-     * @param {string} name
-     */
-    const onVote = (type, name) => {
+    const onVote = (type: "upvoted" | "downvoted", name: string) => {
         if (
             (type == "upvoted" && voteState == true) ||
             (type == "downvoted" && voteState == false)
@@ -52,7 +49,10 @@ const PostHandler = ({
      * @param {"upvoted"|"downvoted"|null} initialState
      * @returns {"upvoted"|"downvoted"|null}
      */
-    const getVoteState = (name, initialState = null) => {
+    const getVoteState = (
+        name: string,
+        initialState: boolean | null = null
+    ) => {
         if (voteState == null) return null;
         return voteState ? "upvoted" : "downvoted";
     };

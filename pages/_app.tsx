@@ -19,7 +19,8 @@ import Account from "../components/Account";
 import TokenContext from "../contexts/TokenContext";
 import BottomNavigation from "../components/BottomNavigation";
 import { usePreserveScroll } from "../hooks/usePreserveScroll";
-import VotedPosts from "../contexts/VotedPosts";
+import VotedPosts, { VotedPostsContext } from "../contexts/VotedPosts";
+import { AppInitialProps } from "next/app";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -33,7 +34,7 @@ Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 
-function MyApp(props) {
+function MyApp(props: any) {
     const router = useRouter();
     const preserveScroll = usePreserveScroll();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,24 +42,18 @@ function MyApp(props) {
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
 
-    /**
-     * @type {import("../contexts/VotedPosts").SetPostValue}
-     */
-    const addVotedPost = (name, value) => {
+    const addVotedPost = (name: string, value: boolean | null) => {
         setVotedPosts((votedPosts) => ({ ...votedPosts, [name]: value }));
     };
 
-    /**
-     * @type {import("../contexts/VotedPosts").VotedPostsContext}
-     */
-    const config = {
+    const config: VotedPostsContext = {
         posts: votedPosts,
         setPostValue: addVotedPost,
     };
 
     useEffect(() => {
+        console.log(props);
         setRefreshing(true);
-        config.setPostValue();
 
         if (props.logout) {
             Cookies.remove("token");
@@ -108,10 +103,13 @@ function MyApp(props) {
             <VotedPosts.Provider value={config}>
                 <QueryClientProvider client={queryClient}>
                     <Head>Revirt</Head>
+
                     <TopNavigation onToggleMenu={onMenuToggleHandler} />
+
                     <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
                         <Account />
                         <span className="divider"></span>
+
                         <PagesList
                             activePage={router.pathname}
                             onChange={() => setIsMenuOpen(false)}
@@ -120,7 +118,7 @@ function MyApp(props) {
                     {isMenuOpen && (
                         <span
                             className="backdrop"
-                            onClick={setIsMenuOpen.bind(this, false)}
+                            onClick={() => setIsMenuOpen(false)}
                         ></span>
                     )}
                     <main className="content">
@@ -135,7 +133,7 @@ function MyApp(props) {
     );
 }
 
-MyApp.getInitialProps = async (props) => {
+MyApp.getInitialProps = async (props: any) => {
     const { token, refresh } = cookies(props.ctx);
 
     if (props.ctx.pathname == "/authenticate") return {};

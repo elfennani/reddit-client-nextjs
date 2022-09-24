@@ -1,10 +1,11 @@
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import config from "../constants/config";
 import endpoints from "../constants/endpoints";
 
-const Authenticate = (props) => {
+const Authenticate = (props: any) => {
     const router = useRouter();
     useEffect(() => {
         document.cookie = `token=${
@@ -36,16 +37,13 @@ const Authenticate = (props) => {
     );
 };
 
-/**
- * @type {import("next").GetServerSideProps}
- */
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const code = ctx.query.code;
 
     if (code) {
-        const body = {
+        const body: Record<string, string> = {
             grant_type: "authorization_code",
-            code,
+            code: code.toString(),
             redirect_uri: config.redirectUri,
         };
         const formData = new URLSearchParams(body);

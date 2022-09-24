@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styles from "./PagesList.module.scss";
-import Card from "../Card";
 import {
     HistoryOutlined,
     HomeFilled,
@@ -16,7 +14,17 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const PagesList = ({ children, onChange, activePage = "/" }) => {
+interface PagesList {
+    children?: React.ReactNode;
+    onChange(): void;
+    activePage?: string;
+}
+
+const PagesList: React.FC<PagesList> = ({
+    children,
+    onChange,
+    activePage = "/",
+}) => {
     const router = useRouter();
     /**
      * @type {[{label:string, link:string, activeCheck:string[], activeIcon:React.Component, inactiveIcon:React.Component}]}
@@ -79,7 +87,7 @@ const PagesList = ({ children, onChange, activePage = "/" }) => {
                         <li key={index}>
                             <Link href={page.link}>
                                 <a
-                                    className={isActive ? styles.active : null}
+                                    className={isActive ? styles.active : ""}
                                     onClick={onChange}
                                 >
                                     {isActive
@@ -94,11 +102,6 @@ const PagesList = ({ children, onChange, activePage = "/" }) => {
             </ul>
         </div>
     );
-};
-
-PagesList.propTypes = {
-    activePage: PropTypes.string,
-    onChange: PropTypes.func,
 };
 
 export default PagesList;

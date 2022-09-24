@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { decode } from "html-entities";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -6,17 +6,20 @@ import { useContext } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import endpoints from "../constants/endpoints";
 import TokenContext from "../contexts/TokenContext";
-import { getPosts, votePost } from "../repository/reddit_api";
+import { getPosts, PostData, votePost } from "../repository/reddit_api";
 import Button from "./Button";
 import PostHandler from "./PostHandler";
 import PostView from "./PostView";
 
-/**
- *
- * @param {{endpoint:string, initialData:import("@tanstack/react-query").InfiniteData}} props
- * @returns {React.Component}
- */
-function PostsList({ endpoint = endpoints.best, initialData = undefined }) {
+interface PostsListProps {
+    endpoint?: string;
+    initialData?: InfiniteData<PostData[]>;
+}
+
+const PostsList: React.FC<PostsListProps> = ({
+    endpoint = endpoints.best,
+    initialData = undefined,
+}) => {
     const token = useContext(TokenContext);
 
     const {
@@ -44,7 +47,8 @@ function PostsList({ endpoint = endpoints.best, initialData = undefined }) {
     useEffect(() => console.log(error), [error]);
 
     if (isLoading) return <p>Loading...</p>;
-    if (isError || !data) return <p>Error{error && `: ${error}`}</p>;
+    if (isError || !data)
+        return <p>Error{(error as string) && `: ${error}`}</p>;
 
     if (data)
         return (
@@ -67,6 +71,7 @@ function PostsList({ endpoint = endpoints.best, initialData = undefined }) {
                 />
             </div>
         );
-}
+    return <div></div>;
+};
 
 export default PostsList;

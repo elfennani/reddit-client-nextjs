@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Card from "../Card";
+import Card from "../Card.tsx";
 import styles from "./AccountTemplate.module.scss";
 import Image from "next/image";
 import Skeleton from "react-loading-skeleton";

@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import styles from "./TopNavigation.module.scss";
 import { MenuOutlined, SearchOutlined } from "@ant-design/icons";
 
-const TopNavigation = (props) => {
+interface TopNavigationProps {
+    onToggleMenu(): void;
+}
+
+const TopNavigation: React.FC<TopNavigationProps> = (props) => {
     const [searchOpen, setSearchOpen] = useState(false);
 
     const searchToggleHandler = () => {

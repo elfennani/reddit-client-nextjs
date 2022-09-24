@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLayoutEffect } from "react";
 import { useRef } from "react";
+import { ImagesMetadata } from "../../repository/reddit_api";
 import Button from "../Button";
 import styles from "./ImageContainer.module.scss";
 
@@ -17,12 +18,27 @@ import styles from "./ImageContainer.module.scss";
  * @param {ImagesContainerProps} props
  * @returns
  */
-const ImageContainer = ({ image, imagesMetadata, blur, alt, ignoreSize }) => {
+interface ImageContainerProps {
+    image?: string;
+    imagesMetadata?: ImagesMetadata[];
+    blur?: boolean;
+    alt?: string;
+    ignoreSize?: boolean;
+}
+
+const ImageContainer: React.FC<ImageContainerProps> = ({
+    image,
+    imagesMetadata,
+    blur,
+    alt,
+    ignoreSize,
+}) => {
     const [currentImage, setCurrentImage] = useState(0);
     const [showLink, setShowLink] = useState(false);
-    const container = useRef();
+    const container = useRef<any>();
 
     useLayoutEffect(() => {
+        if (!container.current) return;
         if (container.current.clientHeight < container.current.scrollHeight) {
             setShowLink(true);
         }
@@ -52,6 +68,8 @@ const ImageContainer = ({ image, imagesMetadata, blur, alt, ignoreSize }) => {
                 </div>
             </>
         );
+
+    if (!imagesMetadata) return <div></div>;
 
     const selectedImage = imagesMetadata[currentImage];
 

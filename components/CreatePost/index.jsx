@@ -6,7 +6,7 @@ import {
     FileImageOutlined,
     VideoCameraOutlined,
 } from "@ant-design/icons";
-import Card from "../Card";
+import Card from "../Card.tsx";
 import TokenContext from "../../contexts/TokenContext";
 import { getUserProfile } from "../../repository/reddit_api";
 import { useQuery } from "@tanstack/react-query";

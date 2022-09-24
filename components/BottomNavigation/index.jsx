@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./BottomNavigation.module.scss";
-import Card from "../Card";
+import Card from "../Card.tsx";
 import {
     HomeFilled,
     HomeOutlined,
