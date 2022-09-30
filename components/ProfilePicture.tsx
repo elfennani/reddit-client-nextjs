@@ -12,15 +12,17 @@ const Image = styled.img<{ size: number }>`
     border: 1px solid rgba($color: #000000, $alpha: 0.15);
 `;
 
-const ProfilePicture: React.FC<{ name: string; size?: number }> = ({
-    name,
-    size = 32,
-}) => {
+const ProfilePicture: React.FC<{
+    size?: number;
+    user?: string | null;
+}> = ({ size = 32, user = null }) => {
     const token = useContext(TokenContext);
 
+    if (user == "[deleted]") return <Image size={size} />;
+
     const { isLoading, isError, data, isSuccess } = useQuery(
-        ["user", token],
-        async () => await getUserProfile(token)
+        ["user", token, user],
+        async () => await getUserProfile(token, user)
     );
 
     return isSuccess ? (

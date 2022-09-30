@@ -1,5 +1,4 @@
 import React from "react";
-import propTypes from "prop-types";
 
 const Card: React.FC<
     React.DetailedHTMLProps<

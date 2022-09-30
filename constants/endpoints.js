@@ -9,6 +9,7 @@ export default {
     vote: `${prefix}/api/vote`,
     post_info: `${prefix}/api/info/`,
     post_info_anon: `${anon_prefix}/api/info/`,
+    user_info: (username) => `${prefix}/user/${username}/about`,
 };
 
 // https://oauth.reddit.com/api/info/?id=

@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
 import VotedPosts from "../contexts/VotedPosts";
-import { PostData, votePost } from "../repository/reddit_api";
+import { votePost } from "../repository/reddit_api";
+import { PostData } from "../types/types";
 import PostView from "./PostView";
 
 interface PostHandlerProps {

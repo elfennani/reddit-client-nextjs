@@ -1,3 +1,4 @@
+@import "../../styles/variables.scss";
 .commentContainerParent {
     padding: 16px;
     margin-bottom: 16px;
@@ -15,6 +16,12 @@
         border-left: 1px solid rgba($color: #000000, $alpha: 0.07);
     }
 
+    .header {
+        opacity: 0.5;
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+
     .commentContainer {
         padding-left: 16px;
         .comment {
@@ -22,8 +29,25 @@
             display: flex;
             gap: 12px;
 
+            a {
+                color: darkblue;
+            }
+
+            &.last {
+                padding-bottom: 0;
+            }
+
             > .content {
                 flex: 1;
+                padding-bottom: 10px;
+
+                p:not(.header) {
+                    margin: 6px 0;
+                }
+
+                &.last {
+                    padding-bottom: 0;
+                }
             }
         }
     }
@@ -34,5 +58,56 @@
         .comment {
             padding-top: 0;
         }
+    }
+}
+
+.collapsedComment {
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: 8px;
+
+    &.reply {
+        margin: 8px;
+        margin-left: 16px;
+        border-left: 1px solid rgba($color: #000000, $alpha: 0.07);
+    }
+
+    > p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        div {
+            display: inline;
+        }
+    }
+
+    *:not(img) {
+        opacity: 0.75;
+    }
+
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            to left,
+            white,
+            rgba($color: white, $alpha: 0)
+        );
+        width: 50px;
+    }
+}
+
+.readmore {
+    color: $primary;
+    padding: 8px 12px;
+    margin: 4px;
+
+    &:hover {
+        background-color: rgba($color: $primary, $alpha: 0.07);
     }
 }

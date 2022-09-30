@@ -1,24 +1,36 @@
 import { decode } from "html-entities";
 import endpoints from "../constants/endpoints";
+import {
+    CommentData,
+    ImagesMetadata,
+    PostData,
+    SubredditInfoData,
+    UserData,
+} from "../types/types";
 import { removeAmp } from "../utils/functions";
 
-interface UserData {
-    username: string;
-    fullname: string;
-    karma: Number;
-    created: Number;
-    cover: string;
-    pfp: string;
-}
+export const getUserProfile = async (
+    token: string,
+    user: string | null = null
+): Promise<UserData> => {
+    let res: Response;
+    if (!user) {
+        res = await fetch(endpoints.profile, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    } else {
+        res = await fetch(endpoints.user_info(user), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    }
 
-export const getUserProfile = async (token: string): Promise<UserData> => {
-    const res = await fetch(endpoints.profile, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    let data = await res.json();
 
-    const data = await res.json();
+    if (user) data = data.data;
 
     return {
         username: data.subreddit.display_name_prefixed,
@@ -29,28 +41,6 @@ export const getUserProfile = async (token: string): Promise<UserData> => {
         cover: "",
     };
 };
-
-export interface ImagesMetadata {
-    url: string;
-    title: string | null;
-    id: string;
-}
-
-export interface PostData {
-    title: string;
-    votes: number;
-    name: string;
-    commentsCount: number;
-    subreddit: string;
-    author: string;
-    permalink: string;
-    image?: string;
-    images?: ImagesMetadata[];
-    created: number;
-    devJson: Object;
-    nsfw: boolean;
-    voteState: boolean | null;
-}
 
 export const parsePost = (data: any): PostData => {
     const post = data.data;
@@ -130,10 +120,6 @@ export const getPosts = async (
     return data.data.children.map(parsePost);
 };
 
-interface SubredditInfoData {
-    icon?: string;
-    primary_color?: string;
-}
 export const getSubredditInfo = async (
     subreddit: string,
     token: string
@@ -198,32 +184,31 @@ export const getPostData = async (
     return data.data.children.map(parsePost)[0];
 };
 
-export interface CommentData {
-    name: string;
-    content: string;
-    replies?: CommentData[];
-    depth: number;
-}
-
-const parseComment = (data: any): CommentData[] => {
-    return data.map((comment: any): CommentData => {
+const parseComment = (data: any, kind: string): CommentData[] => {
+    return data.map((comment: any): CommentData | string => {
         const data = comment.data;
         return {
             name: data.name as string,
             content: data.body_html,
             depth: data.depth,
-            replies: data.replies
-                ? parseComment(data.replies.data.children)
-                : undefined,
+            replies:
+                data.replies && comment.kind != "more"
+                    ? parseComment(
+                          data.replies.data.children,
+                          data.replies.kind
+                      )
+                    : undefined,
+            more: comment.kind == "more" ? data.children : undefined,
+            author: data.author,
+            json: data,
         };
-    });
+    }) as CommentData[];
 };
 
 export const getComments = async (
     name: string,
     token?: string
 ): Promise<CommentData[]> => {
-    console.log();
     const requestInit: RequestInit = token
         ? {
               headers: {
@@ -231,30 +216,23 @@ export const getComments = async (
               },
           }
         : {};
+    console.log(name);
     const res = await fetch(
         `https://${token ? "oauth" : "api"}.reddit.com/comments/${name.replace(
             "t3_",
             ""
-        )}`,
+        )}?limit=25`,
         requestInit
-    );
-
-    console.log(
-        `https://${token ? "oauth" : "api"}.reddit.com/comments/${name.replace(
-            "t3_",
-            ""
-        )}`
     );
 
     const data = await res.json();
 
-    return parseComment(data[1].data.children);
-    return data[1].data.children.map((comment: any): CommentData => {
-        const data = comment.data;
-        return {
-            name: data.name as string,
-            content: data.body_html,
-            depth: data.depth,
-        };
-    });
+    const comments = parseComment(
+        data[1].data.children,
+        data[1].data.children
+    ) as CommentData[];
+
+    console.log(comments);
+
+    return comments;
 };

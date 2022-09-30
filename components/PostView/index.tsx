@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./PostView.module.scss";
-import Card from "../Card";
 import { minimizeNumber, parseDate } from "../../utils/functions";
 import {
     CaretDownOutlined,
     CaretUpOutlined,
+    CheckOutlined,
     LinkOutlined,
     LogoutOutlined,
     SaveFilled,
@@ -15,7 +15,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ImageContainer from "../ImageContainer/";
 import SubredditIcon from "../SubredditIcon";
-import { ImagesMetadata } from "../../repository/reddit_api";
+import { ImagesMetadata } from "../../types/types";
+import Card from "../Card";
 
 interface PostViewProps {
     subreddit: string;

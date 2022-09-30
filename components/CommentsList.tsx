@@ -3,7 +3,7 @@ import { decode } from "html-entities";
 import React, { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
 import { getComments } from "../repository/reddit_api";
-import CommentsHandler from "./Comments/CommentsHandler";
+import CommentsHandler from "./Comments/CommentsList";
 
 interface CommentsList {
     postName: string;

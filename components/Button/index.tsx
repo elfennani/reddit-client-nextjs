@@ -1,20 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Button.module.scss";
-import Head from "next/head";
 import Link from "next/link";
 
-const Button = (props) => {
+interface ButtonProps {
+    onClick?(): void;
+    disabled?: boolean;
+    title: string;
+    secondary?: boolean;
+    className?: string;
+    link?: string;
+    style: any;
+}
+
+const Button: React.FC<ButtonProps> = (props) => {
     if (props.link) {
         return (
-            <Link href={props.link} passHref>
+            <Link href={props.disabled ? "#" : props.link} passHref>
                 <a
                     className={[
                         styles.button,
                         props.secondary ? styles.secondary : null,
                         props.className ? props.className : null,
                     ].join(" ")}
-                    disabled={props.disabled}
+                    style={props.style}
                 >
                     {props.title}
                 </a>
@@ -32,25 +41,12 @@ const Button = (props) => {
                 ].join(" ")}
                 onClick={props.onClick}
                 disabled={props.disabled || props.onClick == null}
+                style={props.style}
             >
                 {props.title}
             </button>
         </>
     );
-};
-
-Button.defaultProps = {
-    primaryColor: styles.primaryColor,
-};
-
-Button.propTypes = {
-    onClick: PropTypes.func,
-    disabled: PropTypes.bool,
-    title: PropTypes.string.isRequired,
-    secondary: PropTypes.bool,
-    className: PropTypes.string,
-    primaryColor: PropTypes.string,
-    link: PropTypes.string,
 };
 
 export default Button;
