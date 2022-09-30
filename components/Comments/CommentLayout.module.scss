@@ -12,6 +12,12 @@
         border: none;
     }
 
+    ul {
+        margin: 0;
+        padding: 0;
+        padding-left: 14px;
+    }
+
     .reply {
         border-left: 1px solid rgba($color: #000000, $alpha: 0.07);
     }

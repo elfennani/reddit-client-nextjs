@@ -1,23 +1,10 @@
 import React, { useState } from "react";
 import { useLayoutEffect } from "react";
 import { useRef } from "react";
-import { ImagesMetadata } from "../../repository/reddit_api";
+import { ImagesMetadata } from "../../types/types";
 import Button from "../Button";
 import styles from "./ImageContainer.module.scss";
 
-/**
- * @typedef ImagesContainerProps
- * @property {string} image
- * @property {string} alt
- * @property {boolean} blur
- * @property {boolean} ignoreSize
- * @property {import("../../repository/reddit_api").ImagesMetadata[]} imagesMetadata
- */
-/**
- *
- * @param {ImagesContainerProps} props
- * @returns
- */
 interface ImageContainerProps {
     image?: string;
     imagesMetadata?: ImagesMetadata[];
@@ -83,10 +70,16 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                 showLink ? styles.overflown : null,
             ].join(" ")}
         >
-            <img
-                src={selectedImage.url}
-                alt={selectedImage.title || selectedImage.url}
-            />
+            {imagesMetadata.map((imageMetadata, index) => (
+                <img
+                    src={imageMetadata.url}
+                    alt={imageMetadata.title || imageMetadata.url}
+                    key={imageMetadata.id}
+                    style={{
+                        display: currentImage == index ? "block" : "none",
+                    }}
+                />
+            ))}
             {currentImage < imagesMetadata.length - 1 && (
                 <button
                     onClick={(e) => {

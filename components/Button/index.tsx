@@ -10,7 +10,7 @@ interface ButtonProps {
     secondary?: boolean;
     className?: string;
     link?: string;
-    style: any;
+    style?: any;
 }
 
 const Button: React.FC<ButtonProps> = (props) => {

@@ -5,7 +5,6 @@ import CommentReadMore from "./CommentReadMore";
 const CommentsHandler: React.FC<{ commentData: CommentData[] }> = ({
     commentData,
 }) => {
-    console.log(commentData);
     return (
         <>
             {commentData.map((comment) =>
