@@ -5,6 +5,9 @@ const path = require("path");
 const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
+    images: {
+        domains: ["preview.redd.it"],
+    },
     sassOptions: {
         includePaths: [path.join(__dirname, "styles")],
     },

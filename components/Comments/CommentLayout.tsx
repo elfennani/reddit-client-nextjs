@@ -2,10 +2,11 @@ import { CompressOutlined, NodeCollapseOutlined } from "@ant-design/icons";
 import { decode, encode } from "html-entities";
 import React, { useMemo, useState } from "react";
 import { CommentData } from "../../types/types";
+import { parseDate } from "../../utils/functions";
 import Card from "../Card";
 import ProfilePicture from "../ProfilePicture";
 import styles from "./CommentLayout.module.scss";
-import CommentsHandler from "./CommentsList";
+import CommentsHandler from "./CommentsHandler";
 
 interface CommentLayoutProps {
     replies?: CommentData[];
@@ -16,6 +17,8 @@ interface CommentLayoutProps {
     json: any;
     more?: string[];
     text: string;
+    created: number;
+    isOP: boolean;
 }
 const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     authorName,
@@ -25,6 +28,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     depth,
     more,
     text,
+    ...props
 }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
@@ -40,7 +44,20 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                             !replies ? styles.last : ""
                         }`}
                     >
-                        <p className={styles.header}>u/{author} • 24min ago</p>
+                        <p className={styles.header}>
+                            u/{author}{" "}
+                            {props.isOP && (
+                                <span
+                                    style={{
+                                        color: "blue",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    OP
+                                </span>
+                            )}{" "}
+                            • {parseDate(props.created)} ago
+                        </p>
                         <div
                             dangerouslySetInnerHTML={{
                                 __html: decode(content),

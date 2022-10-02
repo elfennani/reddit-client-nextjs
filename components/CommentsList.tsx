@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
 import { getComments } from "../repository/reddit_api";
-import CommentsHandler from "./Comments/CommentsList";
+import CommentsHandler from "./Comments/CommentsHandler";
 
 interface CommentsList {
     postName: string;

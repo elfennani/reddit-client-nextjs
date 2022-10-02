@@ -62,7 +62,9 @@ const PostsList: React.FC<PostsListProps> = ({
                 }}
             >
                 {data.pages.map((page) =>
-                    page.map((p) => <PostHandler key={p.name} postData={p} />)
+                    page.map((p) => (
+                        <PostHandler key={p.name} postData={p} active={true} />
+                    ))
                 )}
                 {isFetchingNextPage && <p>Fetching Next Page</p>}
                 <Button

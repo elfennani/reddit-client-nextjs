@@ -59,12 +59,14 @@ export const parsePost = (data: any): PostData => {
         voteState: post.likes,
     };
 
-    if (post.post_hint == "image")
+    if (post.post_hint == "image") {
         post_maped.image = post.preview.images[0].source.url.replaceAll(
             "&amp;",
             "&"
         );
-    else if (post.media_metadata) {
+        post_maped.imageWidth = post.preview.images[0].source.width;
+        post_maped.imageHeight = post.preview.images[0].source.height;
+    } else if (post.media_metadata) {
         let notAnImage = false;
         try {
             const images: (ImagesMetadata | undefined)[] = Object.keys(
@@ -78,6 +80,8 @@ export const parsePost = (data: any): PostData => {
                 return <ImagesMetadata>{
                     id: key,
                     url: removeAmp(post.media_metadata[key].s.u),
+                    width: post.media_metadata[key].s.x,
+                    height: post.media_metadata[key].s.y,
                     title:
                         post.gallery_data && post.gallery_data.items
                             ? post.gallery_data.items.filter(
@@ -205,14 +209,13 @@ const parseComment = (data: any, isReadMore = false): CommentData[] => {
             content: data.body_html,
             depth: data.depth,
             replies,
-            more:
-                !isReadMore && comment.kind == "more"
-                    ? data.children
-                    : undefined,
-            moreId: !isReadMore && comment.kind == "more" ? data.id : undefined,
+            more: data.children ? data.children : undefined,
+            moreId: data.children ? data.id : undefined,
             author: data.author,
             json: data,
             text: data.body,
+            created: data.created,
+            isOP: data.is_submitter,
         };
     }) as CommentData[];
 };

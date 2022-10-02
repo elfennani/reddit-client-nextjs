@@ -19,6 +19,8 @@ const CommentsHandler: React.FC<{ commentData: CommentData[] }> = ({
                         author={comment.author}
                         json={comment.json}
                         text={comment.text}
+                        created={comment.created}
+                        isOP={comment.isOP}
                     />
                 ) : (
                     <CommentReadMore

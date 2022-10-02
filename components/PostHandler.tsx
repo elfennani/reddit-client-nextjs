@@ -13,11 +13,13 @@ interface PostHandlerProps {
     postData: PostData;
     ignoreNSFW?: boolean;
     ignoreImageSize?: boolean;
+    active: boolean;
 }
 const PostHandler: React.FC<PostHandlerProps> = ({
     postData,
     ignoreNSFW = false,
     ignoreImageSize = false,
+    active,
 }) => {
     const token = useContext(TokenContext);
     const votedPosts = useContext(VotedPosts);
@@ -82,6 +84,9 @@ const PostHandler: React.FC<PostHandlerProps> = ({
             nsfw={ignoreNSFW ? false : postData.nsfw}
             voteState={getVoteState(postData.name, postData.voteState)}
             ignoreImageSize={ignoreImageSize}
+            imageWidth={postData.imageWidth}
+            imageHeight={postData.imageHeight}
+            active={active}
         />
     );
 };

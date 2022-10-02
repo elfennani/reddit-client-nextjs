@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useState } from "react";
 import { useLayoutEffect } from "react";
 import { useRef } from "react";
@@ -7,6 +8,8 @@ import styles from "./ImageContainer.module.scss";
 
 interface ImageContainerProps {
     image?: string;
+    imageWidth?: number;
+    imageHeight?: number;
     imagesMetadata?: ImagesMetadata[];
     blur?: boolean;
     alt?: string;
@@ -19,6 +22,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
     blur,
     alt,
     ignoreSize,
+    ...props
 }) => {
     const [currentImage, setCurrentImage] = useState(0);
     const [showLink, setShowLink] = useState(false);
@@ -44,7 +48,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                         showLink ? styles.overflown : null,
                     ].join(" ")}
                 >
-                    <img src={image} alt={alt || image} />
+                    <img src={image} alt={alt || image} loading="lazy" />
                     {showLink && (
                         <Button
                             className={styles.showMore}
@@ -57,8 +61,6 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
         );
 
     if (!imagesMetadata) return <div></div>;
-
-    const selectedImage = imagesMetadata[currentImage];
 
     return (
         <div
@@ -75,6 +77,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                     src={imageMetadata.url}
                     alt={imageMetadata.title || imageMetadata.url}
                     key={imageMetadata.id}
+                    loading="lazy"
                     style={{
                         display: currentImage == index ? "block" : "none",
                     }}

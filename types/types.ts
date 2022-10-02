@@ -11,6 +11,8 @@ export interface ImagesMetadata {
     url: string;
     title: string | null;
     id: string;
+    width: number;
+    height: number;
 }
 
 export interface PostData {
@@ -22,6 +24,8 @@ export interface PostData {
     author: string;
     permalink: string;
     image?: string;
+    imageWidth?: number;
+    imageHeight?: number;
     images?: ImagesMetadata[];
     created: number;
     devJson: Object;
@@ -44,4 +48,6 @@ export interface CommentData {
     author: string;
     json: any;
     text: string;
+    created: number;
+    isOP: boolean;
 }

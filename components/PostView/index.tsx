@@ -42,7 +42,18 @@ interface PostViewProps {
     images?: ImagesMetadata[];
     ignoreImageSize?: boolean;
     json: any;
+    imageWidth?: number;
+    imageHeight?: number;
+    active: boolean;
 }
+
+const PostWrapper: React.FC<{ link: string; active: boolean; children: any }> =
+    ({ link, active, children }) => {
+        if (active) return <Link href={link}>{children}</Link>;
+
+        return <>{children}</>;
+    };
+
 const PostView: React.FC<PostViewProps> = (props) => {
     const router = useRouter();
 
@@ -54,7 +65,7 @@ const PostView: React.FC<PostViewProps> = (props) => {
     }
 
     return (
-        <Link href={`/post/${props.name}`}>
+        <PostWrapper link={`/post/${props.name}`} active={props.active}>
             <Card className={styles.container}>
                 <header>
                     {props.subreddit && (
@@ -92,6 +103,8 @@ const PostView: React.FC<PostViewProps> = (props) => {
                     {props.image && (
                         <ImageContainer
                             image={props.image}
+                            imageWidth={props.imageWidth}
+                            imageHeight={props.imageHeight}
                             alt={props.title}
                             ignoreSize={props.ignoreImageSize}
                             blur={props.nsfw}
@@ -215,7 +228,7 @@ const PostView: React.FC<PostViewProps> = (props) => {
                     </div>
                 </div>
             </Card>
-        </Link>
+        </PostWrapper>
     );
 };
 

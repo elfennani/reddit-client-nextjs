@@ -19,6 +19,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
                     postData={data}
                     ignoreNSFW={true}
                     ignoreImageSize={true}
+                    active={false}
                 />
                 <hr />
                 <CommentsList postName={data.name} />
