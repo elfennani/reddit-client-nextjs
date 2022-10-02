@@ -15,6 +15,7 @@ interface CommentLayoutProps {
     author: string;
     json: any;
     more?: string[];
+    text: string;
 }
 const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     authorName,
@@ -23,6 +24,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     author,
     depth,
     more,
+    text,
 }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
@@ -69,7 +71,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                 onClick={() => setCollapsed(false)}
             >
                 <ProfilePicture user={author} size={24} />
-                <p dangerouslySetInnerHTML={{ __html: decode(content) }}></p>
+                <p>{text}</p>
             </div>
         ),
         []

@@ -184,23 +184,35 @@ export const getPostData = async (
     return data.data.children.map(parsePost)[0];
 };
 
-const parseComment = (data: any, kind: string): CommentData[] => {
+const parseComment = (data: any, isReadMore = false): CommentData[] => {
     return data.map((comment: any): CommentData | string => {
-        const data = comment.data;
+        const data = isReadMore ? comment : comment.data;
+        let replies: CommentData[] | undefined;
+        if (!isReadMore) {
+            replies =
+                data.replies && comment.kind != "more"
+                    ? parseComment(data.replies.data.children)
+                    : undefined;
+        } else {
+            replies =
+                data.replies && data.replies.length != 0
+                    ? parseComment(data.replies, true)
+                    : undefined;
+        }
+
         return {
             name: data.name as string,
             content: data.body_html,
             depth: data.depth,
-            replies:
-                data.replies && comment.kind != "more"
-                    ? parseComment(
-                          data.replies.data.children,
-                          data.replies.kind
-                      )
+            replies,
+            more:
+                !isReadMore && comment.kind == "more"
+                    ? data.children
                     : undefined,
-            more: comment.kind == "more" ? data.children : undefined,
+            moreId: !isReadMore && comment.kind == "more" ? data.id : undefined,
             author: data.author,
             json: data,
+            text: data.body,
         };
     }) as CommentData[];
 };
@@ -227,12 +239,69 @@ export const getComments = async (
 
     const data = await res.json();
 
-    const comments = parseComment(
-        data[1].data.children,
-        data[1].data.children
-    ) as CommentData[];
+    const comments = parseComment(data[1].data.children) as CommentData[];
 
     console.log(comments);
 
     return comments;
+};
+
+export const getReadMoreComments = async (
+    commentList: string[],
+    postId: string,
+    token?: string
+) => {
+    const requestInit: RequestInit = token
+        ? {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+        : {};
+    const res = await fetch(
+        `https://${
+            token ? "oauth" : "api"
+        }.reddit.com/api/morechildren?api_type=json&link_id=${postId}&children=${commentList.join(
+            ","
+        )}`,
+        requestInit
+    );
+
+    return parseCommentReplies(await res.json(), commentList);
+};
+
+export const parseCommentReplies = (
+    data: any,
+    topLevelCommentsIds: string[]
+): CommentData[] => {
+    let result: CommentData[];
+    const things = data.json.data.things as any[];
+
+    const topLevelComments = things.filter((comment: any) =>
+        topLevelCommentsIds.includes(comment.data.id)
+    );
+
+    const comments = topLevelComments.map((comment, index) => {
+        return {
+            ...comment.data,
+            replies: getReplies(comment.data.id, things),
+        };
+    });
+
+    return parseComment(comments, true);
+};
+
+const getReplies = (parent: string, allChildren: any[]): any[] => {
+    const replies = [];
+
+    for (let i = 0; i < allChildren.length; i++) {
+        const comment = allChildren[i].data;
+        if (comment.parent_id == `t1_${parent}`)
+            replies.push({
+                ...comment,
+                replies: getReplies(comment.id, allChildren),
+            });
+    }
+
+    return replies;
 };

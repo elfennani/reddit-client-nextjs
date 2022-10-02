@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { decode } from "html-entities";
 import React, { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
 import { getComments } from "../repository/reddit_api";

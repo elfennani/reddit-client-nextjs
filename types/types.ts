@@ -39,7 +39,9 @@ export interface CommentData {
     content: string;
     replies?: CommentData[];
     more?: string[];
+    moreId?: string;
     depth: number;
     author: string;
     json: any;
+    text: string;
 }

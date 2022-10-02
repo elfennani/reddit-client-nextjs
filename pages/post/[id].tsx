@@ -3,23 +3,27 @@ import cookies from "next-cookies";
 import React from "react";
 import CommentsList from "../../components/CommentsList";
 import PostHandler from "../../components/PostHandler";
-import { getPostData, PostData } from "../../repository/reddit_api";
+import PostNameContext from "../../contexts/PostNameContext";
+import { getPostData } from "../../repository/reddit_api";
+import { PostData } from "../../types/types";
 
 interface PostProps {
     data: PostData;
 }
 const Post: React.FC<PostProps> = ({ data }) => {
     return (
-        <div className="layout">
-            <PostHandler
-                key={data.name}
-                postData={data}
-                ignoreNSFW={true}
-                ignoreImageSize={true}
-            />
-            <hr />
-            <CommentsList postName={data.name} />
-        </div>
+        <PostNameContext.Provider value={data.name}>
+            <div className="layout">
+                <PostHandler
+                    key={data.name}
+                    postData={data}
+                    ignoreNSFW={true}
+                    ignoreImageSize={true}
+                />
+                <hr />
+                <CommentsList postName={data.name} />
+            </div>
+        </PostNameContext.Provider>
     );
 };
 

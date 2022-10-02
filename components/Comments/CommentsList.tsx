@@ -18,9 +18,13 @@ const CommentsHandler: React.FC<{ commentData: CommentData[] }> = ({
                         depth={comment.depth}
                         author={comment.author}
                         json={comment.json}
+                        text={comment.text}
                     />
                 ) : (
-                    <CommentReadMore commentList={comment.more as string[]} />
+                    <CommentReadMore
+                        commentList={comment.more as string[]}
+                        id={comment.moreId as string}
+                    />
                 )
             )}
         </>
