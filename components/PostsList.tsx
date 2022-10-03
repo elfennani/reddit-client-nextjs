@@ -11,6 +11,7 @@ import { PostData } from "../types/types";
 import Button from "./Button";
 import PostHandler from "./PostHandler";
 import PostView from "./PostView";
+import Sorting from "./Sorting";
 
 interface PostsListProps {
     endpoint?: string;
@@ -22,6 +23,9 @@ const PostsList: React.FC<PostsListProps> = ({
     initialData = undefined,
 }) => {
     const token = useContext(TokenContext);
+    const [sorting, setSorting] = useState(endpoints.best);
+
+    useEffect(() => console.log(sorting), [sorting]);
 
     const {
         isLoading,
@@ -53,26 +57,36 @@ const PostsList: React.FC<PostsListProps> = ({
 
     if (data)
         return (
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 16,
-                    marginTop: 16,
-                }}
-            >
-                {data.pages.map((page) =>
-                    page.map((p) => (
-                        <PostHandler key={p.name} postData={p} active={true} />
-                    ))
-                )}
-                {isFetchingNextPage && <p>Fetching Next Page</p>}
-                <Button
-                    title="Next Page"
-                    onClick={fetchNextPage}
-                    disabled={isFetchingNextPage}
-                />
-            </div>
+            <>
+                <Sorting onChoose={setSorting} current={sorting}>
+                    <Sorting.Type title="Best" link={endpoints.best} />
+                    <Sorting.Type title="Hot" link={endpoints.hot} />
+                </Sorting>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 16,
+                        marginTop: 16,
+                    }}
+                >
+                    {data.pages.map((page) =>
+                        page.map((p) => (
+                            <PostHandler
+                                key={p.name}
+                                postData={p}
+                                active={true}
+                            />
+                        ))
+                    )}
+                    {isFetchingNextPage && <p>Fetching Next Page</p>}
+                    <Button
+                        title="Next Page"
+                        onClick={fetchNextPage}
+                        disabled={isFetchingNextPage}
+                    />
+                </div>
+            </>
         );
     return <div></div>;
 };

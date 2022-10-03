@@ -277,14 +277,13 @@ export const parseCommentReplies = (
     data: any,
     topLevelCommentsIds: string[]
 ): CommentData[] => {
-    let result: CommentData[];
     const things = data.json.data.things as any[];
 
     const topLevelComments = things.filter((comment: any) =>
         topLevelCommentsIds.includes(comment.data.id)
     );
 
-    const comments = topLevelComments.map((comment, index) => {
+    const comments = topLevelComments.map((comment) => {
         return {
             ...comment.data,
             replies: getReplies(comment.data.id, things),

@@ -21,7 +21,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
                     ignoreImageSize={true}
                     active={false}
                 />
-                <hr />
+                <div className="hr"></div>
                 <CommentsList postName={data.name} />
             </div>
         </PostNameContext.Provider>

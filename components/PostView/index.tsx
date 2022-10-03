@@ -17,6 +17,7 @@ import ImageContainer from "../ImageContainer/";
 import SubredditIcon from "../SubredditIcon";
 import { ImagesMetadata } from "../../types/types";
 import Card from "../Card";
+import styled from "styled-components";
 
 interface PostViewProps {
     subreddit: string;
@@ -53,6 +54,38 @@ const PostWrapper: React.FC<{ link: string; active: boolean; children: any }> =
 
         return <>{children}</>;
     };
+
+const InfoText = styled.p`
+    font-size: 0.8rem;
+    margin: 0;
+    margin-bottom: 8px;
+    color: ${(props) => props.theme.text};
+
+    .upvoted {
+        color: ${(props) => props.theme.primary} !important;
+        font-weight: bold;
+    }
+    .downvoted {
+        color: ${(props) => props.theme.downvote} !important;
+        font-weight: bold;
+    }
+`;
+
+const VotingButton = styled.button`
+    background-color: ${(props) => props.theme.votingButtonBg};
+    color: ${(props) => props.theme.text};
+
+    &.upvoted {
+        color: ${(props) => props.theme.upvote} !important;
+        font-weight: bold;
+        background-color: ${(props) => props.theme.upvoteLight} !important;
+    }
+    &.downvoted {
+        color: ${(props) => props.theme.downvote} !important;
+        font-weight: bold;
+        background-color: ${(props) => props.theme.downvoteLight} !important;
+    }
+`;
 
 const PostView: React.FC<PostViewProps> = (props) => {
     const router = useRouter();
@@ -139,14 +172,14 @@ const PostView: React.FC<PostViewProps> = (props) => {
                     )}
                 </div>
                 <div className={styles.toolbar}>
-                    <p>
+                    <InfoText>
                         <span
                             className={
                                 props.voteState != null &&
                                 props.voteState != null
                                     ? props.voteState == "upvoted"
-                                        ? styles.upvoted
-                                        : styles.downvoted
+                                        ? "upvoted"
+                                        : "downvoted"
                                     : ""
                             }
                         >
@@ -163,15 +196,15 @@ const PostView: React.FC<PostViewProps> = (props) => {
                         ] === "1"
                             ? ""
                             : "s"}
-                    </p>
+                    </InfoText>
                     <div className={styles.buttonsRow}>
                         <div>
                             {props.onUpvote && (
-                                <button
+                                <VotingButton
                                     className={[
                                         styles.squared,
                                         props.voteState == "upvoted"
-                                            ? styles.upvoted
+                                            ? "upvoted"
                                             : null,
                                     ].join(" ")}
                                     onClick={(e) => {
@@ -181,14 +214,14 @@ const PostView: React.FC<PostViewProps> = (props) => {
                                     }}
                                 >
                                     <CaretUpOutlined />
-                                </button>
+                                </VotingButton>
                             )}
                             {props.onDownvote && (
-                                <button
+                                <VotingButton
                                     className={[
                                         styles.squared,
                                         props.voteState == "downvoted"
-                                            ? styles.downvoted
+                                            ? "downvoted"
                                             : null,
                                     ].join(" ")}
                                     onClick={(e) => {
@@ -198,7 +231,7 @@ const PostView: React.FC<PostViewProps> = (props) => {
                                     }}
                                 >
                                     <CaretDownOutlined />
-                                </button>
+                                </VotingButton>
                             )}
                         </div>
                         <div>

@@ -21,6 +21,10 @@ import BottomNavigation from "../components/BottomNavigation";
 import { usePreserveScroll } from "../hooks/usePreserveScroll";
 import VotedPosts, { VotedPostsContext } from "../contexts/VotedPosts";
 import { AppInitialProps } from "next/app";
+import styled, { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "../constants/theme";
+import ThemeSwitcher from "../contexts/ThemeSwitcher";
+import Sidebar from "../components/Sidebar";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -34,6 +38,11 @@ Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 
+const BodyStyle = styled.div`
+    background-color: ${(props) => props.theme.background};
+    min-height: 100vh;
+`;
+
 function MyApp(props: any) {
     const router = useRouter();
     const preserveScroll = usePreserveScroll();
@@ -41,6 +50,7 @@ function MyApp(props: any) {
     const navBlacklist = ["/authenticate", "/login"];
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
+    const [isDarkTheme, setisDarkTheme] = useState(false);
 
     const addVotedPost = (name: string, value: boolean | null) => {
         setVotedPosts((votedPosts) => ({ ...votedPosts, [name]: value }));
@@ -99,37 +109,40 @@ function MyApp(props: any) {
     }
 
     return (
-        <TokenContext.Provider value={props.token}>
-            <VotedPosts.Provider value={config}>
-                <QueryClientProvider client={queryClient}>
-                    <Head>Revirt</Head>
-
-                    <TopNavigation onToggleMenu={onMenuToggleHandler} />
-
-                    <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
-                        <Account />
-                        <span className="divider"></span>
-
-                        <PagesList
-                            activePage={router.pathname}
-                            onChange={() => setIsMenuOpen(false)}
-                        />
-                    </div>
-                    {isMenuOpen && (
-                        <span
-                            className="backdrop"
-                            onClick={() => setIsMenuOpen(false)}
-                        ></span>
-                    )}
-                    <main className="content">
-                        <props.Component {...props.pageProps} />
-                    </main>
-                    <div className="onMobile">
-                        <BottomNavigation activePage={router.pathname} />
-                    </div>
-                </QueryClientProvider>
-            </VotedPosts.Provider>
-        </TokenContext.Provider>
+        <ThemeSwitcher.Provider value={() => setisDarkTheme((curr) => !curr)}>
+            <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+                <TokenContext.Provider value={props.token}>
+                    <VotedPosts.Provider value={config}>
+                        <QueryClientProvider client={queryClient}>
+                            <BodyStyle>
+                                <Head>Revirt</Head>
+                                <TopNavigation
+                                    onToggleMenu={onMenuToggleHandler}
+                                />
+                                <Sidebar
+                                    isMenuOpen={isMenuOpen}
+                                    setIsMenuOpen={setIsMenuOpen}
+                                />
+                                {isMenuOpen && (
+                                    <span
+                                        className="backdrop"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    ></span>
+                                )}
+                                <main className="content">
+                                    <props.Component {...props.pageProps} />
+                                </main>
+                                <div className="onMobile">
+                                    <BottomNavigation
+                                        activePage={router.pathname}
+                                    />
+                                </div>
+                            </BodyStyle>
+                        </QueryClientProvider>
+                    </VotedPosts.Provider>
+                </TokenContext.Provider>
+            </ThemeProvider>
+        </ThemeSwitcher.Provider>
     );
 }
 

@@ -5,11 +5,12 @@ export default {
     access_token: "https://www.reddit.com/api/v1/access_token",
     profile: `${prefix}/api/v1/me`,
     best: `${prefix}/best/`,
-    subreddit: (subreddit) => `${prefix}/${subreddit}`,
+    hot: `${prefix}/hot/`,
+    subreddit: (subreddit: string) => `${prefix}/${subreddit}`,
     vote: `${prefix}/api/vote`,
     post_info: `${prefix}/api/info/`,
     post_info_anon: `${anon_prefix}/api/info/`,
-    user_info: (username) => `${prefix}/user/${username}/about`,
+    user_info: (username: string) => `${prefix}/user/${username}/about`,
 };
 
 // https://oauth.reddit.com/api/info/?id=
