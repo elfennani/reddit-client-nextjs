@@ -68,11 +68,6 @@
 }
 
 .collapsedComment {
-    display: flex;
-    position: relative;
-    align-items: center;
-    gap: 8px;
-
     &.reply {
         margin: 8px;
         margin-left: 16px;
@@ -90,21 +85,6 @@
 
     *:not(img) {
         opacity: 0.75;
-    }
-
-    &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-            to left,
-            white,
-            rgba($color: white, $alpha: 0)
-        );
-        width: 50px;
     }
 }
 

@@ -44,9 +44,10 @@ const SortListItem = styled.li<{ active: boolean }>`
         font-weight: ${(props) => (props.active ? "bold" : "normal")};
         position: relative;
         background-color: ${(props) =>
-            props.active ? props.theme.primaryLight : "white"};
+            props.active ? props.theme.primaryLight : props.theme.cardBg};
         border: 1px solid
-            ${(props) => (props.active ? props.theme.primary : "lightgrey")};
+            ${(props) =>
+                props.active ? props.theme.primary : props.theme.cardBgLight};
     }
 `;
 

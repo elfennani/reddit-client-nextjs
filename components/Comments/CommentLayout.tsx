@@ -1,6 +1,7 @@
 import { CompressOutlined, NodeCollapseOutlined } from "@ant-design/icons";
 import { decode, encode } from "html-entities";
-import React, { useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { CommentData } from "../../types/types";
 import { parseDate } from "../../utils/functions";
 import Card from "../Card";
@@ -20,6 +21,27 @@ interface CommentLayoutProps {
     created: number;
     isOP: boolean;
 }
+const CollapsedCommentStyle = styled.div`
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: 8px;
+
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            to left,
+            ${(props) => props.theme.cardBg},
+            transparent
+        );
+        width: 50px;
+    }
+`;
 const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     authorName,
     content,
@@ -31,6 +53,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     ...props
 }) => {
     const [collapsed, setCollapsed] = useState<boolean>(false);
+    const theme = useContext(ThemeContext);
 
     const uncollapsedComment = useMemo(
         () => (
@@ -66,7 +89,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                     </div>
                     <div>
                         <button onClick={() => setCollapsed(true)}>
-                            <CompressOutlined />
+                            <CompressOutlined style={{ color: theme.text }} />
                         </button>
                     </div>
                 </div>
@@ -81,7 +104,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
     );
     const collapsedComment = useMemo(
         () => (
-            <div
+            <CollapsedCommentStyle
                 className={`${styles.collapsedComment} ${
                     depth == 0 ? "" : styles.reply
                 }`}
@@ -89,7 +112,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
             >
                 <ProfilePicture user={author} size={24} />
                 <p>{text}</p>
-            </div>
+            </CollapsedCommentStyle>
         ),
         []
     );
@@ -98,6 +121,74 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
 
     return uncollapsedComment;
 };
+
+const CommentContainerParent = styled(Card)`
+    padding: 16px;
+    margin-bottom: 16px;
+
+    p {
+        margin: 0;
+    }
+
+    button {
+        background: none;
+        border: none;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        padding-left: 14px;
+    }
+
+    .reply {
+        border-left: 1px solid rgba($color: #000000, $alpha: 0.07);
+    }
+
+    .header {
+        opacity: 0.5;
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+
+    .commentContainer {
+        padding-left: 16px;
+        .comment {
+            padding: 8px 0;
+            display: flex;
+            gap: 12px;
+
+            a {
+                color: darkblue;
+            }
+
+            &.last {
+                padding-bottom: 0;
+            }
+
+            > .content {
+                flex: 1;
+                padding-bottom: 10px;
+
+                p:not(.header) {
+                    margin: 6px 0;
+                }
+
+                &.last {
+                    padding-bottom: 0;
+                }
+            }
+        }
+    }
+
+    > .commentContainer {
+        padding-left: 0;
+
+        .comment {
+            padding-top: 0;
+        }
+    }
+`;
 
 const CommentLayout: React.FC<CommentLayoutProps> = (props) => {
     if (props.depth == 0)

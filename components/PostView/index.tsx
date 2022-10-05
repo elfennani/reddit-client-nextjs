@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styles from "./PostView.module.scss";
 import { minimizeNumber, parseDate } from "../../utils/functions";
@@ -18,6 +18,7 @@ import SubredditIcon from "../SubredditIcon";
 import { ImagesMetadata } from "../../types/types";
 import Card from "../Card";
 import styled from "styled-components";
+import DisableImageContext from "../../contexts/DisableImageContext";
 
 interface PostViewProps {
     subreddit: string;
@@ -87,8 +88,25 @@ const VotingButton = styled.button`
     }
 `;
 
+const ContentStyle = styled.div`
+    padding-bottom: 12px;
+    position: relative;
+
+    &::after {
+        content: "";
+        display: block;
+        height: 1px;
+        left: 16px;
+        right: 16px;
+        bottom: 0;
+        position: absolute;
+        background-color: ${(props) => props.theme.border};
+    }
+`;
+
 const PostView: React.FC<PostViewProps> = (props) => {
     const router = useRouter();
+    const disableImage = useContext(DisableImageContext);
 
     let textCapped = false;
     let text;
@@ -132,8 +150,8 @@ const PostView: React.FC<PostViewProps> = (props) => {
                         </a>
                     )}
                 </header>
-                <div className={styles.content}>
-                    {props.image && (
+                <ContentStyle className={styles.content}>
+                    {props.image && !disableImage && (
                         <ImageContainer
                             image={props.image}
                             imageWidth={props.imageWidth}
@@ -143,7 +161,7 @@ const PostView: React.FC<PostViewProps> = (props) => {
                             blur={props.nsfw}
                         />
                     )}
-                    {props.images && (
+                    {props.images && !disableImage && (
                         <ImageContainer
                             imagesMetadata={props.images}
                             blur={props.nsfw}
@@ -170,7 +188,7 @@ const PostView: React.FC<PostViewProps> = (props) => {
                             {text}
                         </p>
                     )}
-                </div>
+                </ContentStyle>
                 <div className={styles.toolbar}>
                     <InfoText>
                         <span

@@ -24,7 +24,8 @@
     "react-bottom-scroll-listener": "^5.1.0",
     "react-dom": "18.2.0",
     "react-loading-skeleton": "^3.1.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "use-local-storage-state": "^18.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",

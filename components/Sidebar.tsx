@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Account from "./Account";
 import PagesList from "./PagesList";
+import ThemeSwitchButton from "./ThemeSwitchButton";
 
 type Props = {
     isMenuOpen: boolean;
@@ -10,8 +11,6 @@ type Props = {
 };
 
 const SidebarStyling = styled.aside<{ open: boolean }>`
-    @import "../styles/mixins.scss";
-
     position: fixed;
     top: 0;
     bottom: 0;
@@ -22,7 +21,6 @@ const SidebarStyling = styled.aside<{ open: boolean }>`
     gap: 8px;
     background-color: ${(props) => props.theme.cardBg};
     border-right: 1px solid rgba($color: #000000, $alpha: 0.07);
-    // padding-top: 42px;
     overflow-y: auto;
     z-index: 11;
     transition: left 0.3s ease-in-out;
@@ -58,6 +56,7 @@ const Sidebar: React.FC<Props> = ({ isMenuOpen, setIsMenuOpen }) => {
                 activePage={router.pathname}
                 onChange={() => setIsMenuOpen(false)}
             />
+            <ThemeSwitchButton />
         </SidebarStyling>
     );
 };

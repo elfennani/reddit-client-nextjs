@@ -15,8 +15,6 @@ const CommentsList: React.FC<CommentsList> = ({ postName: name }) => {
         () => getComments(name, token)
     );
 
-    console.log(data);
-
     return (
         <>
             {isError && <p style={{ color: "red" }}>{`Error: ${error}`}</p>}

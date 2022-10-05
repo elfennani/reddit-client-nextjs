@@ -25,6 +25,8 @@ import styled, { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "../constants/theme";
 import ThemeSwitcher from "../contexts/ThemeSwitcher";
 import Sidebar from "../components/Sidebar";
+import DisableImageContext from "../contexts/DisableImageContext";
+import useLocalStorageState from "use-local-storage-state";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -41,6 +43,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 const BodyStyle = styled.div`
     background-color: ${(props) => props.theme.background};
     min-height: 100vh;
+    color: ${(props) => props.theme.text};
 `;
 
 function MyApp(props: any) {
@@ -50,7 +53,10 @@ function MyApp(props: any) {
     const navBlacklist = ["/authenticate", "/login"];
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
-    const [isDarkTheme, setisDarkTheme] = useState(false);
+    // const [isDarkTheme, setIsDarkTheme] = uselooczzzz(true);
+    const [theme, setTheme] = useLocalStorageState("theme", {
+        defaultValue: "light",
+    });
 
     const addVotedPost = (name: string, value: boolean | null) => {
         setVotedPosts((votedPosts) => ({ ...votedPosts, [name]: value }));
@@ -109,36 +115,42 @@ function MyApp(props: any) {
     }
 
     return (
-        <ThemeSwitcher.Provider value={() => setisDarkTheme((curr) => !curr)}>
-            <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+        <ThemeSwitcher.Provider
+            value={() =>
+                setTheme((theme) => (theme == "light" ? "dark" : "light"))
+            }
+        >
+            <ThemeProvider theme={theme == "dark" ? darkTheme : lightTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <QueryClientProvider client={queryClient}>
-                            <BodyStyle>
-                                <Head>Revirt</Head>
-                                <TopNavigation
-                                    onToggleMenu={onMenuToggleHandler}
-                                />
-                                <Sidebar
-                                    isMenuOpen={isMenuOpen}
-                                    setIsMenuOpen={setIsMenuOpen}
-                                />
-                                {isMenuOpen && (
-                                    <span
-                                        className="backdrop"
-                                        onClick={() => setIsMenuOpen(false)}
-                                    ></span>
-                                )}
-                                <main className="content">
-                                    <props.Component {...props.pageProps} />
-                                </main>
-                                <div className="onMobile">
-                                    <BottomNavigation
-                                        activePage={router.pathname}
+                        <DisableImageContext.Provider value={false}>
+                            <QueryClientProvider client={queryClient}>
+                                <BodyStyle>
+                                    <Head>Revirt</Head>
+                                    <TopNavigation
+                                        onToggleMenu={onMenuToggleHandler}
                                     />
-                                </div>
-                            </BodyStyle>
-                        </QueryClientProvider>
+                                    <Sidebar
+                                        isMenuOpen={isMenuOpen}
+                                        setIsMenuOpen={setIsMenuOpen}
+                                    />
+                                    {isMenuOpen && (
+                                        <span
+                                            className="backdrop"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        ></span>
+                                    )}
+                                    <main className="content">
+                                        <props.Component {...props.pageProps} />
+                                    </main>
+                                    <div className="onMobile">
+                                        <BottomNavigation
+                                            activePage={router.pathname}
+                                        />
+                                    </div>
+                                </BodyStyle>
+                            </QueryClientProvider>
+                        </DisableImageContext.Provider>
                     </VotedPosts.Provider>
                 </TokenContext.Provider>
             </ThemeProvider>
