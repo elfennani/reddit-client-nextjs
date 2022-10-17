@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import styled from "styled-components";
 import endpoints from "../constants/endpoints";
 import TokenContext from "../contexts/TokenContext";
 import { getPosts, votePost } from "../repository/reddit_api";
@@ -17,6 +18,19 @@ interface PostsListProps {
     endpoint?: string;
     initialData?: InfiniteData<PostData[]>;
 }
+
+const ListStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+
+    > * {
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+    }
+`;
 
 const PostsList: React.FC<PostsListProps> = ({
     endpoint = endpoints.best,
@@ -57,36 +71,21 @@ const PostsList: React.FC<PostsListProps> = ({
 
     if (data)
         return (
-            <>
+            <ListStyle>
                 <Sorting onChoose={setSorting} current={sorting}>
                     <Sorting.Type title="Best" link={endpoints.best} />
                     <Sorting.Type title="Hot" link={endpoints.hot} />
                 </Sorting>
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 16,
-                        marginTop: 16,
-                    }}
-                >
-                    {data.pages.map((page) =>
-                        page.map((p) => (
-                            <PostHandler
-                                key={p.name}
-                                postData={p}
-                                active={true}
-                            />
-                        ))
-                    )}
-                    {isFetchingNextPage && <p>Fetching Next Page</p>}
-                    <Button
-                        title="Next Page"
-                        onClick={fetchNextPage}
-                        disabled={isFetchingNextPage}
-                    />
-                </div>
-            </>
+                {data.pages.map((page) =>
+                    page.map((p) => <PostHandler key={p.name} postData={p} />)
+                )}
+                {isFetchingNextPage && <p>Fetching Next Page</p>}
+                <Button
+                    title="Next Page"
+                    onClick={fetchNextPage}
+                    disabled={isFetchingNextPage}
+                />
+            </ListStyle>
         );
     return <div></div>;
 };

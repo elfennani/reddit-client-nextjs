@@ -1,10 +1,11 @@
 export interface UserData {
     username: string;
     fullname: string;
-    karma: Number;
-    created: Number;
-    cover: string;
+    karma: number;
+    created: number;
+    cover?: string;
     pfp: string;
+    description: string;
 }
 
 export interface ImagesMetadata {
@@ -31,6 +32,9 @@ export interface PostData {
     devJson: Object;
     nsfw: boolean;
     voteState: boolean | null;
+    text?: string;
+    text_html?: string;
+    link?: string;
 }
 
 export interface SubredditInfoData {

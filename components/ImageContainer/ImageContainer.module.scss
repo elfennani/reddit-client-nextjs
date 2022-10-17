@@ -4,7 +4,9 @@
     max-height: 600px;
     position: relative;
     margin-bottom: 12px;
-    border-radius: 5px;
+    margin: 16px;
+    border-radius: 10px;
+    margin-top: 0;
 
     &.ignoreSize {
         max-height: unset;
@@ -14,6 +16,7 @@
         width: 100%;
         display: block;
         background-color: rgb(230, 230, 230);
+        border-radius: 10px;
     }
 
     .showMore {

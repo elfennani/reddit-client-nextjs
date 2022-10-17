@@ -1,14 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap");
 @import "./variables.scss";
 @import "./mixins.scss";
-
-html,
-body {
-    padding: 0;
-    margin: 0;
-    font-family: $fontFamily;
-    background-color: #fafafa;
-}
 
 a {
     color: inherit;
@@ -28,27 +20,12 @@ img {
 .sidebar {
 }
 
-.backdrop {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba($color: #000000, $alpha: 0.3);
-    display: none;
-    z-index: 10;
-
-    @include onMobile {
-        display: block;
-    }
-}
 main.content {
-    margin-left: 300px;
-    padding-top: 48px;
+    margin-left: 346px;
 
     @include onMobile {
         margin-left: 0;
-        padding-top: 48px;
+        padding-top: 32px;
         margin-bottom: 50px;
     }
 }

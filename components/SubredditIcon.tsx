@@ -7,12 +7,11 @@ import Skeleton from "react-loading-skeleton";
 import styled from "styled-components";
 import TokenContext from "../contexts/TokenContext";
 import { getSubredditInfo } from "../repository/reddit_api";
+import Image from "next/image";
 
-const SubredditImage = styled.img<{ size: number }>`
+const SubredditImage = styled(Image)<{ size?: number }>`
     /* background-color: #dedede; */
-    width: ${(props: any) => props.size}px;
-    height: ${(props: any) => props.size}px;
-    border-radius: 4px;
+    border-radius: 12px;
 `;
 
 interface ImageTemplateTypes {
@@ -23,7 +22,7 @@ const ImageTemplate = styled.div<ImageTemplateTypes>`
     background-color: ${(props: any) => props.bgColor || "#0079D3"};
     width: ${(props: any) => props.size}px;
     height: ${(props: any) => props.size}px;
-    border-radius: 4px;
+    border-radius: 12px;
     flex: unset !important;
     text-transform: capitalize;
     text-align: center;
@@ -61,7 +60,14 @@ const SubredditIcon = ({ subreddit, size = 32 }: SubredditIconTypes) => {
             </ImageTemplate>
         );
 
-    return <SubredditImage src={data.icon} alt={subreddit} size={size} />;
+    return (
+        <SubredditImage
+            src={data.icon}
+            alt={subreddit}
+            width={size}
+            height={size}
+        />
+    );
 };
 
 export default SubredditIcon;

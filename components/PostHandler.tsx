@@ -11,16 +11,8 @@ import PostView from "./PostView";
 
 interface PostHandlerProps {
     postData: PostData;
-    ignoreNSFW?: boolean;
-    ignoreImageSize?: boolean;
-    active: boolean;
 }
-const PostHandler: React.FC<PostHandlerProps> = ({
-    postData,
-    ignoreNSFW = false,
-    ignoreImageSize = false,
-    active,
-}) => {
+const PostHandler: React.FC<PostHandlerProps> = ({ postData }) => {
     const token = useContext(TokenContext);
     const votedPosts = useContext(VotedPosts);
     const [voteState, setVoteState] = useState(postData.voteState);
@@ -47,46 +39,33 @@ const PostHandler: React.FC<PostHandlerProps> = ({
         setVoteState(type == "upvoted");
     };
 
-    /**
-     * @param {string} name
-     * @param {"upvoted"|"downvoted"|null} initialState
-     * @returns {"upvoted"|"downvoted"|null}
-     */
-    const getVoteState = (
-        name: string,
-        initialState: boolean | null = null
-    ) => {
+    const getVoteState = (): boolean | null => {
         if (voteState == null) return null;
-        return voteState ? "upvoted" : "downvoted";
+        return voteState ? true : false;
     };
+
     return (
         <PostView
+            data={postData}
             key={postData.name}
-            name={postData.name}
-            title={decode(postData.title)}
-            creator={"u/" + postData.author}
-            commentCount={postData.commentsCount}
-            subreddit={postData.subreddit}
-            votes={
-                postData.votes + (voteState == null ? 0 : voteState ? 1 : -1)
-            }
-            postLink={postData.permalink}
-            creatorLink={`/u/${postData.author}`}
-            extPostLink={postData.permalink}
-            image={postData.image}
-            images={postData.images}
-            json={postData.devJson}
-            createdOn={postData.created}
+            // votes={
+            //     postData.votes + (voteState == null ? 0 : voteState ? 1 : -1)
+            // }
+            // extPostLink={postData.permalink}
+            // image={postData.image}
+            // images={postData.images}
+            // json={postData.devJson}
+            // createdOn={postData.created}
             onUpvote={() => onVote("upvoted", postData.name)}
             onDownvote={() => onVote("downvoted", postData.name)}
-            onShare={() => console.log("share")}
-            onSave={() => console.log("save")}
-            nsfw={ignoreNSFW ? false : postData.nsfw}
-            voteState={getVoteState(postData.name, postData.voteState)}
-            ignoreImageSize={ignoreImageSize}
-            imageWidth={postData.imageWidth}
-            imageHeight={postData.imageHeight}
-            active={active}
+            // onShare={() => console.log("share")}
+            // onSave={() => console.log("save")}
+            // nsfw={ignoreNSFW ? false : postData.nsfw}
+            voteState={getVoteState()}
+            // ignoreImageSize={ignoreImageSize}
+            // imageWidth={postData.imageWidth}
+            // imageHeight={postData.imageHeight}
+            // active={active}
         />
     );
 };

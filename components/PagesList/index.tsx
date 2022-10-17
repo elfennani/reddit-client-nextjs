@@ -1,18 +1,49 @@
 import React from "react";
-import styles from "./PagesList.module.scss";
-import {
-    HistoryOutlined,
-    HomeFilled,
-    HomeOutlined,
-    LogoutOutlined,
-    SaveFilled,
-    SaveOutlined,
-    SettingFilled,
-    SettingOutlined,
-    UserOutlined,
-} from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Card from "../Card";
+import pagesList from "../../constants/pagesList";
+import styled from "styled-components";
+
+const PagesListStyle = styled.div`
+    padding: 24px;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            a {
+                display: block;
+                padding: 16px;
+                text-transform: capitalize;
+                position: relative;
+                transition: all 0.2s;
+                border-radius: 7px;
+                color: ${(props) => props.theme.text};
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.03);
+                }
+
+                &.active {
+                    background-color: ${(props) => props.theme.primaryLight};
+                    color: ${(props) => props.theme.primary};
+                }
+
+                span {
+                    margin-right: 16px;
+                }
+            }
+            &:last-child {
+                a::after {
+                    display: none;
+                }
+            }
+        }
+    }
+`;
 
 interface PagesList {
     children?: React.ReactNode;
@@ -26,55 +57,9 @@ const PagesList: React.FC<PagesList> = ({
     activePage = "/",
 }) => {
     const router = useRouter();
-    /**
-     * @type {[{label:string, link:string, activeCheck:string[], activeIcon:React.Component, inactiveIcon:React.Component}]}
-     */
-    const pagesList = [
-        {
-            label: "home",
-            link: "/",
-            activeCheck: ["/"],
-            activeIcon: <HomeFilled />,
-            inactiveIcon: <HomeOutlined />,
-        },
-        {
-            label: "profile",
-            link: "/profile",
-            activeCheck: ["/profile"],
-            activeIcon: <UserOutlined />,
-            inactiveIcon: <UserOutlined />,
-        },
-        {
-            label: "history",
-            link: "/history",
-            activeCheck: ["/history"],
-            activeIcon: <HistoryOutlined />,
-            inactiveIcon: <HistoryOutlined />,
-        },
-        {
-            label: "saved",
-            link: "/saved",
-            activeCheck: ["/saved"],
-            inactiveIcon: <SaveOutlined />,
-            activeIcon: <SaveFilled />,
-        },
-        {
-            label: "settings",
-            link: "/settings",
-            activeCheck: ["/settings"],
-            activeIcon: <SettingFilled />,
-            inactiveIcon: <SettingOutlined />,
-        },
-        {
-            label: "log out",
-            link: "/logout",
-            activeCheck: ["/logout"],
-            activeIcon: <LogoutOutlined />,
-            inactiveIcon: <LogoutOutlined />,
-        },
-    ];
+
     return (
-        <div className={styles.container}>
+        <PagesListStyle>
             <ul>
                 {pagesList.map((page, index) => {
                     let isActive;
@@ -87,7 +72,7 @@ const PagesList: React.FC<PagesList> = ({
                         <li key={index}>
                             <Link href={page.link}>
                                 <a
-                                    className={isActive ? styles.active : ""}
+                                    className={isActive ? "active" : ""}
                                     onClick={onChange}
                                 >
                                     {isActive
@@ -100,7 +85,7 @@ const PagesList: React.FC<PagesList> = ({
                     );
                 })}
             </ul>
-        </div>
+        </PagesListStyle>
     );
 };
 

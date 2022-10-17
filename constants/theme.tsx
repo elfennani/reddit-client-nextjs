@@ -1,32 +1,25 @@
-export const lightTheme = {
-    primary: "#f98857",
-    primaryLight: "#fef1eb",
-    cardBg: "white",
-    cardBgHover: "#fcfcfc",
-    name: "light",
-    text: "#171717",
-    background: "#fafafa",
-    votingButtonBg: "#fafafa",
-    upvote: "#f98857",
-    upvoteLight: "#fef1eb",
-    downvote: "#059ff6",
-    downvoteLight: "#d4eaf6",
-    border: "rgba(0, 0, 0, 0.07)",
+import { DefaultTheme } from "styled-components";
+
+export const lightTheme: DefaultTheme = {
     fontFamily:
         "Outfit, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
+    primary: "#FB5F40",
+    background: "#EEF0F4",
+    background0: "rgba(238, 240, 244, 0)",
+    backgroundDark: "#E3E6ED",
+    text: "#223954",
+    text25: "rgba(34, 57, 84, 0.25)",
+    text66: "rgba(34, 57, 84, 0.66)",
+    primaryLight: "#FEE6E1",
+    name: "light",
+    cardShadow: "0px 12px 20px rgba(34, 57, 84, 0.07)",
+    cardBg: "#FFF",
+    border: "black",
+    downvote: "#059FF6",
+    downvoteLight: "#d7e6f0",
+    upvote: "#FB5F40",
+    upvoteLight: "#f6e6e3",
+    votingButtonBg: "grey",
 };
 
-export const darkTheme = {
-    ...lightTheme,
-    cardBg: "#1b1b1b",
-    cardBgHover: "#1e1e1e",
-    name: "dark",
-    text: "#efefef",
-    background: "#0e0e0e",
-    votingButtonBg: "#464646",
-    upvote: "#f98857",
-    upvoteLight: "#322f2e",
-    downvote: "#059ff6",
-    border: "rgba(255, 255, 255, 0.12)",
-    downvoteLight: "#2d3031",
-};
+export const darkTheme: DefaultTheme = { ...lightTheme, name: "dark" };

@@ -38,7 +38,7 @@ export const getUserProfile = async (
         karma: data.total_karma,
         created: data.created_utc,
         pfp: data.icon_img.replaceAll("&amp;", "&"),
-        cover: "",
+        description: data.subreddit.public_description,
     };
 };
 
@@ -57,7 +57,13 @@ export const parsePost = (data: any): PostData => {
         devJson: post,
         nsfw: post.over_18,
         voteState: post.likes,
+        text: post.selftext,
+        text_html: post.selftext_html,
     };
+
+    if (!post.is_reddit_media_domain && !post.is_gallery) {
+        post_maped.link = post.url_overridden_by_dest;
+    }
 
     if (post.post_hint == "image") {
         post_maped.image = post.preview.images[0].source.url.replaceAll(

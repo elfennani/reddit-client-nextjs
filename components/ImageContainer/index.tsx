@@ -1,7 +1,8 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useLayoutEffect } from "react";
 import { useRef } from "react";
+import DisableImageContext from "../../contexts/DisableImageContext";
 import { ImagesMetadata } from "../../types/types";
 import Button from "../Button";
 import styles from "./ImageContainer.module.scss";
@@ -27,6 +28,7 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
     const [currentImage, setCurrentImage] = useState(0);
     const [showLink, setShowLink] = useState(false);
     const container = useRef<any>();
+    const disabledImages = useContext(DisableImageContext);
 
     useLayoutEffect(() => {
         if (!container.current) return;
@@ -35,6 +37,8 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
         }
         return () => {};
     }, [container]);
+
+    if (disabledImages) return <div></div>;
 
     if (image)
         return (
@@ -48,7 +52,13 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                         showLink ? styles.overflown : null,
                     ].join(" ")}
                 >
-                    <img src={image} alt={alt || image} loading="lazy" />
+                    <Image
+                        src={image}
+                        alt={alt || image}
+                        width={props.imageWidth}
+                        height={props.imageHeight}
+                        layout="responsive"
+                    />
                     {showLink && (
                         <Button
                             className={styles.showMore}
@@ -73,11 +83,13 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
             ].join(" ")}
         >
             {imagesMetadata.map((imageMetadata, index) => (
-                <img
+                <Image
                     src={imageMetadata.url}
                     alt={imageMetadata.title || imageMetadata.url}
                     key={imageMetadata.id}
-                    loading="lazy"
+                    width={imageMetadata.width}
+                    height={imageMetadata.height}
+                    layout="responsive"
                     style={{
                         display: currentImage == index ? "block" : "none",
                     }}

@@ -21,12 +21,15 @@ import BottomNavigation from "../components/BottomNavigation";
 import { usePreserveScroll } from "../hooks/usePreserveScroll";
 import VotedPosts, { VotedPostsContext } from "../contexts/VotedPosts";
 import { AppInitialProps } from "next/app";
-import styled, { ThemeProvider } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "../constants/theme";
 import ThemeSwitcher from "../contexts/ThemeSwitcher";
-import Sidebar from "../components/Sidebar";
 import DisableImageContext from "../contexts/DisableImageContext";
 import useLocalStorageState from "use-local-storage-state";
+import Layout from "../components/Layout";
+import Sidebar from "../components/Sidebar";
+import ProfileProvider from "../components/ProfileProvider";
+import SidebarContext from "../contexts/SidebarContext";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -36,24 +39,28 @@ const queryClient = new QueryClient({
     },
 });
 
+const GlobalStyle = createGlobalStyle`
+    body{
+        background-color: ${(props) => props.theme.background};
+        min-height: 100vh;
+        color: ${(props) => props.theme.text};
+        font-family: ${(p) => p.theme.fontFamily};
+        padding: 0;
+        margin: 0;
+    }
+`;
+
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
-
-const BodyStyle = styled.div`
-    background-color: ${(props) => props.theme.background};
-    min-height: 100vh;
-    color: ${(props) => props.theme.text};
-`;
 
 function MyApp(props: any) {
     const router = useRouter();
     const preserveScroll = usePreserveScroll();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const navBlacklist = ["/authenticate", "/login"];
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
-    // const [isDarkTheme, setIsDarkTheme] = uselooczzzz(true);
+
     const [theme, setTheme] = useLocalStorageState("theme", {
         defaultValue: "light",
     });
@@ -85,19 +92,19 @@ function MyApp(props: any) {
 
         const { token, refresh } = Cookies.get();
 
-        if (!token && !refresh && router.pathname != "/login") {
-            router.push("/login");
-            return;
-        }
+        console.log(token, refresh);
 
+        if (
+            !token &&
+            !refresh &&
+            !["/login", "/authenticate"].includes(router.pathname)
+        ) {
+            router.push("/login", undefined, {});
+        }
         setRefreshing(false);
     }, []);
 
     const onMenuToggleHandler = () => setIsMenuOpen((state) => !state);
-
-    if (navBlacklist.includes(router.pathname)) {
-        return <props.Component {...props.pageProps} />;
-    }
 
     if (refreshing) {
         return (
@@ -123,32 +130,19 @@ function MyApp(props: any) {
             <ThemeProvider theme={theme == "dark" ? darkTheme : lightTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <DisableImageContext.Provider value={false}>
+                        <DisableImageContext.Provider value={true}>
                             <QueryClientProvider client={queryClient}>
-                                <BodyStyle>
-                                    <Head>Revirt</Head>
-                                    <TopNavigation
-                                        onToggleMenu={onMenuToggleHandler}
-                                    />
-                                    <Sidebar
-                                        isMenuOpen={isMenuOpen}
-                                        setIsMenuOpen={setIsMenuOpen}
-                                    />
-                                    {isMenuOpen && (
-                                        <span
-                                            className="backdrop"
-                                            onClick={() => setIsMenuOpen(false)}
-                                        ></span>
-                                    )}
-                                    <main className="content">
+                                <ProfileProvider>
+                                    <SidebarContext.Provider
+                                        value={{
+                                            isOpened: isMenuOpen,
+                                            toggle: onMenuToggleHandler,
+                                        }}
+                                    >
+                                        <GlobalStyle />
                                         <props.Component {...props.pageProps} />
-                                    </main>
-                                    <div className="onMobile">
-                                        <BottomNavigation
-                                            activePage={router.pathname}
-                                        />
-                                    </div>
-                                </BodyStyle>
+                                    </SidebarContext.Provider>
+                                </ProfileProvider>
                             </QueryClientProvider>
                         </DisableImageContext.Provider>
                     </VotedPosts.Provider>

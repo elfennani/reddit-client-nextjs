@@ -36,18 +36,21 @@ const Sorting = (props: Props) => {
 const SortListItem = styled.li<{ active: boolean }>`
     button {
         padding: 8px 16px;
-        border-radius: 20px;
+        border-radius: 7px;
         border: none;
-        color: ${(props) => (props.active ? props.theme.primary : "darkgray")};
-        text-transform: uppercase;
+        font-size: 1rem;
+        font-family: ${(p) => p.theme.fontFamily};
+        color: ${(props) =>
+            props.active ? props.theme.background : props.theme.text25};
+        /* text-transform: uppercase; */
         letter-spacing: 1.2px;
-        font-weight: ${(props) => (props.active ? "bold" : "normal")};
+        font-weight: 600;
         position: relative;
         background-color: ${(props) =>
-            props.active ? props.theme.primaryLight : props.theme.cardBg};
+            props.active ? props.theme.primary : props.theme.cardBg};
+        transition: all 0.15s;
         border: 1px solid
-            ${(props) =>
-                props.active ? props.theme.primary : props.theme.cardBgLight};
+            ${(props) => (props.active ? "transparent" : props.theme.text25)};
     }
 `;
 

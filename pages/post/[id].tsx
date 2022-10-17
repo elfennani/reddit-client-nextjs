@@ -1,8 +1,12 @@
 import { GetServerSideProps } from "next";
 import cookies from "next-cookies";
+import Head from "next/head";
 import React from "react";
 import CommentsList from "../../components/CommentsList";
+import Layout from "../../components/Layout";
+import StandardLayout from "../../components/PageLayouts/StandardLayout";
 import PostHandler from "../../components/PostHandler";
+import PostConfig from "../../contexts/PostConfig";
 import PostNameContext from "../../contexts/PostNameContext";
 import { getPostData } from "../../repository/reddit_api";
 import { PostData } from "../../types/types";
@@ -12,19 +16,29 @@ interface PostProps {
 }
 const Post: React.FC<PostProps> = ({ data }) => {
     return (
-        <PostNameContext.Provider value={data.name}>
-            <div className="layout">
-                <PostHandler
-                    key={data.name}
-                    postData={data}
-                    ignoreNSFW={true}
-                    ignoreImageSize={true}
-                    active={false}
-                />
-                <div className="hr"></div>
-                <CommentsList postName={data.name} />
-            </div>
-        </PostNameContext.Provider>
+        <StandardLayout>
+            <PostNameContext.Provider value={data.name}>
+                <div>
+                    <PostConfig.Provider
+                        value={{
+                            wrappedInLink: false,
+                            textCompact: false,
+                            ignoreNSFW: true,
+                            ignoreImageSize: true,
+                        }}
+                    >
+                        <Head>
+                            <title>
+                                {data.title} • {data.subreddit}
+                            </title>
+                        </Head>
+                        <PostHandler key={data.name} postData={data} />
+                    </PostConfig.Provider>
+                    <div className="hr"></div>
+                    <CommentsList postName={data.name} />
+                </div>
+            </PostNameContext.Provider>
+        </StandardLayout>
     );
 };
 

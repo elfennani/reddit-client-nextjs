@@ -3,6 +3,7 @@ import React from "react";
 import LoginCard from "../components/LoginCard";
 import config from "../constants/config";
 import endpoints from "../constants/endpoints";
+import StandartLayout from "../components/PageLayouts/StandardLayout";
 
 const Login = () => {
     const params = {
