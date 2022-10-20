@@ -35,6 +35,20 @@ export interface PostData {
     text?: string;
     text_html?: string;
     link?: string;
+    poll?: PollData;
+}
+
+export type PollDataOption = {
+    id: string;
+    text: string;
+    votes: number | null;
+};
+
+export interface PollData {
+    voting_end: number;
+    selection: string;
+    options: PollDataOption[];
+    total_votes: number;
 }
 
 export interface SubredditInfoData {

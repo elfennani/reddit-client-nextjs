@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Button.module.scss";
 import Link from "next/link";
+import { useTheme } from "styled-components";
 
 interface ButtonProps {
     onClick?(): void;
     disabled?: boolean;
-    title: string;
+    title: any;
     secondary?: boolean;
     className?: string;
     link?: string;
@@ -14,6 +15,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = (props) => {
+    const theme = useTheme();
     if (props.link) {
         return (
             <Link href={props.disabled ? "#" : props.link} passHref>
@@ -41,7 +43,7 @@ const Button: React.FC<ButtonProps> = (props) => {
                 ].join(" ")}
                 onClick={props.onClick}
                 disabled={props.disabled || props.onClick == null}
-                style={props.style}
+                style={{ ...props.style, color: theme.primary }}
             >
                 {props.title}
             </button>

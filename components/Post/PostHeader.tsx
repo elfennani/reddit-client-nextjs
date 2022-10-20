@@ -69,6 +69,7 @@ const PostHeader = (props: Props) => {
                 </p>
             </SubInfo>
             <PostButton
+                title="More Options"
                 onClick={() =>
                     router.push(props.data.permalink, undefined, {
                         locale: false,

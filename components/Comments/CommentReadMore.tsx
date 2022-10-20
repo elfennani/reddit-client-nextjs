@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import React, { useContext, useEffect, useState } from "react";
 import PostNameContext from "../../contexts/PostNameContext";
 import TokenContext from "../../contexts/TokenContext";
@@ -37,7 +38,16 @@ const CommentReadMore: React.FC<Props> = (props) => {
 
     return (
         <Button
-            title={isLoading ? "Loading..." : "Read more"}
+            title={
+                isLoading ? (
+                    <span>
+                        <LoadingOutlined spin />
+                        &nbsp;&nbsp;&nbsp;Loading
+                    </span>
+                ) : (
+                    "Read more"
+                )
+            }
             onClick={getComments}
             secondary
             style={{ margin: 4, marginTop: 0 }}

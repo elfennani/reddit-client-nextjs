@@ -1,4 +1,5 @@
 import { MenuOutlined, SearchOutlined } from "@ant-design/icons";
+import Link from "next/link";
 import React, { useContext } from "react";
 import styled from "styled-components";
 import SidebarContext from "../contexts/SidebarContext";
@@ -103,9 +104,13 @@ const TopNavigation = (props: Props) => {
                     <NavButton onClick={sideBarContext.toggle}>
                         <MenuOutlined />
                     </NavButton>
-                    <Logo>
-                        <span>Re</span>Virted
-                    </Logo>
+                    <Link href="/">
+                        <a>
+                            <Logo>
+                                <span>Re</span>Virted
+                            </Logo>
+                        </a>
+                    </Link>
                 </LeftSide>
                 <SearchBox />
                 <div className="row">

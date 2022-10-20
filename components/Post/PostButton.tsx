@@ -4,6 +4,7 @@ import styled from "styled-components";
 type Props = {
     onClick(): void;
     icon: any;
+    title: string;
     size?: number;
     vote?: boolean | null;
 };
@@ -63,6 +64,7 @@ const PostButton = (props: Props) => {
             }}
             size={props.size || 18}
             vote={props.vote == undefined ? null : props.vote}
+            title={props.title}
         >
             {props.icon}
         </ButtonStyle>

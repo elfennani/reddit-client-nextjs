@@ -21,7 +21,11 @@ import BottomNavigation from "../components/BottomNavigation";
 import { usePreserveScroll } from "../hooks/usePreserveScroll";
 import VotedPosts, { VotedPostsContext } from "../contexts/VotedPosts";
 import { AppInitialProps } from "next/app";
-import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
+import styled, {
+    createGlobalStyle,
+    DefaultTheme,
+    ThemeProvider,
+} from "styled-components";
 import { darkTheme, lightTheme } from "../constants/theme";
 import ThemeSwitcher from "../contexts/ThemeSwitcher";
 import DisableImageContext from "../contexts/DisableImageContext";
@@ -73,6 +77,8 @@ function MyApp(props: any) {
         posts: votedPosts,
         setPostValue: addVotedPost,
     };
+
+    const currentTheme: DefaultTheme = theme == "dark" ? darkTheme : lightTheme;
 
     useEffect(() => {
         console.log(props);
@@ -127,10 +133,10 @@ function MyApp(props: any) {
                 setTheme((theme) => (theme == "light" ? "dark" : "light"))
             }
         >
-            <ThemeProvider theme={theme == "dark" ? darkTheme : lightTheme}>
+            <ThemeProvider theme={currentTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <DisableImageContext.Provider value={true}>
+                        <DisableImageContext.Provider value={false}>
                             <QueryClientProvider client={queryClient}>
                                 <ProfileProvider>
                                     <SidebarContext.Provider
@@ -140,6 +146,17 @@ function MyApp(props: any) {
                                         }}
                                     >
                                         <GlobalStyle />
+                                        <Head>
+                                            <title>ReVirted</title>
+                                            <meta
+                                                name="description"
+                                                content="Another reddit client"
+                                            />
+                                            <meta
+                                                name="theme-color"
+                                                content={currentTheme.primary}
+                                            />
+                                        </Head>
                                         <props.Component {...props.pageProps} />
                                     </SidebarContext.Provider>
                                 </ProfileProvider>

@@ -3,6 +3,8 @@ import endpoints from "../constants/endpoints";
 import {
     CommentData,
     ImagesMetadata,
+    PollData,
+    PollDataOption,
     PostData,
     SubredditInfoData,
     UserData,
@@ -61,8 +63,30 @@ export const parsePost = (data: any): PostData => {
         text_html: post.selftext_html,
     };
 
-    if (!post.is_reddit_media_domain && !post.is_gallery) {
+    if (
+        !post.is_reddit_media_domain &&
+        !post.is_gallery &&
+        post.url_overridden_by_dest
+    ) {
         post_maped.link = post.url_overridden_by_dest;
+    }
+
+    if (post.poll_data) {
+        const poll = post.poll_data;
+        const pollData: PollData = {
+            voting_end: poll.voting_end_timestamp,
+            selection: poll.user_selection || null,
+            total_votes: poll.total_vote_count,
+            options: poll.options.map(
+                (opt: any): PollDataOption => ({
+                    id: opt.id,
+                    text: opt.text,
+                    votes: opt.vote_count || null,
+                })
+            ),
+        };
+
+        post_maped.poll = pollData;
     }
 
     if (post.post_hint == "image") {

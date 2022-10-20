@@ -14,6 +14,7 @@ import Button from "./Button";
 import { minimizeNumber } from "../utils/functions";
 import PostLink from "./Post/PostLink";
 import { decode } from "html-entities";
+import PostPoll from "./Post/PostPoll";
 
 type Props = {
     data: PostData;
@@ -103,9 +104,11 @@ const PostView = ({ data, ...props }: Props) => {
                     />
                 )}
             </TextContainer>
+            {data.poll && <PostPoll pollData={data.poll} />}
             <Footer>
                 <div className="actions">
                     <PostButton
+                        title="Upvote"
                         icon={<GoArrowUp />}
                         onClick={props.onUpvote}
                         size={24}
@@ -113,12 +116,14 @@ const PostView = ({ data, ...props }: Props) => {
                     />
                     <PostButton
                         icon={<GoArrowDown />}
+                        title="Downvote"
                         onClick={props.onDownvote}
                         size={24}
                         vote={props.voteState == false ? false : null}
                     />
                     <PostButton
                         icon={<ShareAltOutlined />}
+                        title="Share"
                         onClick={() => {}}
                     />
                 </div>
@@ -143,7 +148,7 @@ const PostViewWrapper = (props: Props) => {
     if (!wrappedInLink) return <PostView {...props} />;
 
     return (
-        <Link href={`/post/${props.data.name}`}>
+        <Link href={`/post/${props.data.name.replace("t3_", "")}`}>
             <a>
                 <PostView {...props} />
             </a>

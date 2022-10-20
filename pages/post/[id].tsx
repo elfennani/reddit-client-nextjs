@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import cookies from "next-cookies";
 import Head from "next/head";
 import React from "react";
+import styled from "styled-components";
 import CommentsList from "../../components/CommentsList";
 import Layout from "../../components/Layout";
 import StandardLayout from "../../components/PageLayouts/StandardLayout";
@@ -11,6 +12,12 @@ import PostNameContext from "../../contexts/PostNameContext";
 import { getPostData } from "../../repository/reddit_api";
 import { PostData } from "../../types/types";
 
+const PostListLayout = styled.div`
+    width: 600px;
+    margin: 0 auto;
+    max-width: 100%;
+`;
+
 interface PostProps {
     data: PostData;
 }
@@ -18,7 +25,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
     return (
         <StandardLayout>
             <PostNameContext.Provider value={data.name}>
-                <div>
+                <PostListLayout>
                     <PostConfig.Provider
                         value={{
                             wrappedInLink: false,
@@ -36,7 +43,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
                     </PostConfig.Provider>
                     <div className="hr"></div>
                     <CommentsList postName={data.name} />
-                </div>
+                </PostListLayout>
             </PostNameContext.Provider>
         </StandardLayout>
     );
@@ -47,9 +54,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     if (!ctx.params) return { props: {} };
 
+    const data = await getPostData("t3_" + ctx.params.id, token);
+
     return {
         props: {
-            data: await getPostData(ctx.params.id as string, token),
+            data,
         },
     };
 };

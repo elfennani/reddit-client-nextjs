@@ -16,6 +16,7 @@ const PostLinkStyle = styled.a`
     justify-content: space-between;
     align-items: center;
     gap: 16px;
+    margin-top: 0;
 
     .link-container {
         overflow: hidden;
