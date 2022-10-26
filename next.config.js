@@ -8,6 +8,9 @@ const nextConfig = {
         defaultLocale: "en",
     },
     reactStrictMode: true,
+    experimental: {
+        scrollRestoration: true,
+    },
     swcMinify: true,
     images: {
         domains: [

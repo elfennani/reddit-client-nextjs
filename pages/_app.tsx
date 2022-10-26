@@ -6,21 +6,12 @@ import cookies from "next-cookies";
 import config from "../constants/config";
 import endpoints from "../constants/endpoints";
 import Head from "next/head";
-import TopNavigation from "../components/TopNavigation";
-import PagesList from "../components/PagesList";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import {
-    useQuery,
-    QueryClient,
-    QueryClientProvider,
-} from "@tanstack/react-query";
-import Account from "../components/Account";
+import "react-loading-skeleton/dist/skeleton.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import TokenContext from "../contexts/TokenContext";
-import BottomNavigation from "../components/BottomNavigation";
-import { usePreserveScroll } from "../hooks/usePreserveScroll";
 import VotedPosts, { VotedPostsContext } from "../contexts/VotedPosts";
-import { AppInitialProps } from "next/app";
 import styled, {
     createGlobalStyle,
     DefaultTheme,
@@ -30,8 +21,6 @@ import { darkTheme, lightTheme } from "../constants/theme";
 import ThemeSwitcher from "../contexts/ThemeSwitcher";
 import DisableImageContext from "../contexts/DisableImageContext";
 import useLocalStorageState from "use-local-storage-state";
-import Layout from "../components/Layout";
-import Sidebar from "../components/Sidebar";
 import ProfileProvider from "../components/ProfileProvider";
 import SidebarContext from "../contexts/SidebarContext";
 
@@ -43,7 +32,7 @@ const queryClient = new QueryClient({
     },
 });
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle<{ menuOpen: boolean }>`
     body{
         background-color: ${(props) => props.theme.background};
         min-height: 100vh;
@@ -51,6 +40,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: ${(p) => p.theme.fontFamily};
         padding: 0;
         margin: 0;
+        overflow: ${(p) => (p.menuOpen ? "hidden" : "unset")};
     }
 `;
 
@@ -60,7 +50,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 function MyApp(props: any) {
     const router = useRouter();
-    const preserveScroll = usePreserveScroll();
+    // const preserveScroll = usePreserveScroll();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
@@ -145,7 +135,7 @@ function MyApp(props: any) {
                                             toggle: onMenuToggleHandler,
                                         }}
                                     >
-                                        <GlobalStyle />
+                                        <GlobalStyle menuOpen={isMenuOpen} />
                                         <Head>
                                             <title>ReVirted</title>
                                             <meta

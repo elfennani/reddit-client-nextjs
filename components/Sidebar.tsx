@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import SidebarContext from "../contexts/SidebarContext";
+import Hr from "./Hr";
 import Layout from "./Layout";
 import PagesList from "./PagesList";
 import ProfileCard from "./ProfileCard";
@@ -22,14 +23,6 @@ const Backdrop = styled.div<{ active?: boolean }>`
     opacity: 0.25;
     display: ${(p) => (p.active ? "block" : "none !important")};
     z-index: 10;
-`;
-
-const Hr = styled.div`
-    height: 1px;
-    width: calc(100% - (24px * 2));
-    margin: 0px 24px;
-    background-color: ${(p) => p.theme.text};
-    opacity: 0.07;
 `;
 
 type Props = {

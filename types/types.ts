@@ -49,6 +49,7 @@ export interface PollData {
     selection: string;
     options: PollDataOption[];
     total_votes: number;
+    poll_url: string;
 }
 
 export interface SubredditInfoData {

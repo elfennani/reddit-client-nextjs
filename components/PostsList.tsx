@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { decode } from "html-entities";
 import React, { useState } from "react";
@@ -5,13 +6,14 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import styled from "styled-components";
-import endpoints from "../constants/endpoints";
+import endpoints, { prefix } from "../constants/endpoints";
 import TokenContext from "../contexts/TokenContext";
 import { getPosts, votePost } from "../repository/reddit_api";
 import { PostData } from "../types/types";
 import Button from "./Button";
 import PostHandler from "./PostHandler";
 import PostView from "./PostView";
+import PostListSkeleton from "./Skeletons/PostListSkeleton";
 import Sorting from "./Sorting";
 
 interface PostsListProps {
@@ -24,11 +26,40 @@ const ListStyle = styled.div`
     flex-direction: column;
     gap: 16px;
     margin-top: 16px;
+    position: relative;
+    overflow: hidden;
 
     > * {
         max-width: 600px;
         width: 100%;
         margin: 0 auto;
+    }
+`;
+
+const LoadingCircle = styled.div`
+    width: 40px;
+    height: 40px;
+    background-color: ${(p) => p.theme.primaryLight};
+    color: ${(p) => p.theme.primary};
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: ${(p) => p.theme.cardShadow};
+    position: absolute;
+    top: -64px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: slide_in 0.2s forwards;
+
+    @keyframes slide_in {
+        from {
+            top: -64px;
+        }
+        to {
+            top: 64px;
+        }
     }
 `;
 
@@ -45,12 +76,14 @@ const PostsList: React.FC<PostsListProps> = ({
         isLoading,
         isFetchingNextPage,
         isError,
+        isRefetching,
         data,
         fetchNextPage,
         error,
+        refetch,
     } = useInfiniteQuery(
-        ["Home", endpoint, token],
-        ({ pageParam = null }) => getPosts(token, endpoint, pageParam),
+        ["Home", endpoint, token, sorting],
+        ({ pageParam = null }) => getPosts(token, sorting, pageParam),
         {
             getNextPageParam: (lastPage, allPages) =>
                 lastPage[lastPage.length - 1].name || undefined,
@@ -65,14 +98,23 @@ const PostsList: React.FC<PostsListProps> = ({
 
     useEffect(() => console.log(error), [error]);
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) return <PostListSkeleton />;
     if (isError || !data)
         return <p>Error{(error as string) && `: ${error}`}</p>;
 
     if (data)
         return (
             <ListStyle>
-                <Sorting onChoose={setSorting} current={sorting}>
+                {isRefetching && (
+                    <LoadingCircle>
+                        <LoadingOutlined />
+                    </LoadingCircle>
+                )}
+                <Sorting
+                    onChoose={setSorting}
+                    current={sorting}
+                    onRefresh={refetch}
+                >
                     <Sorting.Type title="Best" link={endpoints.best} />
                     <Sorting.Type title="Hot" link={endpoints.hot} />
                 </Sorting>

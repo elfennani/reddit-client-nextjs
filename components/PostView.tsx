@@ -10,7 +10,6 @@ import PostHeader from "./Post/PostHeader";
 import PostText from "./Post/PostText";
 import { GoArrowUp, GoArrowDown } from "react-icons/go";
 import { ShareAltOutlined } from "@ant-design/icons";
-import Button from "./Button";
 import { minimizeNumber } from "../utils/functions";
 import PostLink from "./Post/PostLink";
 import { decode } from "html-entities";
@@ -67,6 +66,11 @@ const Votes = styled.span<{ state: boolean | null }>`
             : "inherit"};
 `;
 
+const Note = styled.p`
+    padding: 0 16px;
+    font-size: 0.8rem;
+`;
+
 const parseVote = (
     ifUp: any,
     ifDown: any,
@@ -105,6 +109,9 @@ const PostView = ({ data, ...props }: Props) => {
                 )}
             </TextContainer>
             {data.poll && <PostPoll pollData={data.poll} />}
+            {data.poll && data.poll.selection == null && (
+                <Note>*Voting is not supported on 3rd party apps.</Note>
+            )}
             <Footer>
                 <div className="actions">
                     <PostButton
@@ -148,7 +155,12 @@ const PostViewWrapper = (props: Props) => {
     if (!wrappedInLink) return <PostView {...props} />;
 
     return (
-        <Link href={`/post/${props.data.name.replace("t3_", "")}`}>
+        <Link
+            href={`/post/${props.data.name.replace("t3_", "")}`}
+            prefetch={true}
+            shallow={true}
+            scroll={true}
+        >
             <a>
                 <PostView {...props} />
             </a>

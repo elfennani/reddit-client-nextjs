@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import TokenContext from "../contexts/TokenContext";
 import { getComments } from "../repository/reddit_api";
 import CommentsHandler from "./Comments/CommentsHandler";
+import CommentSkeleton from "./Skeletons/CommentSkeleton";
 
 interface CommentsList {
     postName: string;
@@ -18,7 +19,7 @@ const CommentsList: React.FC<CommentsList> = ({ postName: name }) => {
     return (
         <>
             {isError && <p style={{ color: "red" }}>{`Error: ${error}`}</p>}
-            {isLoading && <p>Loading comments...</p>}
+            {isLoading && <CommentSkeleton />}
             {data && <CommentsHandler commentData={data} />}
         </>
     );

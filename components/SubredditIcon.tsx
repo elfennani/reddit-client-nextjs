@@ -66,6 +66,7 @@ const SubredditIcon = ({ subreddit, size = 32 }: SubredditIconTypes) => {
             alt={subreddit}
             width={size}
             height={size}
+            placeholder="empty"
         />
     );
 };

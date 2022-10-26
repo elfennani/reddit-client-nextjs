@@ -48,24 +48,9 @@ const PostHandler: React.FC<PostHandlerProps> = ({ postData }) => {
         <PostView
             data={postData}
             key={postData.name}
-            // votes={
-            //     postData.votes + (voteState == null ? 0 : voteState ? 1 : -1)
-            // }
-            // extPostLink={postData.permalink}
-            // image={postData.image}
-            // images={postData.images}
-            // json={postData.devJson}
-            // createdOn={postData.created}
             onUpvote={() => onVote("upvoted", postData.name)}
             onDownvote={() => onVote("downvoted", postData.name)}
-            // onShare={() => console.log("share")}
-            // onSave={() => console.log("save")}
-            // nsfw={ignoreNSFW ? false : postData.nsfw}
             voteState={getVoteState()}
-            // ignoreImageSize={ignoreImageSize}
-            // imageWidth={postData.imageWidth}
-            // imageHeight={postData.imageHeight}
-            // active={active}
         />
     );
 };

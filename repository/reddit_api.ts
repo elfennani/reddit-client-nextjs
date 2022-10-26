@@ -84,6 +84,7 @@ export const parsePost = (data: any): PostData => {
                     votes: opt.vote_count || null,
                 })
             ),
+            poll_url: post.url,
         };
 
         post_maped.poll = pollData;

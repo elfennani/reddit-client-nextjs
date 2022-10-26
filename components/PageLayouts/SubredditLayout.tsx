@@ -15,10 +15,8 @@ const StandardLayoutStyle = styled.div`
         display: none;
     }
 
-    @media screen and (max-width: 930px) {
-        .backdrop {
-            display: block;
-        }
+    .backdrop {
+        display: block;
     }
 
     > div {
@@ -28,28 +26,23 @@ const StandardLayoutStyle = styled.div`
         > .sidebar {
             --wid: 360px;
             position: fixed;
-            top: ${marginTop}px;
-            max-height: calc(100vh - ${marginTop}px - 16px);
             overflow: auto;
             z-index: 11;
             width: var(--wid);
             transition: left 0.2s ease-in-out;
+            top: 16px;
+            bottom: 16px;
+            left: calc(-1 * var(--wid));
+            border-radius: 12px;
+            max-height: none;
+            max-width: 80%;
+            box-shadow: ${(p) => p.theme.cardShadow};
+            .cover {
+                border: 2px solid white;
+            }
 
-            @media screen and (max-width: 930px) {
-                top: 0%;
-                bottom: 0;
-                left: calc(-1 * var(--wid));
-                border-radius: 0;
-                max-height: none;
-                max-width: 80%;
-
-                .cover {
-                    border-radius: 0 0 12px 12px;
-                }
-
-                &.active {
-                    left: 0;
-                }
+            &.active {
+                left: 16px;
             }
         }
     }
@@ -57,17 +50,17 @@ const StandardLayoutStyle = styled.div`
 
 const Container = styled.div`
     margin-top: ${marginTop}px;
-    margin-left: 376px;
+    margin-left: 0;
 
     @media screen and (max-width: 930px) {
         margin-left: 0;
     }
 `;
 
-const StandartLayout = (props: Props) => {
+const SubredditLayout = (props: Props) => {
     return (
         <StandardLayoutStyle>
-            <TopNavigation showMenuButton={false} />
+            <TopNavigation showMenuButton={true} />
             <Layout>
                 <Container>{props.children}</Container>
                 <Sidebar />
@@ -76,4 +69,4 @@ const StandartLayout = (props: Props) => {
     );
 };
 
-export default StandartLayout;
+export default SubredditLayout;

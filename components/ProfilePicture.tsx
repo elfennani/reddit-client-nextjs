@@ -5,7 +5,7 @@ import TokenContext from "../contexts/TokenContext";
 import { getUserProfile } from "../repository/reddit_api";
 
 const Image = styled.img<{ size: number }>`
-    background-color: #5b5b5b;
+    /* background-color: #5b5b5b; */
     border-radius: 4px;
     width: ${(props) => props.size}px;
     height: ${(props) => props.size}px;

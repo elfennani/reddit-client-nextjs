@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ProfileContext from "../contexts/ProfileContext";
 import { minimizeNumber, parseDate } from "../utils/functions";
 import Card from "./Card";
+import ProfileCardSkeleton from "./Skeletons/ProfileCardSkeleton";
 
 type Props = {};
 
@@ -96,7 +97,7 @@ const InfoCard = styled.div`
 
 const ProfileCard = (props: Props) => {
     const profile = useContext(ProfileContext);
-    if (!profile) return <div>Loading...</div>;
+    if (!profile) return <ProfileCardSkeleton />;
     return (
         <div>
             <ProfileHeader>

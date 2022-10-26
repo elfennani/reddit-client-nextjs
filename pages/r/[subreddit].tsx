@@ -1,37 +1,47 @@
+import { GetServerSideProps } from "next";
 import cookies from "next-cookies";
 import { useRouter } from "next/router";
+import SubredditLayout from "../../components/PageLayouts/SubredditLayout";
 import PostsList from "../../components/PostsList";
 import { prefix } from "../../constants/endpoints";
 import { getPosts } from "../../repository/reddit_api";
+import { PostData } from "../../types/types";
 
-const Subreddit = (props) => {
+interface SubredditPageProps {
+    endpoint: string;
+    data: PostData[];
+}
+
+const Subreddit = (props: SubredditPageProps) => {
     const router = useRouter();
+    const subredditName = router.query.subreddit;
 
-    console.log(router.query.subreddit);
     return (
-        <div className="layout">
+        <SubredditLayout>
             <PostsList
                 endpoint={props.endpoint}
                 initialData={{
-                    pageParams: null,
+                    pageParams: null as unknown as unknown[],
                     pages: [props.data || undefined],
                 }}
             />
-        </div>
+        </SubredditLayout>
     );
 };
 
-/**
- * @type {import("next").GetServerSideProps}
- */
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
     let result;
     const { token } = cookies(ctx);
+
+    if (!token)
+        return {
+            props: {},
+        };
 
     try {
         const postData = await getPosts(
             token,
-            `${prefix}/r/${ctx.params.subreddit}/best`,
+            `${prefix}/r/${ctx.params?.subreddit}/best`,
             null
         );
         result = postData;
@@ -42,7 +52,7 @@ export const getServerSideProps = async (ctx) => {
     return {
         props: {
             data: result || null,
-            endpoint: `${prefix}/r/${ctx.params.subreddit}/best`,
+            endpoint: `${prefix}/r/${ctx.params?.subreddit}/best`,
         },
     };
 };

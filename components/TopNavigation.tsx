@@ -8,9 +8,11 @@ import ProfilePicture from "./ProfilePicture";
 import SearchBox from "./SearchBox";
 import ThemeSwitchButton from "./ThemeSwitchButton";
 
-type Props = {};
+type Props = {
+    showMenuButton?: boolean;
+};
 
-const TopNavigationStyle = styled.nav`
+const TopNavigationStyle = styled.nav<Props>`
     height: 70px;
     background-color: ${(props) => props.theme.cardBg};
     position: fixed;
@@ -36,9 +38,16 @@ const TopNavigationStyle = styled.nav`
         align-items: center;
     }
 
-    @media screen and (max-width: 1366px) {
+    .menu-button {
+        display: ${(p) => (p.showMenuButton ? "block" : "none")};
+    }
+
+    @media screen and (max-width: 930px) {
         .search-box {
             display: none;
+        }
+        .menu-button {
+            display: block;
         }
     }
 `;
@@ -98,10 +107,13 @@ const TopNavigation = (props: Props) => {
     const sideBarContext = useContext(SidebarContext);
 
     return (
-        <TopNavigationStyle>
+        <TopNavigationStyle showMenuButton={props.showMenuButton}>
             <Layout>
                 <LeftSide>
-                    <NavButton onClick={sideBarContext.toggle}>
+                    <NavButton
+                        onClick={sideBarContext.toggle}
+                        className="menu-button"
+                    >
                         <MenuOutlined />
                     </NavButton>
                     <Link href="/">

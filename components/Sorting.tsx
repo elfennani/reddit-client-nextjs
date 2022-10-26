@@ -5,14 +5,17 @@ type Props = {
     children: any[];
     onChoose(link: string): void;
     current: string;
+    onRefresh(): void;
 };
 
 const SortContext = createContext<{
     onChoose: (link: string) => void;
     current: string;
+    onRefresh(): void;
 }>({
     current: "",
     onChoose: (link: string) => {},
+    onRefresh: () => {},
 });
 
 const SortList = styled.ul`
@@ -26,7 +29,11 @@ const SortList = styled.ul`
 const Sorting = (props: Props) => {
     return (
         <SortContext.Provider
-            value={{ current: props.current, onChoose: props.onChoose }}
+            value={{
+                current: props.current,
+                onChoose: props.onChoose,
+                onRefresh: props.onRefresh,
+            }}
         >
             <SortList>{props.children}</SortList>
         </SortContext.Provider>
@@ -63,7 +70,13 @@ const Type: React.FC<TypeProps> = (props) => {
     const sortingContext = useContext(SortContext);
     return (
         <SortListItem active={sortingContext.current == props.link}>
-            <button onClick={() => sortingContext.onChoose(props.link)}>
+            <button
+                onClick={() =>
+                    sortingContext.current == props.link
+                        ? sortingContext.onRefresh()
+                        : sortingContext.onChoose(props.link)
+                }
+            >
                 {props.title}
             </button>
         </SortListItem>

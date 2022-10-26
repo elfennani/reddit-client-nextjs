@@ -4,6 +4,7 @@ import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
 import CommentsList from "../../components/CommentsList";
+import Hr from "../../components/Hr";
 import Layout from "../../components/Layout";
 import StandardLayout from "../../components/PageLayouts/StandardLayout";
 import PostHandler from "../../components/PostHandler";
@@ -41,7 +42,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
                         </Head>
                         <PostHandler key={data.name} postData={data} />
                     </PostConfig.Provider>
-                    <div className="hr"></div>
+                    <Hr verticalSpacing={16} opacity={0.12} />
                     <CommentsList postName={data.name} />
                 </PostListLayout>
             </PostNameContext.Provider>
