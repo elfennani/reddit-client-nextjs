@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import cookies from "next-cookies";
 import Head from "next/head";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import CommentsList from "../../components/CommentsList";
 import Hr from "../../components/Hr";

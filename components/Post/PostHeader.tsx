@@ -7,6 +7,7 @@ import { PostData } from "../../types/types";
 import { parseDate } from "../../utils/functions";
 import SubredditIcon from "../SubredditIcon";
 import PostButton from "./PostButton";
+import PostMore from "./PostMore";
 
 type Props = {
     data: PostData;
@@ -68,15 +69,7 @@ const PostHeader = (props: Props) => {
                     {"\u2022"} {parseDate(props.data.created)} ago
                 </p>
             </SubInfo>
-            <PostButton
-                title="More Options"
-                onClick={() =>
-                    router.push(props.data.permalink, undefined, {
-                        locale: false,
-                    })
-                }
-                icon={<MoreOutlined />}
-            />
+            <PostMore data={props.data} />
         </HeaderStyle>
     );
 };

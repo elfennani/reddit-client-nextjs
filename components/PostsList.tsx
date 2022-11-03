@@ -52,6 +52,7 @@ const LoadingCircle = styled.div`
     left: 50%;
     transform: translateX(-50%);
     animation: slide_in 0.2s forwards;
+    z-index: 3;
 
     @keyframes slide_in {
         from {
@@ -69,8 +70,6 @@ const PostsList: React.FC<PostsListProps> = ({
 }) => {
     const token = useContext(TokenContext);
     const [sorting, setSorting] = useState(endpoints.best);
-
-    useEffect(() => console.log(sorting), [sorting]);
 
     const {
         isLoading,
@@ -95,8 +94,6 @@ const PostsList: React.FC<PostsListProps> = ({
     useBottomScrollListener(!isFetchingNextPage ? fetchNextPage : () => {}, {
         offset: 5000,
     });
-
-    useEffect(() => console.log(error), [error]);
 
     if (isLoading) return <PostListSkeleton />;
     if (isError || !data)

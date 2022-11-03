@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 type Props = {
-    onClick(): void;
+    onClick(e: any): void;
     icon: any;
     title: string;
     size?: number;
@@ -60,7 +60,7 @@ const PostButton = (props: Props) => {
             onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                props.onClick();
+                props.onClick(e);
             }}
             size={props.size || 18}
             vote={props.vote == undefined ? null : props.vote}

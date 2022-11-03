@@ -49,7 +49,6 @@ const SortListItem = styled.li<{ active: boolean }>`
         font-family: ${(p) => p.theme.fontFamily};
         color: ${(props) =>
             props.active ? props.theme.background : props.theme.text25};
-        /* text-transform: uppercase; */
         letter-spacing: 1.2px;
         font-weight: 600;
         position: relative;
@@ -57,7 +56,8 @@ const SortListItem = styled.li<{ active: boolean }>`
             props.active ? props.theme.primary : props.theme.cardBg};
         transition: all 0.15s;
         border: 1px solid
-            ${(props) => (props.active ? "transparent" : props.theme.text25)};
+            ${(props) =>
+                props.active ? "transparent" : props.theme.background};
     }
 `;
 
@@ -71,6 +71,7 @@ const Type: React.FC<TypeProps> = (props) => {
     return (
         <SortListItem active={sortingContext.current == props.link}>
             <button
+                type="button"
                 onClick={() =>
                     sortingContext.current == props.link
                         ? sortingContext.onRefresh()

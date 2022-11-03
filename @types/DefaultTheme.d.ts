@@ -20,5 +20,6 @@ declare module "styled-components" {
         border: string;
         upvoteLight: string;
         votingButtonBg: string;
+        bottomSheetShadow: string;
     }
 }

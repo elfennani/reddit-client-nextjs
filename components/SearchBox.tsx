@@ -30,13 +30,13 @@ const SearchboxStyle = styled.div`
     }
 `;
 
-const SearchBox = () => {
+const SearchBox = React.forwardRef<HTMLInputElement>((props, ref) => {
     return (
         <SearchboxStyle className="search-box">
             <SearchOutlined />
-            <input type="text" placeholder="Search here..." />
+            <input ref={ref} type="text" placeholder="Search here..." />
         </SearchboxStyle>
     );
-};
+});
 
 export default SearchBox;

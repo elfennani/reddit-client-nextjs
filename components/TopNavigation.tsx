@@ -1,7 +1,8 @@
 import { MenuOutlined, SearchOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import styled from "styled-components";
+import NotificationsAPI from "../contexts/NotificationsAPI";
 import SidebarContext from "../contexts/SidebarContext";
 import Layout from "./Layout";
 import ProfilePicture from "./ProfilePicture";
@@ -105,6 +106,17 @@ const LeftSide = styled.div`
 
 const TopNavigation = (props: Props) => {
     const sideBarContext = useContext(SidebarContext);
+    const notificationsApi = useContext(NotificationsAPI);
+    const searchInput = useRef<HTMLInputElement>();
+    const index = useRef(0);
+
+    const testNotification = () => {
+        console.log(searchInput.current);
+        notificationsApi.notify(
+            searchInput.current?.value || `Hello World ${index.current}`
+        );
+        index.current++;
+    };
 
     return (
         <TopNavigationStyle showMenuButton={props.showMenuButton}>
@@ -124,14 +136,14 @@ const TopNavigation = (props: Props) => {
                         </a>
                     </Link>
                 </LeftSide>
-                <SearchBox />
+                <SearchBox ref={searchInput as any} />
                 <div className="row">
                     <NavProfile>
                         <ProfilePicture size={24} />
                         Nizar Elfennani
                     </NavProfile>
                     <ThemeSwitchButton />
-                    <NavButton>
+                    <NavButton onClick={testNotification}>
                         <SearchOutlined />
                     </NavButton>
                 </div>

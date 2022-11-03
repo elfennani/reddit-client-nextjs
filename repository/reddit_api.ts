@@ -61,6 +61,7 @@ export const parsePost = (data: any): PostData => {
         voteState: post.likes,
         text: post.selftext,
         text_html: post.selftext_html,
+        saved: post.saved,
     };
 
     if (
@@ -126,7 +127,7 @@ export const parsePost = (data: any): PostData => {
                 (image) => image != undefined
             ) as ImagesMetadata[];
         } catch (error) {
-            console.log(post);
+            console.error("Failed Loading Post: ", post);
         }
 
         if (notAnImage) {
@@ -194,8 +195,6 @@ export const votePost = async (
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         });
-
-        console.log(await res.json());
     } catch (error) {
         console.error(error);
     }
@@ -206,6 +205,9 @@ export const getPostData = async (
     token?: string
 ): Promise<PostData> => {
     let res;
+    if (!id.includes("t3_")) {
+        id = `t3_${id}`;
+    }
     if (token) {
         res = await fetch(endpoints.post_info + `?id=${id}`, {
             headers: {
@@ -262,7 +264,6 @@ export const getComments = async (
               },
           }
         : {};
-    console.log(name);
     const res = await fetch(
         `https://${token ? "oauth" : "api"}.reddit.com/comments/${name.replace(
             "t3_",
@@ -274,8 +275,6 @@ export const getComments = async (
     const data = await res.json();
 
     const comments = parseComment(data[1].data.children) as CommentData[];
-
-    console.log(comments);
 
     return comments;
 };
@@ -337,4 +336,61 @@ const getReplies = (parent: string, allChildren: any[]): any[] => {
     }
 
     return replies;
+};
+
+export const savePost = async (
+    token: string,
+    category: string,
+    fullname: string,
+    onSuccess: () => void
+): Promise<void> => {
+    const res = await fetch(endpoints.save, {
+        method: "POST",
+        body: `category=${category}&id=${fullname}`,
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+    if (res.status == 200) {
+        onSuccess();
+    }
+};
+
+export const unsavePost = async (
+    token: string,
+    fullname: string,
+    onSuccess: () => void
+) => {
+    const res = await fetch(endpoints.unsave, {
+        method: "POST",
+        body: `id=${fullname}`,
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
+    if (res.status == 200) {
+        onSuccess();
+    }
+};
+
+export const getSavedPosts = async (token: string, username: string) => {
+    console.log(token);
+    try {
+        const res = await fetch(
+            `https://oauth.reddit.com/user/${username}/saved`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        console.log(await res.json());
+    } catch (error) {
+        console.log(error);
+    }
 };

@@ -27,6 +27,10 @@ const CollapsedCommentStyle = styled.div`
     align-items: center;
     gap: 8px;
 
+    p {
+        flex: 1;
+    }
+
     &::after {
         content: "";
         display: block;
@@ -111,7 +115,9 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                 onClick={() => setCollapsed(false)}
             >
                 <ProfilePicture user={author} size={24} />
-                <p>{text}</p>
+                <div>
+                    <p>{text}</p>
+                </div>
             </CollapsedCommentStyle>
         ),
         []

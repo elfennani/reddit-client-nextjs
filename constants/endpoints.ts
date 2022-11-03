@@ -11,6 +11,8 @@ export default {
     post_info: `${prefix}/api/info/`,
     post_info_anon: `${anon_prefix}/api/info/`,
     user_info: (username: string) => `${prefix}/user/${username}/about`,
+    save: `${prefix}/api/save`,
+    unsave: `${prefix}/api/unsave`,
 };
 
 // https://oauth.reddit.com/api/info/?id=

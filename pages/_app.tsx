@@ -23,6 +23,10 @@ import DisableImageContext from "../contexts/DisableImageContext";
 import useLocalStorageState from "use-local-storage-state";
 import ProfileProvider from "../components/ProfileProvider";
 import SidebarContext from "../contexts/SidebarContext";
+import Post from "./post/[id]";
+import PostBottomSheet from "../components/PostBottomSheet";
+import { getSavedPosts } from "../repository/reddit_api";
+import NotificationProvider from "../components/Notifications/NotificationProvider";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -32,7 +36,7 @@ const queryClient = new QueryClient({
     },
 });
 
-const GlobalStyle = createGlobalStyle<{ menuOpen: boolean }>`
+const GlobalStyle = createGlobalStyle<{ menuOpen: boolean; scroll: boolean }>`
     body{
         background-color: ${(props) => props.theme.background};
         min-height: 100vh;
@@ -40,7 +44,7 @@ const GlobalStyle = createGlobalStyle<{ menuOpen: boolean }>`
         font-family: ${(p) => p.theme.fontFamily};
         padding: 0;
         margin: 0;
-        overflow: ${(p) => (p.menuOpen ? "hidden" : "unset")};
+        overflow: ${(p) => (p.menuOpen || p.scroll ? "hidden" : "unset")};
     }
 `;
 
@@ -54,6 +58,7 @@ function MyApp(props: any) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
+    const [savedPosts, setSavedPosts] = useState<string[]>([]);
 
     const [theme, setTheme] = useLocalStorageState("theme", {
         defaultValue: "light",
@@ -71,7 +76,6 @@ function MyApp(props: any) {
     const currentTheme: DefaultTheme = theme == "dark" ? darkTheme : lightTheme;
 
     useEffect(() => {
-        console.log(props);
         setRefreshing(true);
 
         if (props.logout) {
@@ -87,8 +91,6 @@ function MyApp(props: any) {
         }
 
         const { token, refresh } = Cookies.get();
-
-        console.log(token, refresh);
 
         if (
             !token &&
@@ -126,7 +128,7 @@ function MyApp(props: any) {
             <ThemeProvider theme={currentTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <DisableImageContext.Provider value={false}>
+                        <DisableImageContext.Provider value={true}>
                             <QueryClientProvider client={queryClient}>
                                 <ProfileProvider>
                                     <SidebarContext.Provider
@@ -135,19 +137,31 @@ function MyApp(props: any) {
                                             toggle: onMenuToggleHandler,
                                         }}
                                     >
-                                        <GlobalStyle menuOpen={isMenuOpen} />
-                                        <Head>
-                                            <title>ReVirted</title>
-                                            <meta
-                                                name="description"
-                                                content="Another reddit client"
+                                        <NotificationProvider>
+                                            <GlobalStyle
+                                                menuOpen={isMenuOpen}
+                                                scroll={!!router.query.post_id}
                                             />
-                                            <meta
-                                                name="theme-color"
-                                                content={currentTheme.primary}
+                                            <Head>
+                                                <title>ReVirted</title>
+                                                <meta
+                                                    name="description"
+                                                    content="Another reddit client"
+                                                />
+                                                <meta
+                                                    name="theme-color"
+                                                    content={
+                                                        currentTheme.primary
+                                                    }
+                                                />
+                                            </Head>
+                                            {router.query.post_id && (
+                                                <PostBottomSheet />
+                                            )}
+                                            <props.Component
+                                                {...props.pageProps}
                                             />
-                                        </Head>
-                                        <props.Component {...props.pageProps} />
+                                        </NotificationProvider>
                                     </SidebarContext.Provider>
                                 </ProfileProvider>
                             </QueryClientProvider>

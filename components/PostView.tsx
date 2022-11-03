@@ -156,10 +156,10 @@ const PostViewWrapper = (props: Props) => {
 
     return (
         <Link
-            href={`/post/${props.data.name.replace("t3_", "")}`}
-            prefetch={true}
+            href={`?post_id=${props.data.name.replace("t3_", "")}`}
+            as={`/post/${props.data.name.replace("t3_", "")}`}
+            // scroll={false}
             shallow={true}
-            scroll={true}
         >
             <a>
                 <PostView {...props} />

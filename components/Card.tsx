@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 export const Card = styled.div`
-    overflow: hidden;
+    /* overflow: hidden; */
     /* border: 1px solid rgba(0, 0, 0, 0.12); */
     border-radius: 12px;
     background-color: ${(props) => props.theme.cardBg};

@@ -36,6 +36,7 @@ export interface PostData {
     text_html?: string;
     link?: string;
     poll?: PollData;
+    saved: boolean;
 }
 
 export type PollDataOption = {
