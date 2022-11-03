@@ -128,7 +128,7 @@ function MyApp(props: any) {
             <ThemeProvider theme={currentTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <DisableImageContext.Provider value={true}>
+                        <DisableImageContext.Provider value={false}>
                             <QueryClientProvider client={queryClient}>
                                 <ProfileProvider>
                                     <SidebarContext.Provider
