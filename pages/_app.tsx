@@ -92,13 +92,6 @@ function MyApp(props: any) {
 
         const { token, refresh } = Cookies.get();
 
-        // if (
-        //     !token &&
-        //     !refresh &&
-        //     !["/login", "/authenticate"].includes(router.pathname)
-        // ) {
-        //     router.push("/login", undefined, {});
-        // }
         setRefreshing(false);
     }, []);
 
