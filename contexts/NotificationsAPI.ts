@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export interface NotificationApiConfig {
-    notify(content: string, color?: string): void;
+    notify(content: string, color?: string, duration?: number): void;
     remove(id: number): void;
 }
 

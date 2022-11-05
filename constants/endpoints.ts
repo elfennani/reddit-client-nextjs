@@ -13,6 +13,13 @@ export default {
     user_info: (username: string) => `${prefix}/user/${username}/about`,
     save: `${prefix}/api/save`,
     unsave: `${prefix}/api/unsave`,
+    anonymous: {
+        best: `${anon_prefix}/best/`,
+        hot: `${anon_prefix}/hot/`,
+        user_info: (username: string) =>
+            `${anon_prefix}/user/${username}/about`,
+        subreddit: (subreddit: string) => `${anon_prefix}/${subreddit}`,
+    },
 };
 
 // https://oauth.reddit.com/api/info/?id=

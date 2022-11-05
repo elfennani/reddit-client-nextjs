@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
+import NotificationsAPI from "../contexts/NotificationsAPI";
 import TokenContext from "../contexts/TokenContext";
 import VotedPosts from "../contexts/VotedPosts";
 import { votePost } from "../repository/reddit_api";
@@ -15,6 +16,7 @@ interface PostHandlerProps {
 const PostHandler: React.FC<PostHandlerProps> = ({ postData }) => {
     const token = useContext(TokenContext);
     const votedPosts = useContext(VotedPosts);
+    const notifications = useContext(NotificationsAPI);
     const [voteState, setVoteState] = useState(postData.voteState);
 
     useEffect(() => {
@@ -24,6 +26,14 @@ const PostHandler: React.FC<PostHandlerProps> = ({ postData }) => {
     }, [votedPosts]);
 
     const onVote = (type: "upvoted" | "downvoted", name: string) => {
+        if (!token) {
+            notifications.notify(
+                `You have to be logged in to ${type}`,
+                "red",
+                10
+            );
+            return;
+        }
         if (
             (type == "upvoted" && voteState == true) ||
             (type == "downvoted" && voteState == false)

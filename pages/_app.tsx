@@ -92,13 +92,13 @@ function MyApp(props: any) {
 
         const { token, refresh } = Cookies.get();
 
-        if (
-            !token &&
-            !refresh &&
-            !["/login", "/authenticate"].includes(router.pathname)
-        ) {
-            router.push("/login", undefined, {});
-        }
+        // if (
+        //     !token &&
+        //     !refresh &&
+        //     !["/login", "/authenticate"].includes(router.pathname)
+        // ) {
+        //     router.push("/login", undefined, {});
+        // }
         setRefreshing(false);
     }, []);
 
@@ -128,7 +128,7 @@ function MyApp(props: any) {
             <ThemeProvider theme={currentTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <DisableImageContext.Provider value={false}>
+                        <DisableImageContext.Provider value={true}>
                             <QueryClientProvider client={queryClient}>
                                 <ProfileProvider>
                                     <SidebarContext.Provider
@@ -182,6 +182,7 @@ MyApp.getInitialProps = async (props: any) => {
             grant_type: "refresh_token",
             refresh_token: refresh,
         };
+
         const formData = new URLSearchParams(body);
 
         const response = await fetch(endpoints.access_token, {

@@ -22,7 +22,8 @@ const ProfilePicture: React.FC<{
 
     const { isLoading, isError, data, isSuccess } = useQuery(
         ["user", token, user],
-        async () => await getUserProfile(token, user)
+        async () => await getUserProfile(token, user),
+        { enabled: !!user }
     );
 
     return isSuccess ? (

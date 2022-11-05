@@ -14,6 +14,7 @@ import { minimizeNumber } from "../utils/functions";
 import PostLink from "./Post/PostLink";
 import { decode } from "html-entities";
 import PostPoll from "./Post/PostPoll";
+import { useRouter } from "next/router";
 
 type Props = {
     data: PostData;
@@ -151,14 +152,24 @@ const PostView = ({ data, ...props }: Props) => {
 
 const PostViewWrapper = (props: Props) => {
     const { wrappedInLink } = useContext(PostConfig);
+    const router = useRouter();
 
     if (!wrappedInLink) return <PostView {...props} />;
 
+    const wrapperLink = `${router.pathname}?post_id=${props.data.name.replace(
+        "t3_",
+        ""
+    )}${
+        "&" +
+        Object.entries(router.query).map(([key, value], index, array) => {
+            return `${key}=${value}${index != array.length - 1 ? "&" : ""}`;
+        })
+    }`;
+
     return (
         <Link
-            href={`?post_id=${props.data.name.replace("t3_", "")}`}
+            href={wrapperLink}
             as={`/post/${props.data.name.replace("t3_", "")}`}
-            // scroll={false}
             shallow={true}
         >
             <a>

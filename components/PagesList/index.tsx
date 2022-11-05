@@ -24,7 +24,11 @@ const PagesListStyle = styled.div`
                 color: ${(props) => props.theme.text};
 
                 &:hover {
-                    background-color: rgba(0, 0, 0, 0.03);
+                    background-color: rgba(
+                        ${(p) =>
+                            p.theme.name == "light" ? "0,0,0" : "255,255,255"},
+                        0.03
+                    );
                 }
 
                 &.active {

@@ -97,6 +97,7 @@ const InfoCard = styled.div`
 
 const ProfileCard = (props: Props) => {
     const profile = useContext(ProfileContext);
+    if (profile == undefined) return <div>anonymous</div>;
     if (!profile) return <ProfileCardSkeleton />;
     return (
         <div>

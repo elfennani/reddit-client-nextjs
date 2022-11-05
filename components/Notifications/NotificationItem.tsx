@@ -50,14 +50,14 @@ const ListItem = styled.li`
     }
 `;
 
-const NotificationItem = ({ info, duration = 3 }: Props) => {
+const NotificationItem = ({ info }: Props) => {
     const notificationsApi = useContext(NotificationsAPI);
     const theme = useTheme();
 
     useEffect(() => {
         const timeout = setTimeout(
             () => notificationsApi.remove(info.id),
-            duration * 1000
+            (info.duration ?? 3) * 1000
         );
 
         return () => {
@@ -74,7 +74,7 @@ const NotificationItem = ({ info, duration = 3 }: Props) => {
             <div>
                 <CountdownCircleTimer
                     isPlaying
-                    duration={duration}
+                    duration={info.duration ?? 3}
                     colors={[theme.text] as any}
                     strokeWidth={2}
                     trailColor={theme.text25 as any}

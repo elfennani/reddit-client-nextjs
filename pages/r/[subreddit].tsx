@@ -3,7 +3,7 @@ import cookies from "next-cookies";
 import { useRouter } from "next/router";
 import SubredditLayout from "../../components/PageLayouts/SubredditLayout";
 import PostsList from "../../components/PostsList";
-import { prefix } from "../../constants/endpoints";
+import { anon_prefix, prefix } from "../../constants/endpoints";
 import { getPosts } from "../../repository/reddit_api";
 import { PostData } from "../../types/types";
 
@@ -33,20 +33,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     let result;
     const { token } = cookies(ctx);
 
-    if (!token)
-        return {
-            props: {},
-        };
+    // if (!token)
+    //     return {
+    //         props: {},
+    //     };
 
     try {
         const postData = await getPosts(
             token,
-            `${prefix}/r/${ctx.params?.subreddit}/best`,
+            `${token ? prefix : anon_prefix}/r/${ctx.params?.subreddit}/best`,
             null
         );
         result = postData;
     } catch (error) {
-        console.log("Error Getting Subreddit Info", error);
+        console.error("Error Getting Subreddit Info", error);
     }
 
     return {

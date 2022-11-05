@@ -11,11 +11,26 @@ import {
 } from "../types/types";
 import { removeAmp } from "../utils/functions";
 
+const getAuth = (
+    token: string | undefined,
+    params?: RequestInit
+): RequestInit | undefined => {
+    return token
+        ? {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+              ...params,
+          }
+        : params;
+};
+
 export const getUserProfile = async (
     token: string,
     user: string | null = null
 ): Promise<UserData> => {
     let res: Response;
+
     if (!user) {
         res = await fetch(endpoints.profile, {
             headers: {
@@ -23,11 +38,12 @@ export const getUserProfile = async (
             },
         });
     } else {
-        res = await fetch(endpoints.user_info(user), {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        res = await fetch(
+            token
+                ? endpoints.user_info(user)
+                : endpoints.anonymous.user_info(user),
+            getAuth(token)
+        );
     }
 
     let data = await res.json();
@@ -142,15 +158,16 @@ export const parsePost = (data: any): PostData => {
 };
 
 export const getPosts = async (
-    token: string,
+    token: string | undefined,
     endpoint: string,
     after: string | null
 ): Promise<PostData[]> => {
-    const res = await fetch(endpoint + (after ? `?after=${after}` : ""), {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const res = await fetch(
+        endpoint + (after ? `?after=${after}` : ""),
+        getAuth(token)
+    );
+
+    if (res.status != 200) throw "Error Loading Posts";
 
     const data = await res.json();
     return data.data.children.map(parsePost);
@@ -160,11 +177,12 @@ export const getSubredditInfo = async (
     subreddit: string,
     token: string
 ): Promise<SubredditInfoData> => {
-    const res = await fetch(endpoints.subreddit(subreddit) + "/about", {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+    const res = await fetch(
+        token
+            ? endpoints.subreddit(subreddit)
+            : endpoints.anonymous.subreddit(subreddit) + "/about",
+        getAuth(token)
+    );
     const json = await res.json();
     const data = json.data;
 

@@ -10,7 +10,6 @@ import { getSubredditInfo } from "../repository/reddit_api";
 import Image from "next/image";
 
 const SubredditImage = styled(Image)<{ size?: number }>`
-    /* background-color: #dedede; */
     border-radius: 12px;
 `;
 

@@ -4,6 +4,7 @@ import React, { useContext, useRef } from "react";
 import styled from "styled-components";
 import NotificationsAPI from "../contexts/NotificationsAPI";
 import SidebarContext from "../contexts/SidebarContext";
+import TokenContext from "../contexts/TokenContext";
 import Layout from "./Layout";
 import ProfilePicture from "./ProfilePicture";
 import SearchBox from "./SearchBox";
@@ -107,6 +108,7 @@ const LeftSide = styled.div`
 const TopNavigation = (props: Props) => {
     const sideBarContext = useContext(SidebarContext);
     const notificationsApi = useContext(NotificationsAPI);
+    const token = useContext(TokenContext);
     const searchInput = useRef<HTMLInputElement>();
     const index = useRef(0);
 
@@ -138,10 +140,12 @@ const TopNavigation = (props: Props) => {
                 </LeftSide>
                 <SearchBox ref={searchInput as any} />
                 <div className="row">
-                    <NavProfile>
-                        <ProfilePicture size={24} />
-                        Nizar Elfennani
-                    </NavProfile>
+                    {token && (
+                        <NavProfile>
+                            <ProfilePicture size={24} />
+                            Nizar Elfennani
+                        </NavProfile>
+                    )}
                     <ThemeSwitchButton />
                     <NavButton onClick={testNotification}>
                         <SearchOutlined />

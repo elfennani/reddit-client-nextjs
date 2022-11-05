@@ -12,11 +12,14 @@ const ProfileProvider = (props: Props) => {
     const token = useContext(TokenContext);
     const { isLoading, isError, data, isSuccess } = useQuery(
         ["user", token],
-        async () => await getUserProfile(token)
+        async () => await getUserProfile(token),
+        {
+            enabled: !!token,
+        }
     );
 
     return (
-        <ProfileContext.Provider value={data ?? null}>
+        <ProfileContext.Provider value={token ? data ?? null : undefined}>
             {props.children}
         </ProfileContext.Provider>
     );

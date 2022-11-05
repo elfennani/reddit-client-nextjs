@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import NotificationsAPI, {
     NotificationApiConfig,
@@ -14,6 +15,7 @@ export type NotificationInfo = {
     content: string;
     color?: string;
     fadeout: boolean;
+    duration?: number;
 };
 
 const NotificationContainer = styled.ul`
@@ -24,14 +26,14 @@ const NotificationContainer = styled.ul`
     gap: 16px;
     flex-direction: column;
     width: 400px;
+    z-index: 30;
 `;
 
 const NotificationProvider = (props: Props) => {
     const currentId = useRef(0);
     const [notifications, setNotifications] = useState<NotificationInfo[]>([]);
 
-    const notify = (content: string, color?: string) => {
-        console.log("first");
+    const notify = (content: string, color?: string, duration?: number) => {
         setNotifications((notifications) => {
             currentId.current++;
             return [
@@ -41,6 +43,7 @@ const NotificationProvider = (props: Props) => {
                     content,
                     color,
                     fadeout: false,
+                    duration,
                 },
             ];
         });
@@ -63,6 +66,12 @@ const NotificationProvider = (props: Props) => {
             notifications.filter((notif) => notif.id != id)
         );
     };
+
+    useEffect(() => {
+        if (notifications.length > 6) {
+            remove(notifications[0].id);
+        }
+    }, [notifications]);
 
     const config: NotificationApiConfig = {
         notify,

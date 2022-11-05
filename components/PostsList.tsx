@@ -8,6 +8,7 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import styled from "styled-components";
 import endpoints, { prefix } from "../constants/endpoints";
 import TokenContext from "../contexts/TokenContext";
+import { useError } from "../hooks/useError";
 import { getPosts, votePost } from "../repository/reddit_api";
 import { PostData } from "../types/types";
 import Button from "./Button";
@@ -65,11 +66,13 @@ const LoadingCircle = styled.div`
 `;
 
 const PostsList: React.FC<PostsListProps> = ({
-    endpoint = endpoints.best,
+    endpoint,
     initialData = undefined,
 }) => {
     const token = useContext(TokenContext);
-    const [sorting, setSorting] = useState(endpoints.best);
+    const [sorting, setSorting] = useState(
+        endpoint || token ? endpoints.best : endpoints.anonymous.best
+    );
 
     const {
         isLoading,
@@ -90,6 +93,8 @@ const PostsList: React.FC<PostsListProps> = ({
             initialData,
         }
     );
+
+    useError(error as string);
 
     useBottomScrollListener(!isFetchingNextPage ? fetchNextPage : () => {}, {
         offset: 5000,
@@ -112,8 +117,14 @@ const PostsList: React.FC<PostsListProps> = ({
                     current={sorting}
                     onRefresh={refetch}
                 >
-                    <Sorting.Type title="Best" link={endpoints.best} />
-                    <Sorting.Type title="Hot" link={endpoints.hot} />
+                    <Sorting.Type
+                        title="Best"
+                        link={token ? endpoints.best : endpoints.anonymous.best}
+                    />
+                    <Sorting.Type
+                        title="Hot"
+                        link={token ? endpoints.hot : endpoints.anonymous.hot}
+                    />
                 </Sorting>
                 {data.pages.map((page) =>
                     page.map((p) => <PostHandler key={p.name} postData={p} />)
