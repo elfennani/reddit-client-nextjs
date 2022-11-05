@@ -105,7 +105,7 @@ const PostView = ({ data, ...props }: Props) => {
                     <PostText
                         text={data.text}
                         text_html={data.text_html as string}
-                        compact={textCompact}
+                        compact={textCompact as boolean}
                     />
                 )}
             </TextContainer>

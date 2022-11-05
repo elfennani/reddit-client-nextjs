@@ -10,15 +10,14 @@ import endpoints, { prefix } from "../constants/endpoints";
 import TokenContext from "../contexts/TokenContext";
 import { useError } from "../hooks/useError";
 import { getPosts, votePost } from "../repository/reddit_api";
-import { PostData } from "../types/types";
+import { PostData, PostsListEndpoints } from "../types/types";
 import Button from "./Button";
 import PostHandler from "./PostHandler";
-import PostView from "./PostView";
 import PostListSkeleton from "./Skeletons/PostListSkeleton";
 import Sorting from "./Sorting";
 
 interface PostsListProps {
-    endpoint?: string;
+    endpoints?: PostsListEndpoints;
     initialData?: InfiniteData<PostData[]>;
 }
 
@@ -66,12 +65,31 @@ const LoadingCircle = styled.div`
 `;
 
 const PostsList: React.FC<PostsListProps> = ({
-    endpoint,
+    endpoints: _endpoints = [
+        {
+            name: "best",
+            logged_routing: endpoints.best,
+            anon_routing: null,
+        },
+        {
+            name: "hot",
+            logged_routing: endpoints.hot,
+            anon_routing: endpoints.anonymous.hot,
+        },
+        {
+            name: "new",
+            logged_routing: endpoints.sorting("new"),
+            anon_routing: endpoints.anonymous.sorting("new"),
+        },
+    ] as PostsListEndpoints,
     initialData = undefined,
 }) => {
     const token = useContext(TokenContext);
-    const [sorting, setSorting] = useState(
-        endpoint || token ? endpoints.best : endpoints.anonymous.best
+    const [sorting, setSorting] = useState<string>(
+        token
+            ? _endpoints.filter((e) => !!e.anon_routing)[0].logged_routing
+            : (_endpoints.filter((e) => !!e.anon_routing)[0]
+                  .anon_routing as string)
     );
 
     const {
@@ -84,7 +102,7 @@ const PostsList: React.FC<PostsListProps> = ({
         error,
         refetch,
     } = useInfiniteQuery(
-        ["Home", endpoint, token, sorting],
+        ["Home", token, sorting],
         ({ pageParam = null }) => getPosts(token, sorting, pageParam),
         {
             getNextPageParam: (lastPage, allPages) =>
@@ -116,15 +134,19 @@ const PostsList: React.FC<PostsListProps> = ({
                     onChoose={setSorting}
                     current={sorting}
                     onRefresh={refetch}
+                    isAnon={!token}
                 >
-                    <Sorting.Type
-                        title="Best"
-                        link={token ? endpoints.best : endpoints.anonymous.best}
-                    />
-                    <Sorting.Type
-                        title="Hot"
-                        link={token ? endpoints.hot : endpoints.anonymous.hot}
-                    />
+                    {_endpoints.map(
+                        (endpoint) =>
+                            endpoint.anon_routing && (
+                                <Sorting.Type
+                                    title={endpoint.name}
+                                    loggedLink={endpoint.logged_routing}
+                                    anonLink={endpoint.anon_routing}
+                                    key={endpoint.name}
+                                />
+                            )
+                    )}
                 </Sorting>
                 {data.pages.map((page) =>
                     page.map((p) => <PostHandler key={p.name} postData={p} />)

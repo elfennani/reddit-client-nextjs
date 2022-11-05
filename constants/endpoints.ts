@@ -6,7 +6,10 @@ export default {
     profile: `${prefix}/api/v1/me`,
     best: `${prefix}/best/`,
     hot: `${prefix}/hot/`,
+    sorting: (sorting: string) => `${prefix}/${sorting}`,
     subreddit: (subreddit: string) => `${prefix}/${subreddit}`,
+    subreddit_sorting: (subreddit: string, sortingName: string) =>
+        `${prefix}/r/${subreddit}/${sortingName}`,
     vote: `${prefix}/api/vote`,
     post_info: `${prefix}/api/info/`,
     post_info_anon: `${anon_prefix}/api/info/`,
@@ -16,9 +19,12 @@ export default {
     anonymous: {
         best: `${anon_prefix}/best/`,
         hot: `${anon_prefix}/hot/`,
+        sorting: (sorting: string) => `${anon_prefix}/${sorting}`,
         user_info: (username: string) =>
             `${anon_prefix}/user/${username}/about`,
         subreddit: (subreddit: string) => `${anon_prefix}/${subreddit}`,
+        subreddit_sorting: (subreddit: string, sortingName: string) =>
+            `${anon_prefix}/r/${subreddit}/${sortingName}`,
     },
 };
 

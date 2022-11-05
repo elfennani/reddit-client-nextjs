@@ -6,16 +6,19 @@ type Props = {
     onChoose(link: string): void;
     current: string;
     onRefresh(): void;
+    isAnon: boolean;
 };
 
 const SortContext = createContext<{
     onChoose: (link: string) => void;
     current: string;
     onRefresh(): void;
+    isAnon: boolean;
 }>({
     current: "",
     onChoose: (link: string) => {},
     onRefresh: () => {},
+    isAnon: true,
 });
 
 const SortList = styled.ul`
@@ -33,6 +36,7 @@ const Sorting = (props: Props) => {
                 current: props.current,
                 onChoose: props.onChoose,
                 onRefresh: props.onRefresh,
+                isAnon: props.isAnon,
             }}
         >
             <SortList>{props.children}</SortList>
@@ -47,6 +51,7 @@ const SortListItem = styled.li<{ active: boolean }>`
         border: none;
         font-size: 1rem;
         font-family: ${(p) => p.theme.fontFamily};
+        text-transform: capitalize;
         color: ${(props) =>
             props.active ? props.theme.background : props.theme.text25};
         letter-spacing: 1.2px;
@@ -64,18 +69,21 @@ const SortListItem = styled.li<{ active: boolean }>`
 interface TypeProps {
     title: string;
     onClick?(link: string): void;
-    link: string;
+    loggedLink: string;
+    anonLink: string;
 }
 const Type: React.FC<TypeProps> = (props) => {
     const sortingContext = useContext(SortContext);
+    const link = sortingContext.isAnon ? props.anonLink : props.loggedLink;
+
     return (
-        <SortListItem active={sortingContext.current == props.link}>
+        <SortListItem active={sortingContext.current == link}>
             <button
                 type="button"
                 onClick={() =>
-                    sortingContext.current == props.link
+                    sortingContext.current == link
                         ? sortingContext.onRefresh()
-                        : sortingContext.onChoose(props.link)
+                        : sortingContext.onChoose(link)
                 }
             >
                 {props.title}

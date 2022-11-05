@@ -71,3 +71,11 @@ export interface CommentData {
     created: number;
     isOP: boolean;
 }
+
+interface PostsListEndpoint {
+    name: string;
+    anon_routing: string;
+    logged_routing: string;
+}
+
+export type PostsListEndpoints = PostsListEndpoint[];

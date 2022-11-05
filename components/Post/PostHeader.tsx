@@ -1,8 +1,9 @@
 import { MoreOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import PostConfig from "../../contexts/PostConfig";
 import { PostData } from "../../types/types";
 import { parseDate } from "../../utils/functions";
 import SubredditIcon from "../SubredditIcon";
@@ -43,23 +44,42 @@ const SubInfo = styled.div`
         padding-bottom: 4px;
     }
 `;
+type LinkWrapperProps = {
+    href: string;
+    disabled?: boolean;
+    children: any[] | any;
+    className?: string;
+};
+const LinkWrapper = (props: LinkWrapperProps) => {
+    if (props.disabled) return <>{props.children}</>;
+
+    return (
+        <Link href={props.href}>
+            <a className={props.className}>{props.children}</a>
+        </Link>
+    );
+};
 
 const PostHeader = (props: Props) => {
-    // TODO: remove later
-    const router = useRouter();
+    const config = useContext(PostConfig);
 
     return (
         <HeaderStyle>
-            <Link href={`/${props.data.subreddit}`}>
-                <a className="icon-link">
-                    <SubredditIcon subreddit={props.data.subreddit} size={45} />
-                </a>
-            </Link>
+            <LinkWrapper
+                href={`/${props.data.subreddit}`}
+                className="icon-link"
+                disabled={config.disableSubredditLink}
+            >
+                <SubredditIcon subreddit={props.data.subreddit} size={45} />
+            </LinkWrapper>
             <SubInfo>
                 <h1>
-                    <Link href={`/${props.data.subreddit}`}>
-                        <a>{props.data.subreddit}</a>
-                    </Link>
+                    <LinkWrapper
+                        disabled={config.disableSubredditLink}
+                        href={`/${props.data.subreddit}`}
+                    >
+                        {props.data.subreddit}
+                    </LinkWrapper>
                 </h1>
                 <p>
                     Posted by{" "}

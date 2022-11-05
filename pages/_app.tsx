@@ -12,7 +12,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import TokenContext from "../contexts/TokenContext";
 import VotedPosts, { VotedPostsContext } from "../contexts/VotedPosts";
-import styled, {
+import {
     createGlobalStyle,
     DefaultTheme,
     ThemeProvider,
@@ -23,9 +23,7 @@ import DisableImageContext from "../contexts/DisableImageContext";
 import useLocalStorageState from "use-local-storage-state";
 import ProfileProvider from "../components/ProfileProvider";
 import SidebarContext from "../contexts/SidebarContext";
-import Post from "./post/[id]";
 import PostBottomSheet from "../components/PostBottomSheet";
-import { getSavedPosts } from "../repository/reddit_api";
 import NotificationProvider from "../components/Notifications/NotificationProvider";
 
 const queryClient = new QueryClient({
@@ -54,11 +52,9 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 function MyApp(props: any) {
     const router = useRouter();
-    // const preserveScroll = usePreserveScroll();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [refreshing, setRefreshing] = useState(true);
     const [votedPosts, setVotedPosts] = useState({});
-    const [savedPosts, setSavedPosts] = useState<string[]>([]);
 
     const [theme, setTheme] = useLocalStorageState("theme", {
         defaultValue: "light",
@@ -90,7 +86,7 @@ function MyApp(props: any) {
             router.reload();
         }
 
-        const { token, refresh } = Cookies.get();
+        // const { token, refresh } = Cookies.get();
 
         setRefreshing(false);
     }, []);
@@ -121,7 +117,7 @@ function MyApp(props: any) {
             <ThemeProvider theme={currentTheme}>
                 <TokenContext.Provider value={props.token}>
                     <VotedPosts.Provider value={config}>
-                        <DisableImageContext.Provider value={true}>
+                        <DisableImageContext.Provider value={false}>
                             <QueryClientProvider client={queryClient}>
                                 <ProfileProvider>
                                     <SidebarContext.Provider

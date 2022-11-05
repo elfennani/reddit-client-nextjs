@@ -3,8 +3,9 @@ import { createContext } from "react";
 type PostConfigType = {
     ignoreNSFW?: boolean;
     ignoreImageSize?: boolean;
-    wrappedInLink: boolean;
-    textCompact: boolean;
+    wrappedInLink?: boolean;
+    textCompact?: boolean;
+    disableSubredditLink?: boolean;
 };
 
 export default createContext<PostConfigType>({
@@ -12,4 +13,5 @@ export default createContext<PostConfigType>({
     ignoreImageSize: false,
     ignoreNSFW: false,
     textCompact: true,
+    disableSubredditLink: false,
 });

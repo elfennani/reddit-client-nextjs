@@ -97,23 +97,25 @@ const PostMore = (props: Props) => {
                             Open in Reddit
                         </a>
                     </li>
+                    {token && (
+                        <li>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    save();
+                                }}
+                            >
+                                {isSaved ? "Saved" : "Save"}
+                            </button>
+                        </li>
+                    )}
                     <li>
                         <button
                             type="button"
                             onClick={(e) => {
                                 e.preventDefault();
-                                save();
-                            }}
-                        >
-                            {isSaved ? "Saved" : "Save"}
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                save();
+                                // TODO: ADD COPY LINK FUNCTIONNALITY
                             }}
                         >
                             Copy Link

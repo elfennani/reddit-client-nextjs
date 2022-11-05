@@ -92,7 +92,10 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                         ></div>
                     </div>
                     <div>
-                        <button onClick={() => setCollapsed(true)}>
+                        <button
+                            onClick={() => setCollapsed(true)}
+                            title="collapse comment"
+                        >
                             <CompressOutlined style={{ color: theme.text }} />
                         </button>
                     </div>
@@ -104,7 +107,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                 )}
             </div>
         ),
-        []
+        [content, replies, props]
     );
     const collapsedComment = useMemo(
         () => (
@@ -120,7 +123,7 @@ const CommentLayoutContent: React.FC<CommentLayoutProps> = ({
                 </div>
             </CollapsedCommentStyle>
         ),
-        []
+        [content, replies, props]
     );
 
     if (collapsed) return collapsedComment;

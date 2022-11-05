@@ -33,6 +33,7 @@ const Post: React.FC<PostProps> = ({ data }) => {
                             textCompact: false,
                             ignoreNSFW: true,
                             ignoreImageSize: true,
+                            disableSubredditLink: false,
                         }}
                     >
                         <Head>
