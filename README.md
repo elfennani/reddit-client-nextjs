@@ -22,10 +22,10 @@ In need to run storybook(Currently not working because many of the components we
 $ npm run storybook
 ```
 
-## Made using what?
-
-This project uses OAuth 2.0 Flow. with the help of [official Reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2) and
-[Reddit OAuth API docs](https://www.reddit.com/dev/api/oauth). In addition to the help of Figma ([My Figma Project](https://www.figma.com/file/FJF4kqQaKnRVm6ZNV1lGa2/Reddit-Redesign?node-id=0%3A1))
+## Links
+-   [Figma File](https://www.figma.com/file/FJF4kqQaKnRVm6ZNV1lGa2/Reddit-Redesign?node-id=0%3A1)
+-   [Official Reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2)
+-   [Reddit OAuth API docs](https://www.reddit.com/dev/api/oauth)
 
 ## Current State
 
