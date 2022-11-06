@@ -4,7 +4,7 @@ Just another reddit client. This project is being made with the power of ReactJS
 
 ## Installation and Running
 
-```bash
+```console
 $ git clone https://github.com/elfennani/reddit-client-nextjs.git
 $ cd reddit-client-nextjs
 $ npm install
@@ -13,7 +13,7 @@ $ npm run dev
 
 In need to run storybook(Currently not working because many of the components were deleted):
 
-```bash
+```console
 $ npm run storybook
 ```
 
