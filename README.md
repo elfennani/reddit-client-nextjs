@@ -7,11 +7,11 @@ Just another reddit client. This project is being made with the power of ReactJS
 ```bash
 $ git clone https://github.com/elfennani/reddit-client-nextjs.git
 $ cd reddit-client-nextjs
-$ npm i
+$ npm install
 $ npm run dev
 ```
 
-In need to run storybook:
+In need to run storybook(Currently not working because many of the components were deleted):
 
 ```bash
 $ npm run storybook
@@ -20,19 +20,22 @@ $ npm run storybook
 ## Made using what?
 
 This project uses OAuth 2.0 Flow. with the help of [official Reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2) and
-[Reddit OAuth API docs](https://www.reddit.com/dev/api/oauth).
+[Reddit OAuth API docs](https://www.reddit.com/dev/api/oauth). In addition to the help of Figma ([My Figma Project](https://www.figma.com/file/FJF4kqQaKnRVm6ZNV1lGa2/Reddit-Redesign?node-id=0%3A1))
 
 ## Current State
 
 What works:
 
--   authenticating
--   display account information in the sidebar
+-   Authentication
+-   Display account information in the sidebar
+-   Anonymous Browsing (No Signing Required)
+-   Upvoting and Downvoting
+-   Saving File
+-   Infinite Scrolling
+-   Modal routing for posts
+-   Browsing individual Subreddits
+-   Light and Dark Theme
 
-Future Features:
+With many other feature coming later.
 
--   scrolling infinite feeds in home page
--   showing notification
--   make all routes in the sidebar accessible
-
-**\*Revirt** is a hobby project, its purpose is only to showcase my abilities and to be a part of my future portfolio.\*
+***Revirt** is a hobby project, its purpose is only to showcase and be a part of my portfolio.*

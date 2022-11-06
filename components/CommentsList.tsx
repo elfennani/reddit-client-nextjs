@@ -1,8 +1,4 @@
-import {
-    LoadingOutlined,
-    ReloadOutlined,
-    RotateLeftOutlined,
-} from "@ant-design/icons";
+import { LoadingOutlined, ReloadOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import styled from "styled-components";

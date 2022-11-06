@@ -1,6 +1,7 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import hi from "date-fns/esm/locale/hi/index.js";
+import Head from "next/head";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { useCallback, useContext, useEffect, useState } from "react";
@@ -212,6 +213,13 @@ const PostBottomSheet = (props: Props) => {
 
     return (
         <>
+            <Head>
+                {data && (
+                    <title>
+                        {data.title} • {data.subreddit}
+                    </title>
+                )}
+            </Head>
             <Backdrop
                 onClick={hideBottomSheet}
                 className={hidden ? "fadeout" : ""}
