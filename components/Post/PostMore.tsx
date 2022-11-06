@@ -92,7 +92,7 @@ const PostMore = (props: Props) => {
                         <a
                             href={props.data.permalink}
                             target="_blank"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={(e) => e.stopPropagation()}
                         >
                             Open in Reddit
                         </a>

@@ -11,6 +11,11 @@ $ npm install
 $ npm run dev
 ```
 
+### In case of needing to run the production build (Better performance):
+```console
+$ npm run production
+```
+
 In need to run storybook(Currently not working because many of the components were deleted):
 
 ```console
