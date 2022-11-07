@@ -39,3 +39,5 @@ example_*
 exemple_*
 **/*.sql
 *.report.html
+# Local Netlify folder
+.netlify
