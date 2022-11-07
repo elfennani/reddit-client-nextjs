@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { decode } from "html-entities";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -11,7 +11,7 @@ import TokenContext from "../contexts/TokenContext";
 import { useError } from "../hooks/useError";
 import { getPosts, votePost } from "../repository/reddit_api";
 import { PostData, PostsListEndpoints } from "../types/types";
-import Button from "./Button";
+import Button from "./ButtonLegacy";
 import PostHandler from "./PostHandler";
 import PostListSkeleton from "./Skeletons/PostListSkeleton";
 import Sorting from "./Sorting";
@@ -118,7 +118,33 @@ const PostsList: React.FC<PostsListProps> = ({
         offset: 5000,
     });
 
-    if (isLoading) return <PostListSkeleton />;
+    const PageListSorting = () => (
+        <Sorting
+            onChoose={setSorting}
+            current={sorting}
+            onRefresh={refetch}
+            isAnon={!token}
+        >
+            {_endpoints.map(
+                (endpoint) =>
+                    endpoint.anon_routing && (
+                        <Sorting.Type
+                            title={endpoint.name}
+                            loggedLink={endpoint.logged_routing}
+                            anonLink={endpoint.anon_routing}
+                            key={endpoint.name}
+                        />
+                    )
+            )}
+        </Sorting>
+    );
+    if (isLoading)
+        return (
+            <ListStyle>
+                {PageListSorting()}
+                <PostListSkeleton />
+            </ListStyle>
+        );
     if (isError || !data)
         return <p>Error{(error as string) && `: ${error}`}</p>;
 
@@ -130,24 +156,7 @@ const PostsList: React.FC<PostsListProps> = ({
                         <LoadingOutlined />
                     </LoadingCircle>
                 )}
-                <Sorting
-                    onChoose={setSorting}
-                    current={sorting}
-                    onRefresh={refetch}
-                    isAnon={!token}
-                >
-                    {_endpoints.map(
-                        (endpoint) =>
-                            endpoint.anon_routing && (
-                                <Sorting.Type
-                                    title={endpoint.name}
-                                    loggedLink={endpoint.logged_routing}
-                                    anonLink={endpoint.anon_routing}
-                                    key={endpoint.name}
-                                />
-                            )
-                    )}
-                </Sorting>
+                {PageListSorting()}
                 {data.pages.map((page) =>
                     page.map((p) => <PostHandler key={p.name} postData={p} />)
                 )}

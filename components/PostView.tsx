@@ -159,12 +159,10 @@ const PostViewWrapper = (props: Props) => {
     const wrapperLink = `${router.pathname}?post_id=${props.data.name.replace(
         "t3_",
         ""
-    )}${
-        "&" +
-        Object.entries(router.query).map(([key, value], index, array) => {
-            return `${key}=${value}${index != array.length - 1 ? "&" : ""}`;
-        })
-    }`;
+    )}&${Object.entries(router.query).map(
+        ([key, value], index, array) =>
+            `${key}=${value}${index != array.length - 1 ? "&" : ""}`
+    )}`;
 
     return (
         <Link

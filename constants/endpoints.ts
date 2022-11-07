@@ -7,7 +7,7 @@ export default {
     best: `${prefix}/best/`,
     hot: `${prefix}/hot/`,
     sorting: (sorting: string) => `${prefix}/${sorting}`,
-    subreddit: (subreddit: string) => `${prefix}/${subreddit}`,
+    subreddit: (subreddit: string) => `${prefix}/${subreddit}/about`,
     subreddit_sorting: (subreddit: string, sortingName: string) =>
         `${prefix}/r/${subreddit}/${sortingName}`,
     vote: `${prefix}/api/vote`,
@@ -22,10 +22,8 @@ export default {
         sorting: (sorting: string) => `${anon_prefix}/${sorting}`,
         user_info: (username: string) =>
             `${anon_prefix}/user/${username}/about`,
-        subreddit: (subreddit: string) => `${anon_prefix}/${subreddit}`,
+        subreddit: (subreddit: string) => `${anon_prefix}/${subreddit}/about`,
         subreddit_sorting: (subreddit: string, sortingName: string) =>
             `${anon_prefix}/r/${subreddit}/${sortingName}`,
     },
 };
-
-// https://oauth.reddit.com/api/info/?id=

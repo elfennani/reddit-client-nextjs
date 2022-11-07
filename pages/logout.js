@@ -7,7 +7,7 @@ const Logout = ({}) => {
     useEffect(() => {
         Cookies.remove("token");
         Cookies.remove("refresh");
-        router.reload();
+        router.push("/");
     }, []);
 
     return <div>Logging out...</div>;

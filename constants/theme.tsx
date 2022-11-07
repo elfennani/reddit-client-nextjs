@@ -4,6 +4,8 @@ export const lightTheme: DefaultTheme = {
     fontFamily:
         "Outfit, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
     primary: "#FB5F40",
+    primaryDark: "#E2563A",
+    primary12: "rgba(251, 95, 64, 0.12)",
     background: "#EEF0F4",
     background0: "rgba(238, 240, 244, 0)",
     backgroundDark: "#E3E6ED",

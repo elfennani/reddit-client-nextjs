@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import SidebarContext from "../contexts/SidebarContext";
+import TokenContext from "../contexts/TokenContext";
 import Hr from "./Hr";
 import Layout from "./Layout";
 import PagesList from "./PagesList";
@@ -32,6 +33,7 @@ type Props = {
 const Sidebar = (props: Props) => {
     const sideBarContext = useContext(SidebarContext);
     const router = useRouter();
+    const token = useContext(TokenContext);
 
     return (
         <>
@@ -39,11 +41,15 @@ const Sidebar = (props: Props) => {
                 className={`sidebar ${sideBarContext.isOpened ? "active" : ""}`}
             >
                 <ProfileCard />
-                <Hr />
-                <PagesList
-                    activePage={router.pathname}
-                    onChange={sideBarContext.toggle}
-                />
+                {token && (
+                    <>
+                        <Hr />
+                        <PagesList
+                            activePage={router.pathname}
+                            onChange={sideBarContext.toggle}
+                        />
+                    </>
+                )}
             </SidebarStyle>
             <Backdrop
                 active={sideBarContext.isOpened}

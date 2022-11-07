@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import ProfileContext from "../contexts/ProfileContext";
 import { minimizeNumber, parseDate } from "../utils/functions";
+import AnonProfileCard from "./AnonProfileCard";
 import Card from "./Card";
 import ProfileCardSkeleton from "./Skeletons/ProfileCardSkeleton";
 
@@ -97,8 +98,8 @@ const InfoCard = styled.div`
 
 const ProfileCard = (props: Props) => {
     const profile = useContext(ProfileContext);
-    if (profile == undefined) return <div>anonymous</div>;
-    if (!profile) return <ProfileCardSkeleton />;
+    if (profile == "loading") return <ProfileCardSkeleton />;
+    if (!profile) return <AnonProfileCard />;
     return (
         <div>
             <ProfileHeader>

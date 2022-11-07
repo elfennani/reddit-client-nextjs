@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Card from "../Card";
 import pagesList from "../../constants/pagesList";
 import styled from "styled-components";
+import TokenContext from "../../contexts/TokenContext";
 
 const PagesListStyle = styled.div`
     padding: 24px;
@@ -55,11 +55,7 @@ interface PagesList {
     activePage?: string;
 }
 
-const PagesList: React.FC<PagesList> = ({
-    children,
-    onChange,
-    activePage = "/",
-}) => {
+const PagesList: React.FC<PagesList> = ({ onChange, activePage = "/" }) => {
     const router = useRouter();
 
     return (

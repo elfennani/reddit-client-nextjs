@@ -13,10 +13,7 @@ import { getPostData } from "../repository/reddit_api";
 import CommentsList from "./CommentsList";
 import Hr from "./Hr";
 import PostHandler from "./PostHandler";
-import PostViewWrapper from "./PostView";
 import PostViewSkeleton from "./Skeletons/PostViewSkeleton";
-
-type Props = {};
 
 const slidingSpeed = 0.2;
 const bottomSheetHeaderHeight = 50;
@@ -186,7 +183,7 @@ const BottomSheetHeader = styled.header`
     }
 `;
 
-const PostBottomSheet = (props: Props) => {
+const PostBottomSheet = () => {
     const router = useRouter();
     const postId = router.query.post_id as string;
     const token = useContext(TokenContext);

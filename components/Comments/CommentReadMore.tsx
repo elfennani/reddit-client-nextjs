@@ -4,7 +4,7 @@ import PostNameContext from "../../contexts/PostNameContext";
 import TokenContext from "../../contexts/TokenContext";
 import { getReadMoreComments } from "../../repository/reddit_api";
 import { CommentData } from "../../types/types";
-import Button from "../Button";
+import Button from "../ButtonLegacy";
 import CommentsHandler from "./CommentsHandler";
 
 interface Props {

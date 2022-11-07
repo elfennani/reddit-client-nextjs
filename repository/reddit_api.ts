@@ -1,4 +1,5 @@
 import { decode } from "html-entities";
+import config from "../constants/config";
 import endpoints from "../constants/endpoints";
 import {
     CommentData,
@@ -23,6 +24,49 @@ const getAuth = (
               ...params,
           }
         : params;
+};
+
+export const getLoginLink = () => {
+    const params = {
+        client_id: config.clientId,
+        response_type: "code",
+        state: "auth",
+        redirect_uri: config.redirectUri,
+        duration: "permanent",
+        scope: [
+            "identity",
+            "edit",
+            "flair",
+            "history",
+            "modconfig",
+            "modflair",
+            "modlog",
+            "modposts",
+            "modwiki",
+            "mysubreddits",
+            "privatemessages",
+            "read",
+            "report",
+            "save",
+            "submit",
+            "subscribe",
+            "vote",
+            "wikiedit",
+            "wikiread",
+        ],
+    };
+
+    const stringParams = (
+        Object.keys(params) as (keyof typeof params)[]
+    ).reduce(
+        (prev, current, index, array) =>
+            `${prev}${current}=${params[current]}${
+                index == array.length - 1 ? "" : "&"
+            }`,
+        ""
+    );
+
+    return `${endpoints.authorization}?${stringParams}`;
 };
 
 export const getUserProfile = async (
@@ -180,7 +224,7 @@ export const getSubredditInfo = async (
     const res = await fetch(
         token
             ? endpoints.subreddit(subreddit)
-            : endpoints.anonymous.subreddit(subreddit) + "/about",
+            : endpoints.anonymous.subreddit(subreddit),
         getAuth(token)
     );
     const json = await res.json();

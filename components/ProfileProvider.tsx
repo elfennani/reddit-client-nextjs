@@ -19,7 +19,9 @@ const ProfileProvider = (props: Props) => {
     );
 
     return (
-        <ProfileContext.Provider value={token ? data ?? null : undefined}>
+        <ProfileContext.Provider
+            value={!isLoading || !token ? data : "loading"}
+        >
             {props.children}
         </ProfileContext.Provider>
     );

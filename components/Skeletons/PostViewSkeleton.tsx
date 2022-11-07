@@ -41,7 +41,8 @@ const PostViewSkeleton = (props: Props) => {
         <SkeletonTheme
             borderRadius={12}
             baseColor={theme.background}
-            highlightColor="rgba(255,255,255,0.66)"
+            highlightColor="rgba(255,255,255,0.5)"
+            inline={true}
         >
             <PostViewCard>
                 <div className="post-skeleton-header">
