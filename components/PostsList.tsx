@@ -11,7 +11,7 @@ import TokenContext from "../contexts/TokenContext";
 import { useError } from "../hooks/useError";
 import { getPosts, votePost } from "../repository/reddit_api";
 import { PostData, PostsListEndpoints } from "../types/types";
-import Button from "./ButtonLegacy";
+import Button from "./Button";
 import PostHandler from "./PostHandler";
 import PostListSkeleton from "./Skeletons/PostListSkeleton";
 import Sorting from "./Sorting";

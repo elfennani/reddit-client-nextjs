@@ -4,7 +4,7 @@ import { useLayoutEffect } from "react";
 import { useRef } from "react";
 import DisableImageContext from "../../contexts/DisableImageContext";
 import { ImagesMetadata } from "../../types/types";
-import Button from "../ButtonLegacy";
+import Button from "../Button";
 import styles from "./ImageContainer.module.scss";
 
 interface ImageContainerProps {

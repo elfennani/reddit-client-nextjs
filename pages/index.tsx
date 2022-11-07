@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import StandartLayout from "../components/PageLayouts/StandardLayout";
 import PostsList from "../components/PostsList";
 
-const Login = ({}) => {
+const Index = ({}) => {
     const router = useRouter();
     return (
         <StandartLayout>
@@ -16,4 +16,4 @@ const Login = ({}) => {
     );
 };
 
-export default Login;
+export default Index;
