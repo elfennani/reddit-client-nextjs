@@ -48,13 +48,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         };
         const formData = new URLSearchParams(body);
 
-        console.log(`Basic ${config.basicCredentials}`);
-        console.log(formData);
-
-        Buffer.from(
-            `${config.clientId}:${process.env.CLIENT_SECRET || config.secretId}`
-        ).toString("base64");
-
         const response = await fetch(endpoints.access_token, {
             method: "POST",
             body: formData,
