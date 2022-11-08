@@ -98,6 +98,14 @@ const PostView = ({ data, ...props }: Props) => {
                     ignoreSize={ignoreImageSize}
                 />
             )}
+            {data.images && (
+                <ImageContainer
+                    imagesMetadata={data.images}
+                    blur={ignoreNSFW ? false : data.nsfw}
+                    alt={data.title}
+                    ignoreSize={ignoreImageSize}
+                />
+            )}
             {data.link && <PostLink url={data.link} />}
             <TextContainer>
                 <h2>{decode(data.title)}</h2>

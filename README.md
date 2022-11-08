@@ -2,6 +2,8 @@
 
 Just another reddit client. This project is being made with the power of ReactJS and NextJS.
 
+*Note: the app is already deployed in netlify to test out. [Check it out here](https://revirted.netlify.app/).*
+
 ## Installation and Running
 
 ```console
@@ -21,6 +23,14 @@ In need to run storybook(Currently not working because many of the components we
 ```console
 $ npm run storybook
 ```
+
+If you want to use your own client_id and client_secret, then create `.env.local` file to pass environment variables:
+```
+CLIENT_ID=YOUR_CLIENT_ID
+CLIENT_SECRET=YOUR_CLIENT_SECRET
+HOST=http://localhost:3000
+```
+Change the `HOST` when you deploy to your own domain or you used a different local domain.
 
 ## Links
 -   [Figma File](https://www.figma.com/file/FJF4kqQaKnRVm6ZNV1lGa2/Reddit-Redesign?node-id=0%3A1)

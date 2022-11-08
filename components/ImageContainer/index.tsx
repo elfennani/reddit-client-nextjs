@@ -1,7 +1,9 @@
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import React, { useContext, useState } from "react";
 import { useLayoutEffect } from "react";
 import { useRef } from "react";
+import styled from "styled-components";
 import DisableImageContext from "../../contexts/DisableImageContext";
 import { ImagesMetadata } from "../../types/types";
 import Button from "../Button";
@@ -16,6 +18,10 @@ interface ImageContainerProps {
     alt?: string;
     ignoreSize?: boolean;
 }
+
+const SlideshowImageContainer = styled.div<{ show?: boolean }>`
+    display: ${(p) => (p.show ? "block" : "none")};
+`;
 
 const ImageContainer: React.FC<ImageContainerProps> = ({
     image,
@@ -85,20 +91,23 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
             ].join(" ")}
         >
             {imagesMetadata.map((imageMetadata, index) => (
-                <Image
-                    src={imageMetadata.url}
-                    alt={imageMetadata.title || imageMetadata.url}
-                    key={imageMetadata.id}
-                    width={imageMetadata.width}
-                    height={imageMetadata.height}
-                    layout="responsive"
-                    style={{
-                        display: currentImage == index ? "block" : "none",
-                    }}
-                />
+                <SlideshowImageContainer show={currentImage == index}>
+                    <Image
+                        src={imageMetadata.url}
+                        alt={imageMetadata.title || imageMetadata.url}
+                        key={imageMetadata.id}
+                        width={imageMetadata.width}
+                        height={imageMetadata.height}
+                        layout="responsive"
+
+                        // style={{
+                        //     display: currentImage == index ? "block" : "none",
+                        // }}
+                    />
+                </SlideshowImageContainer>
             ))}
             {currentImage < imagesMetadata.length - 1 && (
-                <button
+                <Button
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -108,11 +117,11 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                         " "
                     )}
                 >
-                    next
-                </button>
+                    <ArrowRightOutlined />
+                </Button>
             )}
             {currentImage != 0 && (
-                <button
+                <Button
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -122,8 +131,8 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                         " "
                     )}
                 >
-                    prev
-                </button>
+                    <ArrowLeftOutlined />
+                </Button>
             )}
             {showLink && (
                 <Button

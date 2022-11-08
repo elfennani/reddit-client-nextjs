@@ -31,9 +31,8 @@
 
     .slideshowButton {
         position: absolute;
-        top: 50%;
+        top: 32px;
         left: 32px;
-        transform: translateY(-50%);
 
         &.nextButton {
             left: unset;

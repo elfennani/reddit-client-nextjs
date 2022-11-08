@@ -165,7 +165,9 @@ const PostsList: React.FC<PostsListProps> = ({
                     title="Next Page"
                     onClick={fetchNextPage as any}
                     disabled={isFetchingNextPage}
-                />
+                >
+                    Next Page
+                </Button>
             </ListStyle>
         );
     return <div></div>;
