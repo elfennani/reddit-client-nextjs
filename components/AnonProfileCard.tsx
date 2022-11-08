@@ -63,9 +63,7 @@ const AnonProfileCard = (props: Props) => {
             <Title>Anonymous</Title>
             <AnonButton
                 title="Login to reddit"
-                onClick={() =>
-                    (window.location = getLoginLink() as string & Location)
-                }
+                onClick={() => router.push("/login")}
             >
                 Login
             </AnonButton>
