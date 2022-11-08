@@ -59,7 +59,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             method: "POST",
             body: formData,
             headers: {
-                Authorization: `Basic ${config.basicCredentials}`,
+                Authorization: `Basic ${Buffer.from(
+                    `${config.clientId}:${
+                        process.env.CLIENT_SECRET || config.secretId
+                    }`
+                ).toString("base64")}`,
             },
         });
 

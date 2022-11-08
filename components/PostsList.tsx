@@ -163,7 +163,7 @@ const PostsList: React.FC<PostsListProps> = ({
                 {isFetchingNextPage && <p>Fetching Next Page</p>}
                 <Button
                     title="Next Page"
-                    onClick={fetchNextPage}
+                    onClick={fetchNextPage as any}
                     disabled={isFetchingNextPage}
                 />
             </ListStyle>
