@@ -38,21 +38,21 @@ const CommentReadMore: React.FC<Props> = (props) => {
 
     return (
         <Button
-            title={
-                isLoading ? (
-                    <span>
-                        <LoadingOutlined spin />
-                        &nbsp;&nbsp;&nbsp;Loading
-                    </span>
-                ) : (
-                    "Read more"
-                )
-            }
+            title="Read More"
             onClick={getComments}
             secondary
             style={{ margin: 4, marginTop: 0 }}
             disabled={isLoading}
-        />
+        >
+            {isLoading ? (
+                <span>
+                    <LoadingOutlined spin />
+                    &nbsp;&nbsp;&nbsp;Loading
+                </span>
+            ) : (
+                "Read more"
+            )}
+        </Button>
     );
 };
 

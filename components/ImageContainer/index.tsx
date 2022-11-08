@@ -64,7 +64,9 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                             className={styles.showMore}
                             title="Show more"
                             onClick={() => {}}
-                        />
+                        >
+                            Show more
+                        </Button>
                     )}
                 </div>
             </>
@@ -128,7 +130,9 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
                     className={styles.showMore}
                     title="Show more"
                     onClick={() => {}}
-                />
+                >
+                    Show more
+                </Button>
             )}
         </div>
     );
