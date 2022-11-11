@@ -3,6 +3,7 @@ import { decode } from "html-entities";
 import Image from "next/image";
 import React, { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
+import InViewProvider from "../../contexts/InViewProvider";
 import PostConfig from "../../contexts/PostConfig";
 import { RedditVideoData } from "../../types/types";
 import ImageContainer from "../ImageContainer";
@@ -26,9 +27,10 @@ const Video = styled.video`
 const PostVideo = ({ videoData, nsfw }: Props) => {
     const redditVideoRef = useRef<HTMLMediaElement>();
     const config = useContext(PostConfig);
+    const inView = useContext(InViewProvider);
 
     useEffect(() => {
-        if (!videoData || !redditVideoRef.current) return;
+        if (!videoData || !redditVideoRef.current || !inView) return;
         if (Hls.isSupported()) {
             let hls = new Hls();
             hls.loadSource(videoData.hlsUrl);
@@ -42,7 +44,18 @@ const PostVideo = ({ videoData, nsfw }: Props) => {
         ) {
             redditVideoRef.current.src = videoData.hlsUrl;
         }
-    }, []);
+    }, [inView]);
+
+    if (!inView)
+        return (
+            <div
+                style={{
+                    height: videoData.height,
+                    maxHeight: 400,
+                }}
+            ></div>
+        );
+
     if (!config.ignoreNSFW && nsfw && videoData.thumbnail) {
         const thumbnail = videoData.thumbnail;
         return (
@@ -56,7 +69,13 @@ const PostVideo = ({ videoData, nsfw }: Props) => {
             />
         );
     }
-    return <Video ref={redditVideoRef as any} controls></Video>;
+    return (
+        <Video
+            ref={redditVideoRef as any}
+            controls
+            height={videoData.height}
+        ></Video>
+    );
 };
 
 export default PostVideo;

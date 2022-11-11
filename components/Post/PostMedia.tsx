@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import InViewProvider from "../../contexts/InViewProvider";
 import PostConfig from "../../contexts/PostConfig";
 import { PostData } from "../../types/types";
 import ImageContainer from "../ImageContainer";
@@ -32,6 +33,7 @@ const IFrameWrapper = styled.div<{ ratio: number }>`
 
 const PostMedia = ({ data }: Props) => {
     const { ignoreNSFW, ignoreImageSize } = useContext(PostConfig);
+    const inView = useContext(InViewProvider);
     if (data.crosspost) return <PostCrosspost data={data.crosspost} />;
     if (data.image)
         return (
@@ -58,13 +60,15 @@ const PostMedia = ({ data }: Props) => {
             <IFrameWrapper
                 ratio={data.youtubeIframe.height / data.youtubeIframe.width}
             >
-                <iframe
-                    src={data.youtubeIframe.src}
-                    frameBorder="0"
-                    allow={data.youtubeIframe.allow}
-                    allowFullScreen
-                    title={data.youtubeIframe.title}
-                ></iframe>
+                {inView && (
+                    <iframe
+                        src={data.youtubeIframe.src}
+                        frameBorder="0"
+                        allow={data.youtubeIframe.allow}
+                        allowFullScreen
+                        title={data.youtubeIframe.title}
+                    ></iframe>
+                )}
             </IFrameWrapper>
         );
     if (data.redditVideo)
