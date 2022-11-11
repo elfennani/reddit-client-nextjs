@@ -53,7 +53,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 function MyApp(props: any) {
     const router = useRouter();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [refreshing, setRefreshing] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [votedPosts, setVotedPosts] = useState({});
 
     const [theme, setTheme] = useLocalStorageState("theme", {
@@ -63,7 +63,6 @@ function MyApp(props: any) {
     const addVotedPost = (name: string, value: boolean | null) => {
         setVotedPosts((votedPosts) => ({ ...votedPosts, [name]: value }));
     };
-
     const config: VotedPostsContext = {
         posts: votedPosts,
         setPostValue: addVotedPost,
@@ -72,11 +71,11 @@ function MyApp(props: any) {
     const currentTheme: DefaultTheme = theme == "dark" ? darkTheme : lightTheme;
 
     useEffect(() => {
-        setRefreshing(true);
-
+        // setRefreshing(true);
         if (props.logout) {
             Cookies.remove("token");
             Cookies.remove("refresh");
+            router.reload();
         }
 
         if (props.isNewToken) {
@@ -86,9 +85,7 @@ function MyApp(props: any) {
             router.reload();
         }
 
-        // const { token, refresh } = Cookies.get();
-
-        setRefreshing(false);
+        // setRefreshing(false);
     }, []);
 
     const onMenuToggleHandler = () => setIsMenuOpen((state) => !state);

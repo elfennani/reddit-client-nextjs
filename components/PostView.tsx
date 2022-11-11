@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PostConfig from "../contexts/PostConfig";
 import { PostData } from "../types/types";
@@ -15,12 +15,17 @@ import PostLink from "./Post/PostLink";
 import { decode } from "html-entities";
 import PostPoll from "./Post/PostPoll";
 import { useRouter } from "next/router";
+import Hls from "hls.js";
+import { da } from "date-fns/locale";
+import PostVideo from "./Post/PostVideo";
+import PostMedia from "./Post/PostMedia";
 
 type Props = {
     data: PostData;
     onUpvote(): void;
     onDownvote(): void;
     voteState: boolean | null;
+    children?: any | any[];
 };
 const TextContainer = styled.div`
     padding: 16px;
@@ -82,31 +87,33 @@ const parseVote = (
     return state ? ifUp : ifDown;
 };
 
+const PostCard = styled(Card)`
+    position: relative;
+
+    .link-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+
+    a:not(.link-wrapper),
+    button,
+    .post-overlay {
+        position: relative;
+        z-index: 2;
+    }
+`;
+
 const PostView = ({ data, ...props }: Props) => {
     const { ignoreImageSize, ignoreNSFW, textCompact } = useContext(PostConfig);
-
     return (
-        <Card>
+        <PostCard>
+            {props.children}
             <PostHeader data={data} />
-            {data.image && (
-                <ImageContainer
-                    image={data.image}
-                    imageHeight={data.imageHeight}
-                    imageWidth={data.imageWidth}
-                    blur={ignoreNSFW ? false : data.nsfw}
-                    alt={data.title}
-                    ignoreSize={ignoreImageSize}
-                />
-            )}
-            {data.images && (
-                <ImageContainer
-                    imagesMetadata={data.images}
-                    blur={ignoreNSFW ? false : data.nsfw}
-                    alt={data.title}
-                    ignoreSize={ignoreImageSize}
-                />
-            )}
-            {data.link && <PostLink url={data.link} />}
+            {!data.text && <PostMedia data={data} />}
             <TextContainer>
                 <h2>{decode(data.title)}</h2>
                 {data.text && (
@@ -154,13 +161,15 @@ const PostView = ({ data, ...props }: Props) => {
                     • {minimizeNumber(data.commentsCount, 1)} comments
                 </div>
             </Footer>
-        </Card>
+        </PostCard>
     );
 };
 
 const PostViewWrapper = (props: Props) => {
-    const { wrappedInLink } = useContext(PostConfig);
+    let { wrappedInLink } = useContext(PostConfig);
     const router = useRouter();
+
+    // wrappedInLink = false;
 
     if (!wrappedInLink) return <PostView {...props} />;
 
@@ -173,15 +182,15 @@ const PostViewWrapper = (props: Props) => {
     )}`;
 
     return (
-        <Link
-            href={wrapperLink}
-            as={`/post/${props.data.name.replace("t3_", "")}`}
-            shallow={true}
-        >
-            <a>
-                <PostView {...props} />
-            </a>
-        </Link>
+        <PostView {...props}>
+            <Link
+                href={wrapperLink}
+                as={`/post/${props.data.name.replace("t3_", "")}`}
+                shallow={true}
+            >
+                <a className="link-wrapper"></a>
+            </Link>
+        </PostView>
     );
 };
 

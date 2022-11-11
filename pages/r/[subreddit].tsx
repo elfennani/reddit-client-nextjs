@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import cookies from "next-cookies";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import SubredditLayout from "../../components/PageLayouts/SubredditLayout";
 import PostsList from "../../components/PostsList";
 import mainEndpoints, { anon_prefix, prefix } from "../../constants/endpoints";
@@ -17,34 +17,32 @@ interface SubredditPageProps {
 const Subreddit = (props: SubredditPageProps) => {
     const router = useRouter();
     const subredditName = router.query.subreddit as string;
+    const data2 = [...props.data];
 
-    const endpoints = useMemo<PostsListEndpoints>(
-        () => [
-            {
-                name: "hot",
-                anon_routing: mainEndpoints.anonymous.subreddit_sorting(
-                    subredditName,
-                    "hot"
-                ),
-                logged_routing: mainEndpoints.subreddit_sorting(
-                    subredditName,
-                    "hot"
-                ),
-            },
-            {
-                name: "new",
-                anon_routing: mainEndpoints.anonymous.subreddit_sorting(
-                    subredditName,
-                    "new"
-                ),
-                logged_routing: mainEndpoints.subreddit_sorting(
-                    subredditName,
-                    "new"
-                ),
-            },
-        ],
-        []
-    );
+    const endpoints: PostsListEndpoints = [
+        {
+            name: "hot",
+            anon_routing: mainEndpoints.anonymous.subreddit_sorting(
+                subredditName,
+                "hot"
+            ),
+            logged_routing: mainEndpoints.subreddit_sorting(
+                subredditName,
+                "hot"
+            ),
+        },
+        {
+            name: "new",
+            anon_routing: mainEndpoints.anonymous.subreddit_sorting(
+                subredditName,
+                "new"
+            ),
+            logged_routing: mainEndpoints.subreddit_sorting(
+                subredditName,
+                "new"
+            ),
+        },
+    ];
 
     return (
         <SubredditLayout>
@@ -57,8 +55,8 @@ const Subreddit = (props: SubredditPageProps) => {
                 <PostsList
                     endpoints={endpoints}
                     initialData={{
-                        pageParams: null as unknown as unknown[],
-                        pages: [props.data || undefined],
+                        pageParams: [undefined],
+                        pages: [data2],
                     }}
                 />
             </PostConfig.Provider>

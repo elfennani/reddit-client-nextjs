@@ -9,19 +9,20 @@ import TokenContext from "../contexts/TokenContext";
 import { getSubredditInfo } from "../repository/reddit_api";
 import Image from "next/image";
 
-const SubredditImage = styled(Image)<{ size?: number }>`
-    border-radius: 12px;
+const SubredditImage = styled(Image)<{ size?: number; radius?: number }>`
+    border-radius: ${(p) => p.radius || 12}px;
 `;
 
 interface ImageTemplateTypes {
     size: Number;
     bgColor?: string | null;
+    radius?: number;
 }
 const ImageTemplate = styled.div<ImageTemplateTypes>`
     background-color: ${(props: any) => props.bgColor || "#0079D3"};
     width: ${(props: any) => props.size}px;
     height: ${(props: any) => props.size}px;
-    border-radius: 12px;
+    border-radius: ${(p) => p.radius || 12}px;
     flex: unset !important;
     text-transform: capitalize;
     text-align: center;
@@ -33,8 +34,13 @@ const ImageTemplate = styled.div<ImageTemplateTypes>`
 interface SubredditIconTypes {
     subreddit: string;
     size?: number;
+    radius?: number;
 }
-const SubredditIcon = ({ subreddit, size = 32 }: SubredditIconTypes) => {
+const SubredditIcon = ({
+    subreddit,
+    size = 32,
+    radius,
+}: SubredditIconTypes) => {
     const token = useContext(TokenContext);
     const { isLoading, isError, data, error } = useQuery(
         ["subreddit", "about", subreddit, token],
@@ -54,6 +60,7 @@ const SubredditIcon = ({ subreddit, size = 32 }: SubredditIconTypes) => {
             <ImageTemplate
                 size={size}
                 bgColor={isError ? null : data.primary_color}
+                radius={radius}
             >
                 {subreddit.substring(2, 4)}
             </ImageTemplate>
@@ -66,6 +73,7 @@ const SubredditIcon = ({ subreddit, size = 32 }: SubredditIconTypes) => {
             width={size}
             height={size}
             placeholder="empty"
+            radius={radius}
         />
     );
 };

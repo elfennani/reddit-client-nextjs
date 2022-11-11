@@ -24,11 +24,13 @@ const HeaderStyle = styled.header`
         display: block;
         height: 45px;
     }
+
+    .space {
+        flex: 1;
+    }
 `;
 
 const SubInfo = styled.div`
-    flex: 1;
-
     h1,
     p {
         margin: 0;
@@ -81,7 +83,7 @@ const PostHeader = (props: Props) => {
                         {props.data.subreddit}
                     </LinkWrapper>
                 </h1>
-                <p>
+                <p className="post-overlay">
                     Posted by{" "}
                     <Link href={`/u/${props.data.author}`}>
                         <a>u/{props.data.author}</a>
@@ -89,6 +91,7 @@ const PostHeader = (props: Props) => {
                     {"\u2022"} {parseDate(props.data.created)} ago
                 </p>
             </SubInfo>
+            <div className="space"></div>
             <PostMore data={props.data} />
         </HeaderStyle>
     );

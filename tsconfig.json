@@ -20,7 +20,8 @@
         "**/*.ts",
         "**/*.tsx",
         "repository/reddit_api.ts",
-        "pages/_app.tsx"
+        "pages/_app.tsx",
+        "pages/test.jsx"
     ],
     "exclude": ["node_modules"]
 }

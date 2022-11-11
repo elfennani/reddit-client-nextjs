@@ -195,8 +195,18 @@ const PostBottomSheet = () => {
     useEffect(() => {
         Router.events.on("routeChangeStart", hideBottomSheet);
 
+        const escapePress = (ev: KeyboardEvent) => {
+            if (ev.key == "Escape") {
+                router.back();
+                window.removeEventListener("keydown", escapePress);
+            }
+        };
+
+        window.addEventListener("keydown", escapePress);
+
         return () => {
             Router.events.off("routeChangeStart", hideBottomSheet);
+            window.removeEventListener("keydown", escapePress);
         };
     }, []);
 
@@ -218,7 +228,7 @@ const PostBottomSheet = () => {
                 )}
             </Head>
             <Backdrop
-                onClick={hideBottomSheet}
+                onClick={!hidden ? hideBottomSheet : undefined}
                 className={hidden ? "fadeout" : ""}
             />
             <BottomSheet className={hidden ? "slidedown" : ""}>

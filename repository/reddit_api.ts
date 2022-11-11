@@ -11,6 +11,7 @@ import {
     UserData,
 } from "../types/types";
 import { removeAmp } from "../utils/functions";
+import HTML from "html-parse-stringify";
 
 const getAuth = (
     token: string | undefined,
@@ -116,7 +117,6 @@ export const parsePost = (data: any): PostData => {
         author: post.author,
         permalink: "https://www.reddit.com" + post.permalink,
         created: post.created,
-        devJson: post,
         nsfw: post.over_18,
         voteState: post.likes,
         text: post.selftext,
@@ -124,12 +124,54 @@ export const parsePost = (data: any): PostData => {
         saved: post.saved,
     };
 
-    if (
-        !post.is_reddit_media_domain &&
-        !post.is_gallery &&
-        post.url_overridden_by_dest
-    ) {
+    // if (process.env.NODE_ENV == "development") {
+    //     post_maped.devJson = post;
+    // }
+
+    if (post.url_overridden_by_dest) {
         post_maped.link = post.url_overridden_by_dest;
+    }
+
+    if (post.secure_media && post.secure_media.type == "youtube.com") {
+        const embedInfo = post.secure_media.oembed;
+        const iframeAttr = HTML.parse(decode(embedInfo.html))[0].attrs;
+
+        post_maped.youtubeIframe = {
+            src: iframeAttr.src,
+            allow: iframeAttr.allow,
+            height: embedInfo.height,
+            width: embedInfo.width,
+            title: embedInfo.title,
+        };
+    }
+
+    if (post.secure_media?.reddit_video) {
+        const redditVideo = post.secure_media.reddit_video;
+        post_maped.redditVideo = {
+            fallbackUrl: redditVideo.fallback_url,
+            height: redditVideo.height,
+            width: redditVideo.width,
+            duration: redditVideo.duration,
+            hlsUrl: redditVideo.hls_url,
+            isGif: redditVideo.is_gif,
+        };
+
+        if (post.preview?.images[0].source) {
+            const source = post.preview.images[0].source;
+            post_maped.redditVideo.thumbnail = {
+                width: source.width,
+                height: source.height,
+                id: post_maped.title,
+                title: post_maped.title,
+                url: source.url,
+            };
+        }
+    }
+
+    if (post.crosspost_parent_list) {
+        post_maped.crosspost = parsePost({
+            data: post.crosspost_parent_list[0],
+        });
     }
 
     if (post.poll_data) {

@@ -21,6 +21,7 @@ interface ImageContainerProps {
 
 const SlideshowImageContainer = styled.div<{ show?: boolean }>`
     display: ${(p) => (p.show ? "block" : "none")};
+    position: relative;
 `;
 
 const ImageContainer: React.FC<ImageContainerProps> = ({
@@ -36,13 +37,13 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
     const container = useRef<any>();
     const disabledImages = useContext(DisableImageContext);
 
-    useLayoutEffect(() => {
-        if (!container.current) return;
-        if (container.current.clientHeight < container.current.scrollHeight) {
-            setShowLink(true);
-        }
-        return () => {};
-    }, [container]);
+    // useLayoutEffect(() => {
+    //     if (!container.current) return;
+    //     if (container.current.clientHeight < container.current.scrollHeight) {
+    //         setShowLink(true);
+    //     }
+    //     return () => {};
+    // }, [container]);
 
     if (disabledImages) return <div></div>;
 
@@ -91,7 +92,10 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
             ].join(" ")}
         >
             {imagesMetadata.map((imageMetadata, index) => (
-                <SlideshowImageContainer show={currentImage == index}>
+                <SlideshowImageContainer
+                    show={currentImage == index}
+                    key={imageMetadata.id}
+                >
                     <Image
                         src={imageMetadata.url}
                         alt={imageMetadata.title || imageMetadata.url}

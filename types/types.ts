@@ -29,7 +29,7 @@ export interface PostData {
     imageHeight?: number;
     images?: ImagesMetadata[];
     created: number;
-    devJson: Object;
+    devJson?: Object;
     nsfw: boolean;
     voteState: boolean | null;
     text?: string;
@@ -37,6 +37,25 @@ export interface PostData {
     link?: string;
     poll?: PollData;
     saved: boolean;
+    youtubeIframe?: {
+        src: string;
+        width: number;
+        height: number;
+        allow: string;
+        title: string;
+    };
+    redditVideo?: RedditVideoData;
+    crosspost?: PostData;
+}
+
+export interface RedditVideoData {
+    fallbackUrl: string;
+    width: number;
+    height: number;
+    hlsUrl: string;
+    duration: number;
+    isGif: boolean;
+    thumbnail?: ImagesMetadata;
 }
 
 export type PollDataOption = {

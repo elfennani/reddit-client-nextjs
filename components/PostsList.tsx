@@ -102,7 +102,7 @@ const PostsList: React.FC<PostsListProps> = ({
         error,
         refetch,
     } = useInfiniteQuery(
-        ["Home", token, sorting],
+        ["Home", token, sorting, initialData],
         ({ pageParam = null }) => getPosts(token, sorting, pageParam),
         {
             getNextPageParam: (lastPage, allPages) =>
@@ -157,8 +157,10 @@ const PostsList: React.FC<PostsListProps> = ({
                     </LoadingCircle>
                 )}
                 {PageListSorting()}
-                {data.pages.map((page) =>
-                    page.map((p) => <PostHandler key={p.name} postData={p} />)
+                {data.pages.map((page, i) =>
+                    page.map((p) => (
+                        <PostHandler key={p.name || i} postData={p} />
+                    ))
                 )}
                 {isFetchingNextPage && <p>Fetching Next Page</p>}
                 <Button

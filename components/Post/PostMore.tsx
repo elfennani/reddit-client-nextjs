@@ -2,6 +2,7 @@ import { CloseOutlined, MoreOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import NotificationsAPI from "../../contexts/NotificationsAPI";
 import TokenContext from "../../contexts/TokenContext";
 import { savePost, unsavePost } from "../../repository/reddit_api";
 import { PostData } from "../../types/types";
@@ -70,6 +71,8 @@ const PostMore = (props: Props) => {
     const token = useContext(TokenContext);
     const [isMenuRevealed, setIsMenuRevealed] = useState(false);
     const [isSaved, setIsSaved] = useState(props.data.saved);
+    const isDevMode = process.env.NODE_ENV == "development";
+    const notification = useContext(NotificationsAPI);
 
     const save = () => {
         !isSaved
@@ -121,6 +124,22 @@ const PostMore = (props: Props) => {
                             Copy Link
                         </button>
                     </li>
+                    {isDevMode && (
+                        <li>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    navigator.clipboard.writeText(
+                                        JSON.stringify(props.data.devJson)
+                                    );
+                                    notification.notify("JSON Copied");
+                                }}
+                            >
+                                Copy JSON
+                            </button>
+                        </li>
+                    )}
                 </MoreOptions>
             )}
         </ButtonWrapper>

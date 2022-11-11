@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useContext, useRef } from "react";
 import styled from "styled-components";
 import NotificationsAPI from "../contexts/NotificationsAPI";
+import ProfileContext from "../contexts/ProfileContext";
 import SidebarContext from "../contexts/SidebarContext";
 import TokenContext from "../contexts/TokenContext";
 import Layout from "./Layout";
@@ -111,6 +112,7 @@ const TopNavigation = (props: Props) => {
     const token = useContext(TokenContext);
     const searchInput = useRef<HTMLInputElement>();
     const index = useRef(0);
+    const profile = useContext(ProfileContext);
 
     const testNotification = () => {
         console.log(searchInput.current);
@@ -140,12 +142,6 @@ const TopNavigation = (props: Props) => {
                 </LeftSide>
                 <SearchBox ref={searchInput as any} />
                 <div className="row">
-                    {token && (
-                        <NavProfile>
-                            <ProfilePicture size={24} />
-                            Nizar Elfennani
-                        </NavProfile>
-                    )}
                     <ThemeSwitchButton />
                     <NavButton onClick={testNotification}>
                         <SearchOutlined />
