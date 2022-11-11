@@ -192,8 +192,12 @@ MyApp.getInitialProps = async (props: any) => {
         }
     }
 
-    if (!refresh) {
+    if (!refresh && token) {
         return { logout: true };
+    }
+
+    if (!refresh && !token) {
+        return {};
     }
 
     return { token, refresh, isNewToken: false };
