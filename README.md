@@ -7,7 +7,7 @@ Just another reddit client. This project is being made with the power of ReactJS
 ## Installation and Running
 
 ```console
-$ git clone https://github.com/elfennani/reddit-client-nextjs.git
+$ git clone --branch development https://github.com/elfennani/reddit-client-nextjs.git
 $ cd reddit-client-nextjs
 $ npm install
 $ npm run dev
@@ -33,7 +33,7 @@ HOST=http://localhost:3000
 Change the `HOST` when you deploy to your own domain or you used a different local domain.
 
 ## Links
--   [Figma File](https://www.figma.com/file/FJF4kqQaKnRVm6ZNV1lGa2/Reddit-Redesign?node-id=0%3A1)
+-   [Figma File](https://branchnamewww.figma.com/file/FJF4kqQaKnRVm6ZNV1lGa2/Reddit-Redesign?node-id=0%3A1)
 -   [Official Reddit OAuth guide](https://github.com/reddit-archive/reddit/wiki/OAuth2)
 -   [Reddit OAuth API docs](https://www.reddit.com/dev/api/oauth)
 
