@@ -45,7 +45,7 @@ What works:
 -   Display account information in the sidebar
 -   Anonymous Browsing (No Signing Required)
 -   Upvoting and Downvoting
--   Saving File
+-   Saving Posts
 -   Infinite Scrolling
 -   Modal routing for posts
 -   Browsing individual Subreddits

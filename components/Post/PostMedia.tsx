@@ -74,7 +74,11 @@ const PostMedia = ({ data }: Props) => {
     if (data.redditVideo)
         return <PostVideo videoData={data.redditVideo} nsfw={data.nsfw} />;
 
-    return <PostLink url={data.link || ""} />;
+    if (data.link) {
+        return <PostLink url={data.link} />;
+    }
+
+    return <></>;
 };
 
 export default PostMedia;

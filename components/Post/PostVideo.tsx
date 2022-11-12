@@ -24,6 +24,21 @@ const Video = styled.video`
     z-index: 2;
 `;
 
+const VideoPlaceholder = styled.div<{ height: number }>`
+    height: ${(p) => p.height};
+    max-height: 400px;
+`;
+
+const Thumbnail = styled.div<{ height: number }>`
+    position: relative;
+    height: ${(p) => p.height}px;
+    max-height: 400px;
+    background-color: black;
+    margin: 16px;
+    margin-top: 0;
+    border-radius: 12px;
+`;
+
 const PostVideo = ({ videoData, nsfw }: Props) => {
     const redditVideoRef = useRef<HTMLMediaElement>();
     const config = useContext(PostConfig);
@@ -47,13 +62,18 @@ const PostVideo = ({ videoData, nsfw }: Props) => {
     }, [inView]);
 
     if (!inView)
-        return (
-            <div
-                style={{
-                    height: videoData.height,
-                    maxHeight: 400,
-                }}
-            ></div>
+        return videoData.thumbnail ? (
+            <Thumbnail height={videoData.height}>
+                <Image
+                    layout="fill"
+                    width="100%"
+                    src={decode(videoData.thumbnail?.url)}
+                    height={"100%"}
+                    objectFit="contain"
+                />
+            </Thumbnail>
+        ) : (
+            <VideoPlaceholder height={videoData.height} />
         );
 
     if (!config.ignoreNSFW && nsfw && videoData.thumbnail) {
