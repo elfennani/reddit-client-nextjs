@@ -7,8 +7,9 @@ Just another reddit client. This project is being made with the power of ReactJS
 ## Installation and Running
 
 ```console
-$ git clone --branch development https://github.com/elfennani/reddit-client-nextjs.git
+$ git clone https://github.com/elfennani/reddit-client-nextjs.git
 $ cd reddit-client-nextjs
+$ git checkout development
 $ npm install
 $ npm run dev
 ```
