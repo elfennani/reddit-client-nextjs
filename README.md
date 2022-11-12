@@ -9,6 +9,7 @@ Just another reddit client. This project is being made with the power of ReactJS
 ```console
 $ git clone --branch development https://github.com/elfennani/reddit-client-nextjs.git
 $ cd reddit-client-nextjs
+$ git checkout development
 $ npm install
 $ npm run dev
 ```
@@ -45,7 +46,7 @@ What works:
 -   Display account information in the sidebar
 -   Anonymous Browsing (No Signing Required)
 -   Upvoting and Downvoting
--   Saving File
+-   Saving Posts
 -   Infinite Scrolling
 -   Modal routing for posts
 -   Browsing individual Subreddits

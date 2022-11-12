@@ -124,9 +124,9 @@ export const parsePost = (data: any): PostData => {
         saved: post.saved,
     };
 
-    // if (process.env.NODE_ENV == "development") {
-    //     post_maped.devJson = post;
-    // }
+    if (process.env.NODE_ENV == "development") {
+        post_maped.devJson = post;
+    }
 
     if (post.url_overridden_by_dest) {
         post_maped.link = post.url_overridden_by_dest;
