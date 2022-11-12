@@ -90,6 +90,7 @@ const parseVote = (
 
 const PostCard = styled(Card)`
     position: relative;
+    content-visibility: auto;
 
     .link-wrapper {
         position: absolute;
@@ -98,6 +99,8 @@ const PostCard = styled(Card)`
         right: 0;
         bottom: 0;
         z-index: 1;
+        opacity: 0;
+        user-select: none;
     }
 
     a:not(.link-wrapper),
@@ -109,7 +112,7 @@ const PostCard = styled(Card)`
 `;
 
 const PostView = ({ data, ...props }: Props) => {
-    const { ignoreImageSize, ignoreNSFW, textCompact } = useContext(PostConfig);
+    const { textCompact } = useContext(PostConfig);
     const postRef = useRef<Element>();
     const [inView, setInView] = useState(false);
 
@@ -209,7 +212,7 @@ const PostViewWrapper = (props: Props) => {
                 as={`/post/${props.data.name.replace("t3_", "")}`}
                 shallow={true}
             >
-                <a className="link-wrapper"></a>
+                <a className="link-wrapper">{props.data.title}</a>
             </Link>
         </PostView>
     );

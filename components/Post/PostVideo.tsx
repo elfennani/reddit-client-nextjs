@@ -70,6 +70,7 @@ const PostVideo = ({ videoData, nsfw }: Props) => {
                     src={decode(videoData.thumbnail?.url)}
                     height={"100%"}
                     objectFit="contain"
+                    alt={videoData.thumbnail.title || "Video"}
                 />
             </Thumbnail>
         ) : (
