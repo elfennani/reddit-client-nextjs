@@ -1,8 +1,12 @@
 //npx storybook@next automigrate
 const path = require("path");
 
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    enabled: process.env.ANALYZE === "true",
+});
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withBundleAnalyzer({
     i18n: {
         locales: ["en"],
         defaultLocale: "en",
@@ -27,6 +31,6 @@ const nextConfig = {
     compiler: {
         styledComponents: true,
     },
-};
+});
 
 module.exports = nextConfig;

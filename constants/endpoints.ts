@@ -16,6 +16,8 @@ export default {
     user_info: (username: string) => `${prefix}/user/${username}/about`,
     save: `${prefix}/api/save`,
     unsave: `${prefix}/api/unsave`,
+    search_ac: (query: string, limit = 5) =>
+        `${prefix}/api/subreddit_autocomplete?limit=${limit}&query=${query}&include_profiles`, // Search Auto Complete
     anonymous: {
         best: `${anon_prefix}/best/`,
         hot: `${anon_prefix}/hot/`,
@@ -25,5 +27,7 @@ export default {
         subreddit: (subreddit: string) => `${anon_prefix}/${subreddit}/about`,
         subreddit_sorting: (subreddit: string, sortingName: string) =>
             `${anon_prefix}/r/${subreddit}/${sortingName}`,
+        search_ac: (query: string, limit = 5) =>
+            `${anon_prefix}/api/subreddit_autocomplete?limit=${limit}&query=${query}&include_profiles`,
     },
 };

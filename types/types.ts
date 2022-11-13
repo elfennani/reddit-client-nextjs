@@ -1,3 +1,5 @@
+import { type } from "os";
+
 export interface UserData {
     username: string;
     fullname: string;
@@ -98,3 +100,11 @@ interface PostsListEndpoint {
 }
 
 export type PostsListEndpoints = PostsListEndpoint[];
+
+export type SearchAutocompleteResults = {
+    name: string;
+    icon: string;
+    isUser: boolean;
+    followers: number;
+    id: string;
+};

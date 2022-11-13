@@ -7,6 +7,7 @@ import {
     PollData,
     PollDataOption,
     PostData,
+    SearchAutocompleteResults,
     SubredditInfoData,
     UserData,
 } from "../types/types";
@@ -497,4 +498,32 @@ export const getSavedPosts = async (token: string, username: string) => {
     } catch (error) {
         console.log(error);
     }
+};
+
+export const getSearchResult = async (
+    token: string,
+    query: string
+): Promise<SearchAutocompleteResults[]> => {
+    const res = await fetch(
+        token
+            ? endpoints.search_ac(query)
+            : endpoints.anonymous.search_ac(query),
+        getAuth(token)
+    );
+
+    const data = (await res.json()).subreddits;
+
+    return data.map((subreddit: any): SearchAutocompleteResults => {
+        const isUser = (subreddit.name as string).startsWith("u_");
+
+        return {
+            name: isUser
+                ? (subreddit.name as string).replace("u_", "")
+                : subreddit.name,
+            followers: subreddit.numSubscribers,
+            icon: subreddit.icon || subreddit.communityIcon,
+            isUser,
+            id: subreddit.id,
+        };
+    }) as SearchAutocompleteResults[];
 };
