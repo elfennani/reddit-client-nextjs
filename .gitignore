@@ -41,3 +41,4 @@ exemple_*
 *.report.html
 # Local Netlify folder
 .netlify
+.env
