@@ -21,13 +21,6 @@ import PostVideo from "./Post/PostVideo";
 import PostMedia from "./Post/PostMedia";
 import InViewProvider from "../contexts/InViewProvider";
 
-type Props = {
-    data: PostData;
-    onUpvote(): void;
-    onDownvote(): void;
-    voteState: boolean | null;
-    children?: any | any[];
-};
 const TextContainer = styled.div`
     padding: 16px;
     padding-top: 0;
@@ -111,13 +104,22 @@ const PostCard = styled(Card)`
     }
 `;
 
+type Props = {
+    data: PostData;
+    onUpvote(): void;
+    onDownvote(): void;
+    voteState: boolean | null;
+    children?: any | any[];
+};
+
 const PostView = ({ data, ...props }: Props) => {
     const { textCompact } = useContext(PostConfig);
-    const postRef = useRef<Element>();
+    const postRef = useRef<HTMLDivElement>();
     const [inView, setInView] = useState(false);
 
     useEffect(() => {
         if (!postRef.current) return;
+
         const observer = new IntersectionObserver((entries) => {
             const entry = entries[0];
             setInView(entry.isIntersecting);
@@ -133,57 +135,60 @@ const PostView = ({ data, ...props }: Props) => {
     return (
         <InViewProvider.Provider value={inView}>
             <PostCard ref={postRef as any}>
-                {props.children}
-                <PostHeader data={data} />
-                {!data.text && <PostMedia data={data} />}
-                <TextContainer>
-                    <h2>{decode(data.title)}</h2>
-                    {data.text && (
-                        <PostText
-                            text={data.text}
-                            text_html={data.text_html as string}
-                            compact={textCompact as boolean}
-                        />
+                <>
+                    {props.children}
+                    <PostHeader data={data} />
+                    {!data.text && <PostMedia data={data} />}
+                    <TextContainer>
+                        <h2>{decode(data.title)}</h2>
+                        {data.text && (
+                            <PostText
+                                text={data.text}
+                                text_html={data.text_html as string}
+                                compact={textCompact as boolean}
+                            />
+                        )}
+                    </TextContainer>
+                    {data.poll && <PostPoll pollData={data.poll} />}
+                    {data.poll && data.poll.selection == null && (
+                        <Note>*Voting is not supported on 3rd party apps.</Note>
                     )}
-                </TextContainer>
-                {data.poll && <PostPoll pollData={data.poll} />}
-                {data.poll && data.poll.selection == null && (
-                    <Note>*Voting is not supported on 3rd party apps.</Note>
-                )}
-                <Footer>
-                    <div className="actions">
-                        <PostButton
-                            title="Upvote"
-                            icon={<GoArrowUp />}
-                            onClick={props.onUpvote}
-                            size={24}
-                            vote={props.voteState == true ? true : null}
-                        />
-                        <PostButton
-                            icon={<GoArrowDown />}
-                            title="Downvote"
-                            onClick={props.onDownvote}
-                            size={24}
-                            vote={props.voteState == false ? false : null}
-                        />
-                        <PostButton
-                            icon={<ShareAltOutlined />}
-                            title="Share"
-                            onClick={() => {}}
-                        />
-                    </div>
-                    <div className="info">
-                        <Votes state={props.voteState}>
-                            {minimizeNumber(
-                                data.votes +
-                                    parseVote(1, -1, 0, props.voteState),
-                                1
-                            )}{" "}
-                            votes
-                        </Votes>{" "}
-                        • {minimizeNumber(data.commentsCount, 1)} comments
-                    </div>
-                </Footer>
+                    <Footer>
+                        <div className="actions">
+                            <PostButton
+                                title="Upvote"
+                                icon={<GoArrowUp />}
+                                onClick={props.onUpvote}
+                                size={24}
+                                vote={props.voteState == true ? true : null}
+                            />
+                            <PostButton
+                                icon={<GoArrowDown />}
+                                title="Downvote"
+                                onClick={props.onDownvote}
+                                size={24}
+                                vote={props.voteState == false ? false : null}
+                            />
+                            <PostButton
+                                icon={<ShareAltOutlined />}
+                                title="Share"
+                                onClick={() => {}}
+                            />
+                        </div>
+                        <div className="info">
+                            <Votes state={props.voteState}>
+                                {minimizeNumber(
+                                    data.votes +
+                                        parseVote(1, -1, 0, props.voteState),
+                                    1
+                                )}{" "}
+                                votes
+                            </Votes>{" "}
+                            • {minimizeNumber(data.commentsCount, 1)}{" "}
+                            comments
+                        </div>
+                    </Footer>
+                </>
             </PostCard>
         </InViewProvider.Provider>
     );
