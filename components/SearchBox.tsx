@@ -13,6 +13,7 @@ const SearchboxStyle = css`
     border-radius: 12px;
     display: flex;
     padding: 0;
+    border-bottom: none;
 
     > span {
         font-size: 18px;
@@ -23,6 +24,9 @@ const SearchboxStyle = css`
         opacity: 0.33;
     }
 
+    > p {
+        line-height: 40px;
+    }
     > input,
     p {
         flex: 1;
@@ -35,7 +39,6 @@ const SearchboxStyle = css`
         padding-right: 16px;
         margin: 0;
         text-align: left;
-        line-height: 40px;
 
         &::placeholder {
             color: ${(p) => p.theme.text};
@@ -48,8 +51,7 @@ const SearchBoxButton = styled.button`
     ${SearchboxStyle}
     border: none;
     cursor: text;
-    border: 1px solid transparent;
-    border-bottom: none;
+    box-sizing: border-box;
 
     p {
         opacity: 0.5;
@@ -64,6 +66,7 @@ const focusedSearchInputCss = css`
     border-radius: 12px 12px 0 0;
     border: 1px solid ${(p) => p.theme.text25};
     border-bottom: none;
+    /* box-shadow: inset 0 0 0 1px ${(p) => p.theme.text25}; */
 `;
 
 const SearchBoxInput = styled.div<SearchInput>`
@@ -74,7 +77,7 @@ const SearchBoxInput = styled.div<SearchInput>`
 
 const SearchBox = React.forwardRef<HTMLInputElement>((props, ref) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [searchValue, setSearchValue] = useState("hello");
+    const [searchValue, setSearchValue] = useState("");
 
     if (!isFocused) {
         return (

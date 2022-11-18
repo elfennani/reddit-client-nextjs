@@ -103,6 +103,19 @@ export const getUserProfile = async (
         created: data.created_utc,
         pfp: data.icon_img.replaceAll("&amp;", "&"),
         description: data.subreddit.public_description,
+        followers: data.subreddit.subscribers,
+    };
+};
+
+const parseUser = (data: any): UserData => {
+    return {
+        username: data.subreddit.display_name_prefixed,
+        fullname: data.subreddit.title,
+        karma: data.total_karma,
+        created: data.created_utc,
+        pfp: data.icon_img.replaceAll("&amp;", "&"),
+        description: data.subreddit.public_description,
+        followers: data.subreddit.subscribers,
     };
 };
 
@@ -504,26 +517,89 @@ export const getSearchResult = async (
     token: string,
     query: string
 ): Promise<SearchAutocompleteResults[]> => {
-    const res = await fetch(
-        token
-            ? endpoints.search_ac(query)
-            : endpoints.anonymous.search_ac(query),
-        getAuth(token)
-    );
+    console.log(endpoints.anonymous.search_ac_users(query));
 
-    const data = (await res.json()).subreddits;
+    if (token) {
+        const res = await fetch(endpoints.search_ac(query, 5), getAuth(token));
+        const json = await res.json();
 
-    return data.map((subreddit: any): SearchAutocompleteResults => {
-        const isUser = (subreddit.name as string).startsWith("u_");
+        return json.data.children
+            .map((d: any) => d.data)
+            .filter((data: any) => data.subreddit_type !== "private")
+            .map((data: any): SearchAutocompleteResults => {
+                const isUser = !!data.subreddit;
+                console.log(data.subreddit_type);
+                let icon;
 
-        return {
-            name: isUser
-                ? (subreddit.name as string).replace("u_", "")
-                : subreddit.name,
-            followers: subreddit.numSubscribers,
-            icon: subreddit.icon || subreddit.communityIcon,
-            isUser,
-            id: subreddit.id,
-        };
-    }) as SearchAutocompleteResults[];
+                if (isUser) {
+                    icon = data.snoovatar_img
+                        ? decode(data.snoovatar_img)
+                        : decode(data.icon_img);
+                } else {
+                    if (data.community_icon) {
+                        icon = decode(data.community_icon);
+                    } else if (data.icon_img) {
+                        icon = decode(data.icon_img);
+                    }
+                }
+
+                return {
+                    name: isUser ? `u/${data.name}` : `r/${data.display_name}`,
+                    followers: isUser
+                        ? data.subreddit.subscribers
+                        : data.subscribers,
+                    icon: icon,
+                    isUser,
+                    id: isUser ? data.subreddit.name : data.name,
+                };
+            }) as SearchAutocompleteResults[];
+    }
+
+    let result = [];
+
+    const [usersResponse, subsResponse] = await Promise.all([
+        fetch(endpoints.anonymous.search_ac_users(query)),
+        fetch(endpoints.anonymous.search_ac_subs(query)),
+    ]);
+
+    const [users, subs] = await Promise.all([
+        usersResponse.json(),
+        subsResponse.json(),
+    ]);
+
+    result = [
+        ...subs.data.children.map((d: any): SearchAutocompleteResults => {
+            let data = d.data;
+            let icon;
+
+            if (data.community_icon) {
+                icon = decode(data.community_icon);
+            } else if (data.icon_img) {
+                icon = decode(data.icon_img);
+            }
+
+            return {
+                followers: data.subscribers,
+                icon: icon,
+                id: data.name,
+                isUser: false,
+                name: data.display_name_prefixed,
+            };
+        }),
+        ...users.data.children
+            .map((d: any) => d.data)
+            .map(parseUser)
+            .map(
+                (user: UserData): SearchAutocompleteResults => ({
+                    name: user.username,
+                    isUser: true,
+                    followers: user.followers,
+                    icon: user.pfp,
+                    id: user.fullname,
+                })
+            ),
+    ];
+    console.log(result);
+
+    return result;
 };

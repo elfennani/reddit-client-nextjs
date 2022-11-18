@@ -8,6 +8,7 @@ export interface UserData {
     cover?: string;
     pfp: string;
     description: string;
+    followers: number;
 }
 
 export interface ImagesMetadata {
@@ -103,7 +104,7 @@ export type PostsListEndpoints = PostsListEndpoint[];
 
 export type SearchAutocompleteResults = {
     name: string;
-    icon: string;
+    icon: string | undefined;
     isUser: boolean;
     followers: number;
     id: string;
